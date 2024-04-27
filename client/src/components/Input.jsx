@@ -1,7 +1,5 @@
 import React from "react";
-import MostrarError from "./validacionForm/MostrarError";
-
-
+import MostrarErrorMessage from "./ValidacionForm/MostrarErrorMessage";
 
 
 const Input = ({ type, name, value, handleChange, errors, label }) => {
@@ -18,7 +16,7 @@ const Input = ({ type, name, value, handleChange, errors, label }) => {
         value={value}
         min={new Date().toISOString().split("T")[0]}
       />
-      <MostrarError errors={errors} campo={name} />
+      <MostrarErrorMessage errors={errors} campo={name} />
     </div>
   );
 };

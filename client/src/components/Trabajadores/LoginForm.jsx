@@ -4,8 +4,10 @@ import * as Yup from "yup";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import MostrarError from "../validacionForm/mostrarError";
+
 import { loginRequest } from "../../api/login.api";
+import MostrarErrorMessage from "../ValidacionForm/MostrarErrorMessage";
+
 
 const Login = () => {
   const { isAuthenticated, errors, login } = useAuth();
@@ -68,7 +70,7 @@ const Login = () => {
                 type="password"
                 name="password"
               />
-              <MostrarError campo={"password"} errors={errors} />
+              <MostrarErrorMessage campo={"password"} errors={errors} />
               {credencial_invalida && (
                 <span className="bg-red-500 p-1 m-1 rounded">
                   {credencial_invalida}

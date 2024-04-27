@@ -8,7 +8,9 @@ import {
   registerRequest,
   updateTrabajadorRequest,
 } from "../../api/login.api";
-import MostrarError from "../validacionForm/mostrarError";
+import MostrarErrorMessage from "../ValidacionForm/MostrarErrorMessage";
+
+
 
 const AgregarTrabajador = () => {
   const params = useParams();
@@ -66,7 +68,6 @@ const AgregarTrabajador = () => {
     }
 
     try {
-  
       if (params.id) {
         await updateTrabajadorRequest(params.id, formData);
 
@@ -137,7 +138,7 @@ const AgregarTrabajador = () => {
                 value={values.username}
                 //  disabled={params.id ? true : false}
               />
-             <MostrarError campo={"username"} errors={errors} />
+              <MostrarErrorMessage campo={"username"} errors={errors} />
               <label className="text-black" htmlFor="password">
                 Contraseña :
               </label>
