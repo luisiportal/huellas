@@ -11,4 +11,3 @@ const MostrarErrorMessage = ({ errors, campo }) => {
 };
 export default MostrarErrorMessage;
 
-import React from "react";
