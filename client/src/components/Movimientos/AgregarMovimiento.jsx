@@ -3,11 +3,12 @@ import Select from "react-select";
 
 import { Form, Formik, isInteger } from "formik";
 import { getProductosRequest } from "../../api/productos.api";
-import BotoneraEntrada_Salida from "../botoneraEntrada_Salida";
+
 
 import * as Yup from "yup";
 import { hacerMoviemientoRequest } from "../../api/movimientos.api";
 import MovimientoCard from "./MovimientoCard";
+import BotoneraEntrada_Salida from "../BotoneraEntrada_Salida";
 
 const AgregarMovimiento = (tipo) => {
   const [estadoEnviar, setEstadoEnviar] = useState(0);
@@ -63,7 +64,7 @@ const AgregarMovimiento = (tipo) => {
   return (
     <div>
       <div className="flex justify-center items-center">
-        <BotoneraEntrada_Salida></BotoneraEntrada_Salida>
+      <BotoneraEntrada_Salida/>
       </div>
       <div>
         <div className="flex justify-center items-center">
