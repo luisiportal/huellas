@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 import { loginRequest } from "../../api/login.api";
-import MostrarErrorMessage from "../ValidacionForm/MostrarErrorMessage";
+import MostrarErrorMessage from "../ValidacionForm/MostrarErrorMessage"
 
 
 const Login = () => {
@@ -61,7 +61,7 @@ const Login = () => {
                 type="text"
                 name="username"
               />
-              <MostrarError campo={"username"} errors={errors} />
+              <MostrarErrorMessage campo={"username"} errors={errors} />
               <label className="text-gray-900" htmlFor="password">
                 Contraseña :
               </label>
