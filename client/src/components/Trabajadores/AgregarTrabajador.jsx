@@ -2,12 +2,13 @@ import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import MostrarError from "../validacionForm/mostrarError";
+
 import {
   cargarPerfilRequest,
   registerRequest,
   updateTrabajadorRequest,
 } from "../../api/login.api";
+import MostrarError from "../validacionForm/mostrarError";
 
 const AgregarTrabajador = () => {
   const params = useParams();
@@ -136,7 +137,7 @@ const AgregarTrabajador = () => {
                 value={values.username}
                 //  disabled={params.id ? true : false}
               />
-              <MostrarError campo={"username"} errors={errors} />
+             <MostrarError campo={"username"} errors={errors} />
               <label className="text-black" htmlFor="password">
                 Contraseña :
               </label>
