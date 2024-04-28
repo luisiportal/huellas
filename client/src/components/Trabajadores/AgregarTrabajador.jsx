@@ -149,7 +149,7 @@ const AgregarTrabajador = () => {
                 value={values.password}
                 //  disabled={params.id ? true : false}
               />
-              <MostrarError campo={"password"} errors={errors} />
+              <MostrarErrorMessage campo={"password"} errors={errors} />
               <label className="text-black" htmlFor="password">
                 Nombre :
               </label>
@@ -159,7 +159,7 @@ const AgregarTrabajador = () => {
                 onChange={handleChange}
                 value={values.nombre}
               />
-              <MostrarError campo={"nombre"} errors={errors} />
+              <MostrarErrorMessage campo={"nombre"} errors={errors} />
               <label className="text-black" htmlFor="apellidos">
                 Apellidos :
               </label>
@@ -169,7 +169,7 @@ const AgregarTrabajador = () => {
                 onChange={handleChange}
                 value={values.apellidos}
               />
-              <MostrarError campo={"apellidos"} errors={errors} />
+              <MostrarErrorMessage campo={"apellidos"} errors={errors} />
               <label className="text-black" htmlFor="movil">
                 Movil :
               </label>
@@ -179,7 +179,7 @@ const AgregarTrabajador = () => {
                 onChange={handleChange}
                 value={values.movil}
               />
-              <MostrarError campo={"movil"} errors={errors} />
+              <MostrarErrorMessage campo={"movil"} errors={errors} />
               <label className="text-black" htmlFor="puesto">
                 Puesto :
               </label>
@@ -209,7 +209,7 @@ const AgregarTrabajador = () => {
                 onChange={handleChange}
                 value={values.salario}
               />
-              <MostrarError campo={"salario"} errors={errors} />
+              <MostrarErrorMessage campo={"salario"} errors={errors} />
               <label htmlFor="ruta_image" className="block"></label>
               <input
                 name="ruta_image"
