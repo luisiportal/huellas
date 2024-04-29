@@ -34,16 +34,20 @@ const Login = () => {
         })}
         onSubmit={async (values, { setSubmitting }) => {
           try {
-             setLoader(true);
+            setLoader(true);
             await loginRequest(values).then((result) => {
-             
-              login(result.data);
               setLoader(false);
+              login(result.data);
             });
 
             // login(response.data);
           } catch (error) {
             setCredencial_invalida(error.response.data.message);
+
+            setTimeout(() => {
+              setCredencial_invalida(null);
+            }, 2000);
+            setLoader(false);
             console.error(error);
           }
         }}
@@ -86,7 +90,7 @@ const Login = () => {
               >
                 Iniciar sesión
               </button>
-              {loader &&( <Loader />)}
+              {loader && <Loader />}
             </div>
           </Form>
         )}

@@ -27,7 +27,7 @@ END;
 $function$
 ;
 
-create trigger tr_actualizar_costo_total_producto before
+create or replace trigger tr_actualizar_costo_total_producto before
 insert
     or
 update
@@ -56,10 +56,10 @@ $function$
 ;
 
 
-create trigger tr_insertar_movimiento after
+create or replace trigger tr_insertar_movimiento after
 insert
     on
-    public.ventas for each row execute function insertar_movimiento()
+    public.ventas for each row execute function insertar_movimiento();
 
 
     ALTER TABLE public.movimientos ALTER COLUMN "createdAt" SET DEFAULT CURRENT_DATE;
@@ -101,7 +101,7 @@ $function$
 
 
 
-create trigger trMoneda_actualizar_costo_total_producto after
+create or replace trigger trMoneda_actualizar_costo_total_producto after
 insert
     or
 update
