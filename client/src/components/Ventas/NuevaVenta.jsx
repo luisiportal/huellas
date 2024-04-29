@@ -10,11 +10,13 @@ import ProductoCarrito from "./ProductoCarrito";
 import Btn_Huellas from "../Btn_Huellas";
 
 import { createVentaRequest } from "../../api/venta.api";
+import Loader from "../Utilidades/Loader";
 
 const NuevaVenta = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [productos, setProductos] = useState([]);
   const [carrito, setCarrito] = useState([]);
+  const [loader, setLoader] = useState(true);
 
   const [movimiento, setMovimiento] = useState({
     cantidad: "",
@@ -72,6 +74,7 @@ const NuevaVenta = () => {
   const pagar = () => {
     try {
       createVentaRequest(carrito, total);
+      setLoader(false);
       alert("Venta realizada correctamente");
     } catch (error) {
       alert(error);
@@ -141,6 +144,7 @@ const NuevaVenta = () => {
             <div className="flex justify-center items-center mt-4"></div>
           </div>
         </div>
+       {loader &&( <Loader />)}
         <h2>Total a cobrar : {total}</h2>
         {carrito.map((producto) => {
           const totalProducto = producto.cantidad * producto.precio_venta;

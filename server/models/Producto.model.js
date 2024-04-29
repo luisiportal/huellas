@@ -53,3 +53,5 @@ export const Producto = sequelize.define("productos", {
     type: DataTypes.DECIMAL(10, 2),
   },
 });
+
+

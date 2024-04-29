@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 import { loginRequest } from "../../api/login.api";
-import MostrarErrorMessage from "../ValidacionForm/MostrarErrorMessage"
-
+import MostrarErrorMessage from "../ValidacionForm/MostrarErrorMessage";
+import Loader from "../Utilidades/Loader";
 
 const Login = () => {
-  const { isAuthenticated, errors, login } = useAuth();
+  const { isAuthenticated, errors, login, loader, setLoader } = useAuth();
   const [credencial_invalida, setCredencial_invalida] = useState(null);
   const navigate = useNavigate();
 
@@ -34,8 +34,11 @@ const Login = () => {
         })}
         onSubmit={async (values, { setSubmitting }) => {
           try {
+            setLoader(true);
             await loginRequest(values).then((result) => {
+             
               login(result.data);
+              setLoader(false);
             });
 
             // login(response.data);
@@ -83,6 +86,7 @@ const Login = () => {
               >
                 Iniciar sesión
               </button>
+              {loader &&( <Loader />)}
             </div>
           </Form>
         )}

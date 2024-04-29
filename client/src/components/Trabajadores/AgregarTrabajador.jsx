@@ -10,12 +10,11 @@ import {
 } from "../../api/login.api";
 import MostrarErrorMessage from "../ValidacionForm/MostrarErrorMessage";
 
-
-
 const AgregarTrabajador = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
+  const [cambiarPass, setCambiarPass] = useState(null);
   const [perfil, setPerfil] = useState({
     username: "",
     password: "",
@@ -32,7 +31,7 @@ const AgregarTrabajador = () => {
         const trabajador = await cargarPerfilRequest(params.id);
         setPerfil({
           username: trabajador.data.username,
-          password: "trabajador.data.password",
+          password: trabajador.data.password,
           nombre: trabajador.data.nombre,
           apellidos: trabajador.data.apellidos,
           movil: trabajador.data.movil,
@@ -48,6 +47,10 @@ const AgregarTrabajador = () => {
     loadTrabajador();
   }, []);
 
+  const handleCambiarPass = () => {
+    setCambiarPass(!cambiarPass);
+  };
+
   const handleSubmit = async (values) => {
     const formData = new FormData();
 
@@ -55,7 +58,9 @@ const AgregarTrabajador = () => {
       params.id ? false : formData.append("username", values.username);
     }
     {
-      params.id ? false : formData.append("password", values.password);
+      perfil.password === values.password
+        ? false
+        : formData.append("password", values.password);
     }
     formData.append("nombre", values.nombre);
     formData.append("apellidos", values.apellidos);
@@ -147,8 +152,16 @@ const AgregarTrabajador = () => {
                 name="password"
                 onChange={handleChange}
                 value={values.password}
-                //  disabled={params.id ? true : false}
+                disabled={cambiarPass ? false : true}
               />
+              <div className="flex gap-2 items-center">
+                <label htmlFor="cambiarPass">Cambiar contraseña</label>
+                <input
+                  type="checkbox"
+                  name="cambiarPass"
+                  onChange={handleCambiarPass}
+                />
+              </div>
               <MostrarErrorMessage campo={"password"} errors={errors} />
               <label className="text-black" htmlFor="password">
                 Nombre :
