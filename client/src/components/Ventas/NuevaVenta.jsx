@@ -11,13 +11,13 @@ import Btn_Huellas from "../Btn_Huellas";
 
 import { createVentaRequest } from "../../api/venta.api";
 import Loader from "../Utilidades/Loader";
+import { useAuth } from "../../context/AuthContext";
 
 const NuevaVenta = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [productos, setProductos] = useState([]);
   const [carrito, setCarrito] = useState([]);
-  const [loader, setLoader] = useState(true);
-
+  const { loader, setLoader } = useAuth();
   const [movimiento, setMovimiento] = useState({
     cantidad: "",
     producto: "",
@@ -71,11 +71,13 @@ const NuevaVenta = () => {
     0
   );
 
-  const pagar = () => {
+  const pagar = async () => {
     try {
-      createVentaRequest(carrito, total);
+      setLoader(true);
+      await createVentaRequest(carrito, total);
       setLoader(false);
-      alert("Venta realizada correctamente");
+      alert("Producto vendido");
+      setCarrito([]);
     } catch (error) {
       alert(error);
     }
@@ -91,7 +93,9 @@ const NuevaVenta = () => {
               enableReinitialize={true}
               validationSchema={schema}
               onSubmit={async (values) => {
+                setLoader(true);
                 setCarrito([...carrito, values]);
+                setLoader(false);
               }}
             >
               {({
@@ -144,7 +148,7 @@ const NuevaVenta = () => {
             <div className="flex justify-center items-center mt-4"></div>
           </div>
         </div>
-       {loader &&( <Loader />)}
+        {loader && <Loader />}
         <h2>Total a cobrar : {total}</h2>
         {carrito.map((producto) => {
           const totalProducto = producto.cantidad * producto.precio_venta;
@@ -159,7 +163,7 @@ const NuevaVenta = () => {
             />
           );
         })}
-        <Btn_Huellas text={`Cobrar ${total} cup`} onclick={() => pagar()} />
+        <Btn_Huellas text={`Cobrar ${total} cup`} disbledText={"Sin productos"} disabled= {(carrito.length) ? false : true} onclick={() => pagar()} />
       </div>
     </div>
   );

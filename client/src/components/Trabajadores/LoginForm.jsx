@@ -34,7 +34,7 @@ const Login = () => {
         })}
         onSubmit={async (values, { setSubmitting }) => {
           try {
-            setLoader(true);
+             setLoader(true);
             await loginRequest(values).then((result) => {
              
               login(result.data);

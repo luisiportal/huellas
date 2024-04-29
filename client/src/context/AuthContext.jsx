@@ -39,8 +39,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (user) => {
+    setLoader(true);
     setUser(user);
     const { data } = await cargarPerfilRequest(user.id_trabajador);
+    setLoader(false);
     setPerfil(data);
     setIsAuthenticated(true);
   };
@@ -52,8 +54,9 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async (user) => {
     try {
+      setLoader(true);
       const res = await logoutRequest();
-
+      setLoader(false);
       setUser(res.data);
       setIsAuthenticated(false);
     } catch (error) {

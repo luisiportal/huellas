@@ -2,14 +2,16 @@ import React from "react";
 import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
+import Loader from "../Utilidades/Loader";
 
 const PerfilTrabajador = () => {
-  const { logout, user, perfil, cargarPerfil } = useAuth();
+  const { logout, user, perfil, cargarPerfil, loader, setLoader } = useAuth();
 
   const navigate = useNavigate();
   const params = useParams();
   useEffect(() => {
     cargarPerfil(user.id_trabajador);
+    setLoader(false);
   }, []);
 
   return (
@@ -69,6 +71,8 @@ const PerfilTrabajador = () => {
           >
             Cerrar Sesión
           </button>
+
+          {loader &&( <Loader />)}
         </div>
       </div>
     </div>

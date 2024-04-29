@@ -1,14 +1,19 @@
 import { useState, useEffect } from "react";
 import { getTodosMovimientosRequest } from "../../api/movimientos.api";
+import { useAuth } from "../../context/AuthContext";
+import Loader from "../Utilidades/Loader";
 
 const MovimientoCard = () => {
   const [movimientos, setMovimientos] = useState([]);
+  const { loader, setLoader } = useAuth();
 
   useEffect(() => {
     const loadProducto = async () => {
       try {
+        setLoader(true);
         const response = await getTodosMovimientosRequest();
         setMovimientos(response.data);
+        setLoader(false);
       } catch (error) {}
     };
 
@@ -39,12 +44,13 @@ const MovimientoCard = () => {
               </h3>
               <h3 className="text-sm font-semibold">Tipo: {movimiento.tipo}</h3>
               <span className="text-sm text-slate-900">
-                Fecha : {new Date(movimiento.createdAt).toLocaleString('es-ES')}
+                Fecha : {new Date(movimiento.createdAt).toLocaleString("es-ES")}
               </span>
             </div>
           </div>
         </header>
       ))}
+       {loader && <Loader />}
     </div>
   );
 };

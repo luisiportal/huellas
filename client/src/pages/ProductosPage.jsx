@@ -2,12 +2,15 @@ import { useEffect } from "react";
 
 import { useProductos } from "../context/ProductoProvider";
 import ProductoCard from "../components/Productos/ProductoCard";
+import { useAuth } from "../context/AuthContext";
 
 const ProductosPage = () => {
   const { productos, loadProductos } = useProductos();
-
+  const { loader, setLoader } = useAuth();
   useEffect(() => {
-    loadProductos();
+    try {
+      loadProductos();
+    } catch (error) {}
   }, []);
 
   function renderMain() {
