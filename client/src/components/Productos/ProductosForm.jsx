@@ -3,6 +3,8 @@ import { useProductos } from "../../context/ProductoProvider";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
+import { useAuth } from "../../context/AuthContext";
+import Loader from "../Utilidades/Loader";
 
 const schema = Yup.object().shape({
   nombre_producto: Yup.string().required("Nombre producto requerido"),
@@ -15,11 +17,12 @@ const schema = Yup.object().shape({
     .positive("El precio debe ser mayor que cero")
     .required("Precio Requerido"),
   categoria: Yup.string().default("Sin categoria"),
-   stockMinimo: Yup.number().default(0),
+  stockMinimo: Yup.number().default(0),
 });
 
 const ProductoForm = () => {
   const { createProducto, getProducto, updateProducto } = useProductos();
+  const { loader, setLoader } = useAuth();
   const [file, setFile] = useState(null);
   const [producto, setProducto] = useState({
     nombre_producto: "",
@@ -27,20 +30,21 @@ const ProductoForm = () => {
     costo_unitario: 0,
     precio_venta: 0,
     categoria: "Sin categoria",
-    stockMinimo : 0,
+    stockMinimo: 0,
   });
 
   const params = useParams();
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
+    setLoader(true);
     const formData = new FormData();
     formData.append("nombre_producto", values.nombre_producto);
     formData.append("description_producto", values.description_producto);
     formData.append("costo_unitario", values.costo_unitario);
     formData.append("precio_venta", values.precio_venta);
     formData.append("categoria", values.categoria);
-  
+
     formData.append("stockMinimo", values.stockMinimo);
     formData.append("unidadMedida", values.unidadMedida || "pcs");
 
@@ -63,14 +67,14 @@ const ProductoForm = () => {
       console.log(error);
       alert("Error al actualizar producto  " + error);
     }
-
+    setloader(false);
   };
 
   useEffect(() => {
     const loadProducto = async () => {
       if (params.id_producto) {
         const producto = await getProducto(params.id_producto);
-      
+
         setProducto({
           nombre_producto: producto.nombre_producto,
           description_producto: producto.description_producto,
@@ -237,6 +241,7 @@ const ProductoForm = () => {
           )}
         </Formik>
       </div>
+      {loader && <Loader />}
     </div>
   );
 };

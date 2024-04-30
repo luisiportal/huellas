@@ -62,7 +62,7 @@ insert
     public.ventas for each row execute function insertar_movimiento();
 
 
-    ALTER TABLE public.movimientos ALTER COLUMN "createdAt" SET DEFAULT CURRENT_DATE;
+  ALTER TABLE public.movimientos ALTER COLUMN "createdAt" SET DEFAULT CURRENT_DATE;
 ALTER TABLE public.movimientos ALTER COLUMN "updatedAt" SET DEFAULT CURRENT_DATE;
 
 

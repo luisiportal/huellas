@@ -79,6 +79,7 @@ const NuevaVenta = () => {
       alert("Producto vendido");
       setCarrito([]);
     } catch (error) {
+      setLoader(false);
       alert(error);
     }
   };
@@ -93,6 +94,8 @@ const NuevaVenta = () => {
               enableReinitialize={true}
               validationSchema={schema}
               onSubmit={async (values) => {
+                console.log(values);
+                //carrito.filter(values.id_producto)
                 setLoader(true);
                 setCarrito([...carrito, values]);
                 setLoader(false);
@@ -163,7 +166,12 @@ const NuevaVenta = () => {
             />
           );
         })}
-        <Btn_Huellas text={`Cobrar ${total} cup`} disbledText={"Sin productos"} disabled= {(carrito.length) ? false : true} onclick={() => pagar()} />
+        <Btn_Huellas
+          text={`Cobrar ${total} cup`}
+          disbledText={"Sin productos"}
+          disabled={carrito.length ? false : true}
+          onclick={() => pagar()}
+        />
       </div>
     </div>
   );
