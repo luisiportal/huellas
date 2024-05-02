@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [loader, setLoader] = useState(null);
+  const [loader, setLoader] = useState(false);
   const [perfil, setPerfil] = useState({
     username: "",
     nombre: "",

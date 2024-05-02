@@ -1,4 +1,4 @@
-import { Form, Formik } from "formik";
+import { Form, Formik, useFormik } from "formik";
 import { useProductos } from "../../context/ProductoProvider";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -33,43 +33,6 @@ const ProductoForm = () => {
     stockMinimo: 0,
   });
 
-  const params = useParams();
-  const navigate = useNavigate();
-
-  const handleSubmit = async (values) => {
-    setLoader(true);
-    const formData = new FormData();
-    formData.append("nombre_producto", values.nombre_producto);
-    formData.append("description_producto", values.description_producto);
-    formData.append("costo_unitario", values.costo_unitario);
-    formData.append("precio_venta", values.precio_venta);
-    formData.append("categoria", values.categoria);
-
-    formData.append("stockMinimo", values.stockMinimo);
-    formData.append("unidadMedida", values.unidadMedida || "pcs");
-
-    if (file !== null) {
-      formData.append("ruta_image", file);
-    }
-
-    try {
-      if (params.id_producto) {
-        await updateProducto(params.id_producto, formData);
-        alert("Se ha actualizado el producto");
-
-        navigate("/");
-      } else {
-        await createProducto(formData);
-        alert("Se ha creado el producto correctamente");
-        navigate("/");
-      }
-    } catch (error) {
-      console.log(error);
-      alert("Error al actualizar producto  " + error);
-    }
-    setloader(false);
-  };
-
   useEffect(() => {
     const loadProducto = async () => {
       if (params.id_producto) {
@@ -92,6 +55,46 @@ const ProductoForm = () => {
     loadProducto();
   }, []);
 
+  const params = useParams();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (values) => {
+    const formData = new FormData();
+    formData.append("nombre_producto", values.nombre_producto);
+    formData.append("description_producto", values.description_producto);
+    formData.append("costo_unitario", values.costo_unitario);
+    formData.append("precio_venta", values.precio_venta);
+    formData.append("categoria", values.categoria);
+
+    formData.append("stockMinimo", values.stockMinimo);
+    formData.append("existencia_inicial", values.existencia_inicial);
+    formData.append("unidadMedida", values.unidadMedida || "pcs");
+
+    if (file !== null) {
+      formData.append("ruta_image", file);
+    }
+
+    try {
+      setLoader(true);
+      if (params.id_producto) {
+        await updateProducto(params.id_producto, formData);
+        alert("Se ha actualizado el producto");
+
+        navigate("/");
+      } else {
+        await createProducto(formData);
+
+        alert("Se ha creado el producto correctamente");
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+
+      alert("Error al actualizar producto  " + error);
+    }
+    setLoader(false);
+  };
+
   return (
     <div className="mx-2 bg-neutral-200 rounded-md p-4">
       <h1 className="text-sm font-bold text-white">
@@ -105,12 +108,16 @@ const ProductoForm = () => {
           onSubmit={handleSubmit}
           validationSchema={schema}
         >
-          {({ handleChange, handleSubmit, errors, values, isSubmitting }) => (
+          {({
+            handleChange,
+            handleSubmit,
+            errors,
+            values,
+            isSubmitting,
+            resetForm,
+          }) => (
             // FORMULARIO PARA RELLENAR CAMPOS
-            <Form
-              onSubmit={handleSubmit}
-              className="bg-neutral-200 max-w-md rounded-md p-4 mx-auto"
-            >
+            <Form className="bg-neutral-200 max-w-md rounded-md p-4 mx-auto">
               {
                 /*muestra la imagen preview */ file && (
                   <img
@@ -202,6 +209,21 @@ const ProductoForm = () => {
                 onChange={handleChange}
                 value={values.stockMinimo || 0}
               />
+              {!params.id_producto && (
+                <>
+                  <label htmlFor="existencia_inicial" className="block">
+                    Existencia Inicial:
+                  </label>
+                  <input
+                    type="number"
+                    name="existencia_inicial"
+                    placeholder=""
+                    className="my-2 px-2 py-1 rounded-sm w-full"
+                    onChange={handleChange}
+                    value={values.existencia_inicial || 0}
+                  />
+                </>
+              )}
               <label htmlFor="categoria" className="block">
                 Elegir Categoría:
               </label>

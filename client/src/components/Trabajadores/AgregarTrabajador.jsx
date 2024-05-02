@@ -152,16 +152,17 @@ const AgregarTrabajador = () => {
                 name="password"
                 onChange={handleChange}
                 value={values.password}
-                disabled={cambiarPass ? false : true}
+                disabled={cambiarPass || !params.id ? false : true}
               />
-              <div className="flex gap-2 items-center">
+              {params.id &&( <div className="flex gap-2 items-center">
                 <label htmlFor="cambiarPass">Cambiar contraseña</label>
                 <input
                   type="checkbox"
                   name="cambiarPass"
                   onChange={handleCambiarPass}
                 />
-              </div>
+              </div>)}
+             
               <MostrarErrorMessage campo={"password"} errors={errors} />
               <label className="text-black" htmlFor="password">
                 Nombre :

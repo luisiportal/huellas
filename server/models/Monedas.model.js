@@ -9,11 +9,24 @@ export const Moneda = sequelize.define("monedas", {
   },
   moneda: {
     type: DataTypes.STRING,
-    allowNull: false,                                                                                                                                                                                                                                                                                                                                    
+    allowNull: false,
   },
 
   precio: {
     type: DataTypes.DECIMAL,
     allowNull: false,
   },
- });
+});
+
+export const monedasDefecto = () => {
+  const monedas = [
+    { moneda: "USD", precio: 1 },
+    { moneda: "EURO", precio: 1 },
+    { moneda: "MLC", precio: 1 },
+    { moneda: "ZELLE", precio: 1 },
+  ];
+
+  monedas.forEach((moneda) => {
+    Moneda.create(moneda);
+  });
+};

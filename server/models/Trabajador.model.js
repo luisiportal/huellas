@@ -39,4 +39,8 @@ export const Trabajador = sequelize.define("trabajadores", {
   foto_perfil: {
     type: DataTypes.STRING,
   },
+  foto_portada: {
+    type: DataTypes.STRING,
+    defaultValue: "portada_default.jpg",
+  },
 });

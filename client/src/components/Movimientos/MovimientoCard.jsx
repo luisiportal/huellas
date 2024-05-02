@@ -27,7 +27,10 @@ const MovimientoCard = () => {
           <div></div>
           <div
             className={`rounded flex shadow-xl w-screen overflow-hidden ${
-              movimiento.tipo === "Entrada" ? "bg-green-400  " : "bg-red-400"
+              movimiento.tipo === "Entrada" ||
+              movimiento.tipo === "Existencia Inicial"
+                ? "bg-green-400"
+                : "bg-red-400"
             }`}
           >
             <img
@@ -50,7 +53,7 @@ const MovimientoCard = () => {
           </div>
         </header>
       ))}
-       {loader && <Loader />}
+      {loader && <Loader />}
     </div>
   );
 };

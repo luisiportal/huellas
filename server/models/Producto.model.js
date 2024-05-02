@@ -31,6 +31,10 @@ export const Producto = sequelize.define("productos", {
     type: DataTypes.DECIMAL(10, 2),
     defaultValue: 0,
   },
+  existencia_inicial: {
+    type: DataTypes.DECIMAL(10, 2),
+    defaultValue: 0,
+  },
   stockMinimo: {
     type: DataTypes.DECIMAL(10, 2),
   },

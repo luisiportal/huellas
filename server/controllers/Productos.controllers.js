@@ -45,6 +45,7 @@ export const createProducto = async (req, res) => {
       existencia,
       stockMinimo,
       unidadMedida,
+      existencia_inicial,
     } = req.body;
 
     const response = await Producto.create({
@@ -57,6 +58,7 @@ export const createProducto = async (req, res) => {
       ruta_image,
       stockMinimo,
       unidadMedida,
+      existencia_inicial,
     });
 
     res.json({
@@ -70,6 +72,7 @@ export const createProducto = async (req, res) => {
       stockMinimo,
       unidadMedida,
       ruta_image,
+      existencia_inicial,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });

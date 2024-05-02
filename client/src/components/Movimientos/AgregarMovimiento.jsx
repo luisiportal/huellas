@@ -4,16 +4,18 @@ import Select from "react-select";
 import { Form, Formik, isInteger } from "formik";
 import { getProductosRequest } from "../../api/productos.api";
 
-
 import * as Yup from "yup";
 import { hacerMoviemientoRequest } from "../../api/movimientos.api";
 import MovimientoCard from "./MovimientoCard";
 import BotoneraEntrada_Salida from "../BotoneraEntrada_Salida";
+import { useAuth } from "../../context/AuthContext";
+import Loader from "../Utilidades/Loader";
 
 const AgregarMovimiento = (tipo) => {
   const [estadoEnviar, setEstadoEnviar] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [productos, setProductos] = useState([]);
+  const { loader, setLoader } = useAuth();
   const [movimiento, setMovimiento] = useState({
     cantidad: "",
     producto: "",
@@ -30,7 +32,7 @@ const AgregarMovimiento = (tipo) => {
     };
     loadProducto();
   }, [estadoEnviar]);
-  
+
   const options = productos.map((producto) => ({
     value: producto.id_producto,
     label: producto.nombre_producto,
@@ -64,7 +66,7 @@ const AgregarMovimiento = (tipo) => {
   return (
     <div>
       <div className="flex justify-center items-center">
-      <BotoneraEntrada_Salida/>
+        <BotoneraEntrada_Salida />
       </div>
       <div>
         <div className="flex justify-center items-center">
@@ -75,22 +77,21 @@ const AgregarMovimiento = (tipo) => {
               validationSchema={
                 movimiento.tipo === "Salida" ? schemaSalida : schema
               }
-              onSubmit={async (values) => {
+              onSubmit={async (values, { resetForm }) => {
                 try {
+                  setLoader(true);
                   await hacerMoviemientoRequest(values);
                   setEstadoEnviar(new Date().getTime());
+                  resetForm();
+                  setSelectedOption(null);
+                  alert(`Movimiento de ${tipo.tipo} realizado`);
                 } catch (error) {
                   console.error(error);
                 }
+                setLoader(false);
               }}
             >
-              {({
-                handleChange,
-
-                errors,
-                values,
-                isSubmitting,
-              }) => (
+              {({ handleChange, resetForm, errors, values, isSubmitting }) => (
                 <Form>
                   <div className="bg-neutral-200 mt-6">
                     <BotoneraEntrada_Salida></BotoneraEntrada_Salida>
@@ -141,6 +142,7 @@ const AgregarMovimiento = (tipo) => {
               </div>
             </div>
           </div>
+          {loader && <Loader />}
         </div>
       </div>
     </div>
