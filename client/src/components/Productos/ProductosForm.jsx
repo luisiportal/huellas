@@ -59,6 +59,7 @@ const ProductoForm = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
+    console.log(values);
     const formData = new FormData();
     formData.append("nombre_producto", values.nombre_producto);
     formData.append("description_producto", values.description_producto);
@@ -67,7 +68,7 @@ const ProductoForm = () => {
     formData.append("categoria", values.categoria);
 
     formData.append("stockMinimo", values.stockMinimo);
-    formData.append("existencia_inicial", values.existencia_inicial);
+    formData.append("existencia_inicial", values.existencia_inicial || 0);
     formData.append("unidadMedida", values.unidadMedida || "pcs");
 
     if (file !== null) {
@@ -88,6 +89,7 @@ const ProductoForm = () => {
         navigate("/");
       }
     } catch (error) {
+     
       console.log(error);
 
       alert("Error al actualizar producto  " + error);
@@ -192,10 +194,10 @@ const ProductoForm = () => {
               <input
                 type="text"
                 name="unidadMedida"
-                placeholder=""
+                placeholder="pcs"
                 className="my-2 px-2 py-1 rounded-sm w-full"
                 onChange={handleChange}
-                value={values.unidadMedida || "pcs"}
+                value={values.unidadMedida || ""}
               />
 
               <label htmlFor="stockMinimo" className="block">

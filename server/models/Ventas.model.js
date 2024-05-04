@@ -1,7 +1,6 @@
 import { sequelize } from "../db.js";
 import { DataTypes } from "sequelize";
-import { Movimiento } from "./Movimientos.model.js";
-import { Producto } from "./Producto.model.js";
+
 
 export const Venta = sequelize.define("ventas", {
   id_venta: {

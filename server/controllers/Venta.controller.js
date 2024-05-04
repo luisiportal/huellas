@@ -1,6 +1,8 @@
+import { Op } from "sequelize";
 import sequelize from "../db.js";
 import { Factura } from "../models/Facturas.model.js";
 import { Venta } from "../models/Ventas.model.js";
+import { Producto } from "../models/Producto.model.js";
 
 export const createVenta = async (req, res) => {
   const productos = req.body.values;
@@ -31,6 +33,40 @@ export const createVenta = async (req, res) => {
     });
 
     return res.status(200).json({ message: "Ventas creadas correctamente" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getTodosVentas = async (req, res) => {
+  try {
+    const response = await Venta.findAll({
+      order: [["id_venta", "DESC"]],
+    });
+    res.json(response);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+export const getTodosFacturas = async (req, res) => {
+  try {
+    const response = await Factura.findAll({
+      include: [
+        {
+          model: Venta,
+          required: false,
+          include: [
+            {
+              model: Producto,
+              required: false,
+            },
+          ],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+
+    res.json(response);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

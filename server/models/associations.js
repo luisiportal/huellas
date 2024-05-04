@@ -13,9 +13,11 @@ export const associations = () => {
   Movimiento.belongsTo(Producto, { foreignKey: "id_producto" });
 };
 
-
 Factura.hasMany(Venta, {
   foreignKey: "id_factura",
   onDelete: "CASCADE",
   hooks: true,
 });
+
+Venta.belongsTo(Factura, { foreignKey: "id_factura" });
+Venta.belongsTo(Producto, { foreignKey: "id_producto" });

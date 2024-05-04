@@ -15,8 +15,7 @@ import Prueba from "./pages/Prueba";
 import AgregarMovimiento from "./components/Movimientos/AgregarMovimiento";
 import TipoCambioPage from "./pages/TipoCambioPage";
 import TipoCambioForm from "./components/TipoCambio/TipoCambioForm";
-
-
+import VentasPage from "./pages/VentasPage";
 
 const App = () => {
   return (
@@ -24,46 +23,38 @@ const App = () => {
       <div>
         <ProductoContextProvider>
           <AuthProvider>
-           <Navbar/>
+            <Navbar />
             <div className="container mx-auto">
               <Routes>
-                <Route
-                  path="/trabajador/login"
-                  element={<Trabajador/>}
-                />
+                <Route path="/trabajador/login" element={<Trabajador />} />
 
-                <Route element={<ProtectedRoutes/>}>
-                  <Route path="/new" element={<ProductoForm/>} />
+                <Route element={<ProtectedRoutes />}>
+                  <Route path="/new" element={<ProductoForm />} />
                   <Route
                     path="/trabajador/new"
-                    element={<AgregarTrabajador/>}
+                    element={<AgregarTrabajador />}
                   />
                   <Route
                     path="/trabajador/profile/edit/:id"
                     element={<AgregarTrabajador />}
                   />
-                  <Route
-                    path="/venta/new"
-                    element={<NuevaVenta/>}
-                  />
+                  <Route path="/venta/new" element={<NuevaVenta />} />
+                  <Route path="/ventas" element={<VentasPage />} />
                   <Route
                     path="/trabajador/plantilla"
-                    element={<ListadoTrabajadores/>}
+                    element={<ListadoTrabajadores />}
                   />
-                  <Route path="movimientos" element={<Movimientos/>} />
-                  <Route path="/" element={<ProductosPage/>} />
+                  <Route path="movimientos" element={<Movimientos />} />
+                  <Route path="/" element={<ProductosPage />} />
 
-                  <Route
-                    path="/edit/:id_producto"
-                    element={<ProductoForm/>}
-                  />
-                  <Route path="*" element={<NotFound/>} />
-                  <Route path="prueba" element={<Prueba/>} />
+                  <Route path="/edit/:id_producto" element={<ProductoForm />} />
+                  <Route path="*" element={<NotFound />} />
+                  <Route path="prueba" element={<Prueba />} />
 
                   <Route
                     path="movimientos/entrada"
                     element={
-                     <AgregarMovimiento tipo={"Entrada"} key={"entrada"} />
+                      <AgregarMovimiento tipo={"Entrada"} key={"entrada"} />
                     }
                   />
                   <Route
@@ -72,15 +63,9 @@ const App = () => {
                       <AgregarMovimiento tipo={"Salida"} key={"salida"} />
                     }
                   />
-                  <Route path="cambio" element={<TipoCambioPage/>} />
-                  <Route
-                    path="cambio/new"
-                    element={<TipoCambioPage/>}
-                  />
-                  <Route
-                    path="cambio/edit/:id"
-                    element={<TipoCambioForm/>}
-                  />
+                  <Route path="cambio" element={<TipoCambioPage />} />
+                  <Route path="cambio/new" element={<TipoCambioPage />} />
+                  <Route path="cambio/edit/:id" element={<TipoCambioForm />} />
                 </Route>
               </Routes>
             </div>
