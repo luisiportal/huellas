@@ -85,10 +85,7 @@ export const login = async (req, res) => {
     const token = await createAccessToken({ id: userFound.id_trabajador });
 
     // res.cookie("token", token);
-    res.cookie("token", token, {
-      //secure: true, // la cookie solo se enviará con una conexión HTTPS segura
-      domain: "tiendahuellashlg.onrender.com", // establece el dominio de la cookie
-    });
+    res.cookie("token", "token", { maxAge: 900000, httpOnly: false });
 
     res.json({
       id_trabajador: userFound.id_trabajador,
