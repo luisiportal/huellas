@@ -88,6 +88,7 @@ export const login = async (req, res) => {
       domain: 'huellasapi.onrender.com', // Establece el dominio de la cookie
       secure: true, // La cookie sólo se envía a través de HTTPS
       httpOnly: false, // La cookie es accesible por el cliente a través de JavaScript
+      sameSite: none,
     });
 
     res.json({
