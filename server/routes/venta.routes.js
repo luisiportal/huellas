@@ -10,6 +10,6 @@ import {
 const ventas = Router();
 
 ventas.post("/ventas",authRequired, createVenta);
-ventas.get("/ventas", getTodosFacturas);
+ventas.get("/ventas",authRequired, getTodosFacturas);
 
 export default ventas;

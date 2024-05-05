@@ -83,7 +83,12 @@ export const login = async (req, res) => {
     }
 
     const token = await createAccessToken({ id: userFound.id_trabajador });
-    res.cookie("token", token);
+    //res.cookie("token", token);
+    res.cookie("token", token, {
+      domain: 'huellasapi.onrender.com', // Establece el dominio de la cookie
+      secure: true, // La cookie sólo se envía a través de HTTPS
+      httpOnly: false, // La cookie es accesible por el cliente a través de JavaScript
+    });
 
     res.json({
       id_trabajador: userFound.id_trabajador,

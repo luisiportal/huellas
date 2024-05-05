@@ -9,11 +9,11 @@ import { authRequired } from "../middlewares/validateToken.js";
 const moneda = Router();
 
 
-moneda.post("/cambio/", crearMoneda);
-moneda.get("/cambio/",  getMonedas);
-moneda.put("/cambio/:id", updateMoneda);
+moneda.post("/cambio/",authRequired, crearMoneda);
+moneda.get("/cambio/",authRequired,  getMonedas);
+moneda.put("/cambio/:id",authRequired, updateMoneda);
 
-moneda.get("/cambio/:id", getUnaMoneda);
+moneda.get("/cambio/:id",authRequired, getUnaMoneda);
 
 
 export default moneda;
