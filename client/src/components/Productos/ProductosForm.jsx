@@ -17,7 +17,7 @@ const schema = Yup.object().shape({
     .positive("El precio debe ser mayor que cero")
     .required("Precio Requerido"),
   categoria: Yup.string().default("Sin categoria"),
-  stockMinimo: Yup.number().default(0),
+  stockMinimo: Yup.number(),
 });
 
 const ProductoForm = () => {
@@ -209,7 +209,7 @@ const ProductoForm = () => {
                 placeholder=""
                 className="my-2 px-2 py-1 rounded-sm w-full"
                 onChange={handleChange}
-                value={values.stockMinimo || 0}
+                value={values.stockMinimo}
               />
               {!params.id_producto && (
                 <>

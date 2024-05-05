@@ -8,5 +8,5 @@ export const DB_PASSWORD =process.env.DB_PASSWORD || "otravuelta"
 export const SECURE = process.env.SECURE || false
 export const HTTPONLY = process.env.HTTPONLY || false
 export const SAMESITE = process.env.SAMESITE || "none"
-export const DOMAIN = process.env.DOMAIN || "localhost:5173"
+export const DOMAIN = process.env.DOMAIN || ""
 
