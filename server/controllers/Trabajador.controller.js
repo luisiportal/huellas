@@ -3,7 +3,7 @@ import { TOKEN_SECRET, createAccessToken } from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
 import { saveImage } from "./upload.multer.js";
 import { Trabajador } from "../models/Trabajador.model.js";
-import { HTTPONLY, SAMESITE, SECURE } from "../config.js";
+import { DOMAIN, HTTPONLY, SAMESITE, SECURE } from "../config.js";
 export const register = async (req, res) => {
   let foto_perfil = "perfil_default.jpg ";
   if (req.file !== undefined) {
