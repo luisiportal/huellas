@@ -3,6 +3,7 @@ import { TOKEN_SECRET, createAccessToken } from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
 import { saveImage } from "./upload.multer.js";
 import { Trabajador } from "../models/Trabajador.model.js";
+import { HTTPONLY, SAMESITE, SECURE } from "../config.js";
 export const register = async (req, res) => {
   let foto_perfil = "perfil_default.jpg ";
   if (req.file !== undefined) {
@@ -85,10 +86,10 @@ export const login = async (req, res) => {
     const token = await createAccessToken({ id: userFound.id_trabajador });
     //res.cookie("token", token);
     res.cookie("token", token, {
-      domain: 'huellasapi.onrender.com', // Establece el dominio de la cookie
-      secure: true, // La cookie sólo se envía a través de HTTPS
-      httpOnly: false, // La cookie es accesible por el cliente a través de JavaScript
-      sameSite: "none",
+      domain: DOMAIN, // Establece el dominio de la cookie
+      secure: SECURE, // La cookie sólo se envía a través de HTTPS
+      httpOnly: HTTPONLY, // La cookie es accesible por el cliente a través de JavaScript
+      sameSite: SAMESITE,
     });
 
     res.json({

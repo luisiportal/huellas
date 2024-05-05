@@ -5,3 +5,8 @@ export const DB_PORT =process.env.DB_PORT ||  "5444"
 export const DB_DATABASE =process.env.DB_DATABASE || "huellasapp"
 export const DB_USER =process.env.DB_USER || "postgres"
 export const DB_PASSWORD =process.env.DB_PASSWORD || "otravuelta"
+export const SECURE = process.env.SECURE || false
+export const HTTPONLY = process.env.HTTPONLY || false
+export const SAMESITE = process.env.SAMESITE || "none"
+export const DOMAIN = process.env.DOMAIN || ""
+
