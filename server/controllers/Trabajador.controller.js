@@ -84,11 +84,10 @@ export const login = async (req, res) => {
 
     const token = await createAccessToken({ id: userFound.id_trabajador });
 
-   // res.cookie("token", token);
+    // res.cookie("token", token);
     res.cookie("token", token, {
-      
-      secure: true, // la cookie solo se enviará con una conexión HTTPS segura
-      domain: 'tiendahuellashlg.onrender.com' // establece el dominio de la cookie
+      //secure: true, // la cookie solo se enviará con una conexión HTTPS segura
+      domain: "tiendahuellashlg.onrender.com", // establece el dominio de la cookie
     });
 
     res.json({
@@ -101,8 +100,8 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
- res.cookie("token", "", { expires: new Date(0) });
- 
+  res.cookie("token", "", { expires: new Date(0) });
+
   return res.sendStatus(200);
 };
 
@@ -122,10 +121,9 @@ export const profile = async (req, res) => {
 
 //editar trabajador perfil
 export const updatePerfilTrabajador = async (req, res) => {
-
   try {
     const id_trabajador = req.params.id;
-     saveImage(req.file, "trabajadores/perfil");
+    saveImage(req.file, "trabajadores/perfil");
 
     const {
       username,
