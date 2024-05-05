@@ -16,6 +16,7 @@ import AgregarMovimiento from "./components/Movimientos/AgregarMovimiento";
 import TipoCambioPage from "./pages/TipoCambioPage";
 import TipoCambioForm from "./components/TipoCambio/TipoCambioForm";
 import VentasPage from "./pages/VentasPage";
+import HomePage from "./pages/HomePage";
 
 const App = () => {
   return (
@@ -38,16 +39,18 @@ const App = () => {
                     path="/trabajador/profile/edit/:id"
                     element={<AgregarTrabajador />}
                   />
-                  <Route path="/venta/new" element={<NuevaVenta />} />
-                  <Route path="/ventas" element={<VentasPage />} />
+                  <Route path="/transacciones/new" element={<NuevaVenta />} />
+                  <Route path="/transacciones" element={<VentasPage />} />
                   <Route
                     path="/trabajador/plantilla"
                     element={<ListadoTrabajadores />}
                   />
                   <Route path="movimientos" element={<Movimientos />} />
-                  <Route path="/" element={<ProductosPage />} />
+                  <Route path="/" element={<HomePage />} />
+                  
 
-                  <Route path="/edit/:id_producto" element={<ProductoForm />} />
+                  <Route path="/productos/edit/:id_producto" element={<ProductoForm />} />
+                  <Route path="/productos" element={<ProductosPage />} />
                   <Route path="*" element={<NotFound />} />
                   <Route path="prueba" element={<Prueba />} />
 

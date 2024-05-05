@@ -17,7 +17,7 @@ const schema = Yup.object().shape({
     .positive("El precio debe ser mayor que cero")
     .required("Precio Requerido"),
   categoria: Yup.string().default("Sin categoria"),
-  stockMinimo: Yup.number(),
+  stockMinimo: Yup.number().typeError("Debes escribir solo números"),
 });
 
 const ProductoForm = () => {
@@ -89,7 +89,6 @@ const ProductoForm = () => {
         navigate("/");
       }
     } catch (error) {
-     
       console.log(error);
 
       alert("Error al actualizar producto  " + error);
@@ -211,6 +210,9 @@ const ProductoForm = () => {
                 onChange={handleChange}
                 value={values.stockMinimo}
               />
+              {errors.stockMinimo && (
+                <span className="bg-red-500 p-1 m-1">{errors.stockMinimo}</span>
+              )}
               {!params.id_producto && (
                 <>
                   <label htmlFor="existencia_inicial" className="block">
