@@ -17,6 +17,7 @@ const NuevaVenta = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [productos, setProductos] = useState([]);
   const [carrito, setCarrito] = useState([]);
+  const [existeProducto, setExisteProducto] = useState(false);
   const { loader, setLoader } = useAuth();
   const [movimiento, setMovimiento] = useState({
     cantidad: "",
@@ -75,8 +76,10 @@ const NuevaVenta = () => {
     try {
       setLoader(true);
       await createVentaRequest(carrito, total);
-      setLoader(false);
+
       alert("Producto vendido");
+      setLoader(false);
+
       setCarrito([]);
     } catch (error) {
       setLoader(false);
@@ -94,10 +97,18 @@ const NuevaVenta = () => {
               enableReinitialize={true}
               validationSchema={schema}
               onSubmit={async (values) => {
-                console.log(values);
-                //carrito.filter(values.id_producto)
                 setLoader(true);
-                setCarrito([...carrito, values]);
+                setExisteProducto(null);
+                if (
+                  !carrito.some(
+                    (producto) => producto.producto === values.producto
+                  )
+                ) {
+                  setCarrito([...carrito, values]);
+                } else {
+                  alert("Ya este producto ha sido agregado");
+                }
+
                 setLoader(false);
               }}
             >
