@@ -1,48 +1,74 @@
 import React, { useState, useEffect } from "react";
-import Select from "react-select";
 
 import { Form, Formik, isInteger } from "formik";
-import { getProductosRequest } from "../../api/productos.api";
-
 import * as Yup from "yup";
-
 import ProductoCarrito from "./ProductoCarrito";
 import Btn_Huellas from "../Btn_Huellas";
-
 import { createVentaRequest } from "../../api/venta.api";
 import Loader from "../Utilidades/Loader";
 import { useAuth } from "../../context/AuthContext";
+import {
+  readLocalStorage,
+  useLocalStorage,
+  writeLocalStorage,
+} from "../../hooks/useLocalStorage";
+import { useGetApiRequest } from "../../hooks/useGetApiREquest";
+import FormAddProduct from "./FormAddProduct";
+import CarritosGuardados from "./CarritosGuardados";
 
 const NuevaVenta = () => {
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [productos, setProductos] = useState([]);
   const [carrito, setCarrito] = useState([]);
-  const [existeProducto, setExisteProducto] = useState(false);
+
+  const [carrito1, setCarrito1] = useState([]);
+  const [carrito2, setCarrito2] = useState([]);
+  const [carrito3, setCarrito3] = useState([]);
+  const [carrito4, setCarrito4] = useState([]);
+  const [cartSelect, setCartSelect] = useState(0);
+
+  const [recargar, setRecargar] = useState(false);
+
+  const [nuCart, setnuCart] = useState(1);
+
   const { loader, setLoader } = useAuth();
   const [movimiento, setMovimiento] = useState({
     cantidad: "",
     producto: "",
   });
 
+  const productos = useGetApiRequest();
+
   useEffect(() => {
-    const loadProducto = async () => {
-      try {
-        const { data } = await getProductosRequest();
+    cargarCarritosGuardados();
+  }, [recargar]);
 
-        setProductos(data);
-      } catch (error) {}
-    };
+  const guardarCarrito = () => {
+    if (carrito.length == 0) {
+      alert("Carrito Vacio");
+    } else {
+      setnuCart(readLocalStorage("nuCart"));
+      nuCart < 5
+        ? writeLocalStorage("carrito" + nuCart, [...carrito])
+        : alert("Maximo de carritos alcanzado");
+      writeLocalStorage("nuCart", nuCart);
+      setnuCart(nuCart + 1);
+      setCarrito([]);
+      alert("Carrito Guardado");
+      setRecargar(!recargar);
+    }
+  };
+  const cargarCarrito = (nuCart) => {
+    setCarrito([0]);
+    setCarrito(readLocalStorage("carrito" + nuCart));
+    setCartSelect(nuCart);
+    alert("Carrito " + nuCart + " Cargado");
+  };
 
-    loadProducto();
-  }, []);
-
-  const options = productos.map((producto) => ({
-    value: producto.id_producto,
-    label: producto.nombre_producto,
-    existencia: producto.existencia,
-    precio_venta: Number(producto.precio_venta),
-    ruta_image: producto.ruta_image,
-  }));
+  const cargarCarritosGuardados = () => {
+    setCarrito1(readLocalStorage("carrito1"));
+    setCarrito2(readLocalStorage("carrito2"));
+    setCarrito3(readLocalStorage("carrito3"));
+    setCarrito4(readLocalStorage("carrito4"));
+  };
 
   const schema = Yup.object().shape({
     cantidad: Yup.number()
@@ -53,19 +79,6 @@ const NuevaVenta = () => {
       .required("Este campo es requerido")
       .min(1, "Cantidad vacia"),
   });
-
-  const handleSelectChange = (p) => {
-    setSelectedOption(p);
-
-    setMovimiento({
-      ...movimiento,
-      id_producto: p.value,
-      producto: p.label,
-      existencia: p.existencia,
-      precio_venta: p.precio_venta,
-      ruta_image: p.ruta_image,
-    });
-  };
 
   const total = carrito.reduce(
     (sum, producto) => sum + producto.precio_venta * producto.cantidad,
@@ -81,6 +94,9 @@ const NuevaVenta = () => {
       setLoader(false);
 
       setCarrito([]);
+
+      localStorage.removeItem("carrito" + cartSelect);
+      setRecargar(!recargar);
     } catch (error) {
       setLoader(false);
       alert(error);
@@ -89,7 +105,7 @@ const NuevaVenta = () => {
 
   return (
     <div>
-      <div>
+      <div className="pt-20">
         <div className="flex justify-center items-center pt-24">
           <div>
             <Formik
@@ -98,7 +114,7 @@ const NuevaVenta = () => {
               validationSchema={schema}
               onSubmit={async (values) => {
                 setLoader(true);
-                setExisteProducto(null);
+
                 if (
                   !carrito.some(
                     (producto) => producto.producto === values.producto
@@ -120,42 +136,34 @@ const NuevaVenta = () => {
                 isSubmitting,
               }) => (
                 <Form>
-                  <div className="bg-neutral-200 mt-6">
-                    <div className="p-4 ">
-                      <Select
-                        name="nombre_producto"
-                        options={options}
-                        value={selectedOption}
-                        onChange={handleSelectChange}
-                        isSearchable
-                      />
-                    </div>
-                    <div className="text-slate-900 p-4">
-                      <label className="p-2" htmlFor="cantidad">
-                        Cantidad :
-                      </label>
-                      <input
-                        className="text-black"
-                        name="cantidad"
-                        type="text"
-                        onChange={handleChange}
-                        value={values.cantidad}
-                      />
-                      {errors.cantidad && (
-                        <span className="bg-red-500 p-1 m-1">
-                          {errors.cantidad}
-                        </span>
-                      )}
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className=" bg-huellas_color w-full text-2md text-black font-bold block p-2 rounded-md"
-                    >
-                      {isSubmitting ? "Guardando..." : "Agregar"}
-                    </button>
+                  <Btn_Huellas
+                    text={"Guardar Carrito"}
+                    onclick={guardarCarrito}
+                    type={"button"}
+                  />
+                  <div className="">
+                    {" "}
+                    <CarritosGuardados
+                      cargarCarrito={cargarCarrito}
+                      carrito1={carrito1}
+                      carrito2={carrito2}
+                      carrito3={carrito3}
+                      carrito4={carrito4}
+                      setCarrito={setCarrito}
+                      setRecargar={setRecargar}
+                      recargar={recargar}
+                    />
                   </div>
+
+                  <FormAddProduct
+                    productos={productos}
+                    setMovimiento={setMovimiento}
+                    handleChange={handleChange}
+                    movimiento={movimiento}
+                    values={values}
+                    errors={errors}
+                    isSubmitting={isSubmitting}
+                  />
                 </Form>
               )}
             </Formik>
