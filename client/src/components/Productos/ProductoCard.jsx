@@ -36,11 +36,7 @@ function ProductoCard({ producto }) {
       onMouseLeave={handleMouseLeave}
       onClick={handleSetmasDetalles}
     >
-      <Link to={"/new"}>
-        <button className="fixed  md:hidden bottom-5 right-8 bg-huellas_color hover:bg-slate-700 text-white font-extrabold py-10 px-10 rounded-full h-8 w-8 text-4xl flex justify-center items-center">
-          +
-        </button>
-      </Link>
+      
       <header className="flex">
         <div /* imagen del prodcuto */>
           <img
@@ -91,7 +87,9 @@ function ProductoCard({ producto }) {
 
               <p>Costo Total: {producto.costo_total} cup</p>
 
-              <span>Creado: {new Date(producto.createdAt).toLocaleString('es-ES')}</span>
+              <span>
+                Creado: {new Date(producto.createdAt).toLocaleString("es-ES")}
+              </span>
             </ul>
           </div>
         )}
@@ -99,15 +97,11 @@ function ProductoCard({ producto }) {
       {showBotones && (
         <div className="flex gap-x-1 transition-all duration-500 ease-in-out">
           <div className="bg-slate-700 px-2 py-1 font-bold text-white rounded hover:bg-huellas_color">
-            <button
-              className=""
-              onClick={() => deleteProducto(producto.id_producto)}
-            >
+            <button onClick={() => deleteProducto(producto.id_producto)}>
               Eliminar
             </button>
           </div>
           <div>
-            {" "}
             <button
               className="bg-slate-700 px-2 py-1 font-bold text-white rounded hover:bg-huellas_color"
               onClick={() => navigate(`edit/${producto.id_producto}`)}

@@ -45,6 +45,7 @@ const ResumenVenta = () => {
 
   function renderMain() {
     if (fechas.length === 0) return <h1>No hay ventas</h1>;
+    //if (facturas.length === 0) return <h1>No hay ventas</h1>;
     return fechas.map((fecha) => (
      <H2FechaTitulo fecha={fecha} opciones={opciones} facturas={facturas}/>
     ));
