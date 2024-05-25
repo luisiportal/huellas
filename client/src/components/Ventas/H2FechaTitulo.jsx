@@ -1,10 +1,10 @@
 import React from "react";
 import FacturaCard from "./FacturaCard";
 
-const H2FechaTitulo = ({ fecha, facturas, opciones }) => {
+const H2FechaTitulo = ({ fecha, facturas, opciones,setFacturas }) => {
   const facturasMismafecha = facturas.filter(
     (factura) =>
-      new Date(factura.createdAt).toLocaleDateString("es-ES", opciones) == fecha
+      new Date(factura.creado).toLocaleDateString("es-ES", opciones) == fecha
   );
 
   const totalVentaDia = facturasMismafecha.reduce(
@@ -12,7 +12,7 @@ const H2FechaTitulo = ({ fecha, facturas, opciones }) => {
     0
   );
 
-  console.log(totalVentaDia);
+ 
 
   return (
     <section className="flex flex-1 flex-col" key={fecha}>

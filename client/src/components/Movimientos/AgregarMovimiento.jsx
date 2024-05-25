@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 
 import { Form, Formik, isInteger } from "formik";
-import { getProductosRequest } from "../../api/productos.api";
 
 import * as Yup from "yup";
 import { hacerMoviemientoRequest } from "../../api/movimientos.api";
@@ -11,11 +10,17 @@ import BotoneraEntrada_Salida from "../BotoneraEntrada_Salida";
 import { useAuth } from "../../context/AuthContext";
 import Loader from "../Utilidades/Loader";
 
+import { useProductos } from "../../context/ProductoProvider";
+import {
+  writeLocalStorage,
+  writeLocalStorageCrearMovimiento,
+} from "../../hooks/useLocalStorage";
+
 const AgregarMovimiento = (tipo) => {
   const [estadoEnviar, setEstadoEnviar] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [productos, setProductos] = useState([]);
-  const { loader, setLoader } = useAuth();
+  const { loader, setLoader, isOnline } = useAuth();
+  const { productos, loadProductos } = useProductos();
   const [movimiento, setMovimiento] = useState({
     cantidad: "",
     producto: "",
@@ -23,15 +28,11 @@ const AgregarMovimiento = (tipo) => {
   });
 
   useEffect(() => {
-    const loadProducto = async () => {
-      try {
-        const { data } = await getProductosRequest();
-
-        setProductos(data);
-      } catch (error) {}
-    };
-    loadProducto();
+    loadProductos(null);
   }, [estadoEnviar]);
+
+  let fechaActual = new Date();
+  let createdAt = fechaActual.toISOString();
 
   const options = productos.map((producto) => ({
     value: producto.id_producto,
@@ -60,6 +61,7 @@ const AgregarMovimiento = (tipo) => {
       id_producto: p.value,
       producto: p.label,
       existencia: p.existencia,
+      createdAt: createdAt,
     });
   };
 
@@ -80,11 +82,18 @@ const AgregarMovimiento = (tipo) => {
               onSubmit={async (values, { resetForm }) => {
                 try {
                   setLoader(true);
-                  await hacerMoviemientoRequest(values);
-                  setEstadoEnviar(new Date().getTime());
+                  if (!isOnline) {
+                    writeLocalStorageCrearMovimiento(
+                      values,
+                      movimiento.producto
+                    );
+                  } else {
+                    await hacerMoviemientoRequest(values);
+                  }
+                  alert(`Movimiento de ${tipo.tipo} realizado`);
                   resetForm();
                   setSelectedOption(null);
-                  alert(`Movimiento de ${tipo.tipo} realizado`);
+                  setEstadoEnviar(new Date().getTime());
                 } catch (error) {
                   console.error(error);
                 }

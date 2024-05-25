@@ -1,24 +1,66 @@
 import { useState, useEffect } from "react";
-import { getTodosMovimientosRequest } from "../../api/movimientos.api";
+import {
+  deleteMovimientoRequest,
+  getTodosMovimientosRequest,
+} from "../../api/movimientos.api";
 import { useAuth } from "../../context/AuthContext";
 import Loader from "../Utilidades/Loader";
+import Bton_eliminar_producto from "../Ventas/Bton_eliminar_producto";
+import {
+  readLocalStorage,
+  writeLocalStorage,
+} from "../../hooks/useLocalStorage";
 
 const MovimientoCard = () => {
   const [movimientos, setMovimientos] = useState([]);
-  const { loader, setLoader } = useAuth();
+  const { loader, setLoader, isOnline } = useAuth();
 
   useEffect(() => {
-    const loadProducto = async () => {
+    const loadMovimientos = async () => {
       try {
         setLoader(true);
-        const response = await getTodosMovimientosRequest();
-        setMovimientos(response.data);
+        if (!isOnline) {
+          setMovimientos(readLocalStorage("movimientos"));
+        } else {
+          const response = await getTodosMovimientosRequest();
+          setMovimientos(response.data);
+          writeLocalStorage("movimientos", response.data);
+        }
+
         setLoader(false);
       } catch (error) {}
     };
 
-    loadProducto();
+    loadMovimientos();
   }, []);
+
+  const handleEliminar = async (id) => {
+    if (confirm("¿Estás a punto de eliminar un Movimiento ?")) {
+      try {
+        if (!isOnline) {
+          writeLocalStorage(
+            "movimientos",
+            movimientos.filter((movimiento) => movimiento.id_movimiento !== id)
+          );
+        } else {
+          const response = await deleteMovimientoRequest(id);
+          setMovimientos(
+            movimientos.filter((movimiento) => movimiento.id_movimiento !== id)
+          );
+          writeLocalStorage(
+            "movimientos",
+            movimientos.filter((movimiento) => movimiento.id_movimiento !== id)
+          );
+        }
+        alert("Movimiento Eliminado");
+      } catch (error) {
+        alert(error);
+      }
+    } else {
+      // El usuario hizo clic en "Cancelar", puedes poner aquí el código para la acción cancelada
+    }
+  };
+
   return (
     <div className="mx-2 bg-neutral-200 rounded-md">
       {movimientos.map((movimiento, id_movimiento) => (
@@ -40,16 +82,23 @@ const MovimientoCard = () => {
             />
             <div className="p-2 text-left">
               <h2 className="text-md font-semibold ">
-                {movimiento.producto.nombre_producto}
+                {movimiento.producto?.nombre_producto ?? movimiento.producto}
               </h2>
               <h3 className="text-sm font-semibold">
                 Cantidad: {movimiento.cantidad}
               </h3>
               <h3 className="text-sm font-semibold">Tipo: {movimiento.tipo}</h3>
               <span className="text-sm text-slate-900">
-                Fecha : {new Date(movimiento.createdAt).toLocaleString("es-ES")}
+                Fecha :{" "}
+                {new Date(
+                  movimiento?.creado ?? movimiento.createdAt
+                ).toLocaleString("es-ES")}
               </span>
             </div>
+
+            <button onClick={() => handleEliminar(movimiento.id_movimiento)}>
+              <Bton_eliminar_producto />
+            </button>
           </div>
         </header>
       ))}

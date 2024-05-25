@@ -7,7 +7,7 @@ import { Costo_Total } from "../models/costo_total.model.js";
 export const getTodosProductos = async (req, res) => {
   try {
     const response = await Producto.findAll({
-      order: [["id_producto", "DESC"]],
+      order: [["nombre_producto", "ASC"]]
     });
     res.json(response);
   } catch (error) {

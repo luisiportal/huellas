@@ -5,11 +5,10 @@ import { Producto } from "../models/Producto.model.js";
 
 export const hacerMovimientoAPi = async (req, res) => {
   try {
-    const { existencia, cantidad, id_producto } = req.body;
+    const { existencia, cantidad, id_producto, creado } = req.body;
     if (req.body.tipo === "Entrada") {
       const response = await Producto.findByPk(id_producto);
-      console.log(cantidad);
-      console.log(existencia);
+
       response.existencia = Number(cantidad) + Number(existencia);
 
       await response.save();
@@ -30,7 +29,8 @@ export const hacerMovimientoAPi = async (req, res) => {
       req.body.id_producto,
       req.body.tipo,
       req.body.producto,
-      req.body.cantidad
+      req.body.cantidad,
+      req.body.creado
     );
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -42,7 +42,8 @@ export const regsitrarMovimiento = async (
   id_producto,
   tipo,
   producto,
-  cantidad
+  cantidad,
+  creado
 ) => {
   try {
     const response = await Movimiento.create({
@@ -50,6 +51,7 @@ export const regsitrarMovimiento = async (
       tipo,
       producto,
       cantidad,
+      creado,
     });
   } catch (error) {
     console.log("Error al registrar movimiento");
@@ -69,13 +71,26 @@ export const getTodosMovimientos = async (req, res) => {
       include: [
         {
           model: Producto,
-          attributes: ["nombre_producto", 'ruta_image'],
+          attributes: ["nombre_producto", "ruta_image"],
           required: true,
         },
       ],
       order: [["createdAt", "DESC"]],
     });
     res.json(response);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteMovimiento = async (req, res) => {
+  try {
+    const response = await Movimiento.destroy({
+      where: {
+        id_movimiento: req.params.id,
+      },
+    });
+    res.sendStatus(204);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

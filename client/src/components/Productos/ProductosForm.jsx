@@ -5,6 +5,12 @@ import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useAuth } from "../../context/AuthContext";
 import Loader from "../Utilidades/Loader";
+import {
+  readLocalStorage,
+  writeLocalStorage,
+   writeLocalStorageActualizarProductos,
+   writeLocalStorageCrearProducto,
+} from "../../hooks/useLocalStorage";
 
 const schema = Yup.object().shape({
   nombre_producto: Yup.string().required("Nombre producto requerido"),
@@ -22,7 +28,7 @@ const schema = Yup.object().shape({
 
 const ProductoForm = () => {
   const { createProducto, getProducto, updateProducto } = useProductos();
-  const { loader, setLoader } = useAuth();
+  const { loader, setLoader, isOnline } = useAuth();
   const [file, setFile] = useState(null);
   const [producto, setProducto] = useState({
     nombre_producto: "",
@@ -35,18 +41,22 @@ const ProductoForm = () => {
 
   useEffect(() => {
     const loadProducto = async () => {
+      // cargar el producto
       if (params.id_producto) {
-        const producto = await getProducto(params.id_producto);
+        if (isOnline) {
+          // modo en linea
+          const producto = await getProducto(params.id_producto);
+          setProducto(producto);
+        } else {
+          // modo fuera linea
+          const productos = readLocalStorage("productos");
+          const producto = productos.filter(
+            (producto) => producto.id_producto == params.id_producto
+          );
 
-        setProducto({
-          nombre_producto: producto.nombre_producto,
-          description_producto: producto.description_producto,
-          costo_unitario: producto.costo_unitario,
-          precio_venta: producto.precio_venta,
-          categoria: producto.categoria,
-          stockMinimo: producto.stockMinimo,
-          unidadMedida: producto.unidadMedida,
-        });
+          setProducto(producto[0]);
+        }
+
         (e) => {
           setFile(e.target.files[0]);
         };
@@ -59,7 +69,6 @@ const ProductoForm = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
-    console.log(values);
     const formData = new FormData();
     formData.append("nombre_producto", values.nombre_producto);
     formData.append("description_producto", values.description_producto);
@@ -78,15 +87,39 @@ const ProductoForm = () => {
     try {
       setLoader(true);
       if (params.id_producto) {
-        await updateProducto(params.id_producto, formData);
+        if (isOnline) {
+          await updateProducto(params.id_producto, formData); // onlinne
+        } else {
+          writeLocalStorageActualizarProductos("productos", {
+            id_producto: params.id_producto,
+            nombre_producto: formData.get("nombre_producto"),
+            description_producto: formData.get("description_producto"),
+            costo_unitario: formData.get("costo_unitario"),
+            precio_venta: formData.get("precio_venta"),
+            categoria: formData.get("categoria"),
+            stockMinimo: formData.get("stockMinimo"),
+          });
+        }
+
         alert("Se ha actualizado el producto");
 
-        navigate("/");
+        navigate("/productos");
       } else {
-        await createProducto(formData);
+        if (isOnline) {
+          await createProducto(formData);
+        } else {
+          writeLocalStorageCrearProducto("productos", {
+            nombre_producto: formData.get("nombre_producto"),
+            description_producto: formData.get("description_producto"),
+            costo_unitario: formData.get("costo_unitario"),
+            precio_venta: formData.get("precio_venta"),
+            categoria: formData.get("categoria"),
+            stockMinimo: formData.get("stockMinimo"),
+          });
+        }
 
         alert("Se ha creado el producto correctamente");
-        navigate("/");
+        navigate("/productos");
       }
     } catch (error) {
       console.log(error);

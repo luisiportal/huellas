@@ -3,6 +3,11 @@ import React, { useEffect, useState } from "react";
 import FacturaCard from "./FacturaCard";
 import { getTodosFacturasRequest } from "../../api/venta.api";
 import H2FechaTitulo from "./H2FechaTitulo";
+import { useAuth } from "../../context/AuthContext";
+import {
+  readLocalStorage,
+  writeLocalStorage,
+} from "../../hooks/useLocalStorage";
 
 const ResumenVenta = () => {
   const [facturas, setFacturas] = useState([]);
@@ -14,21 +19,32 @@ const ResumenVenta = () => {
     day: "numeric",
   };
 
+  const { isOnline } = useAuth();
+
   useEffect(() => {
     const loadFacturas = async () => {
       try {
-        const { data } = await getTodosFacturasRequest();
+        if (!isOnline) {
+          const data = readLocalStorage("facturas");
 
-        setFacturas(data);
-        loadFechas(data);
+          setFacturas(data);
+          loadFechas(data);
+        } else {
+          const { data } = await getTodosFacturasRequest();
+          writeLocalStorage("facturas", data);
+
+          setFacturas(data);
+          loadFechas(data);
+        }
       } catch (error) {}
     };
 
     const loadFechas = async (facturas) => {
+      // aquuiiii
       setFechas([
         ...new Set(
           facturas.map((factura) =>
-            new Date(factura.createdAt).toLocaleDateString("es-ES", opciones)
+            new Date(factura.creado).toLocaleDateString("es-ES", opciones)
           )
         ),
       ]);
@@ -47,7 +63,12 @@ const ResumenVenta = () => {
     if (fechas.length === 0) return <h1>No hay ventas</h1>;
     //if (facturas.length === 0) return <h1>No hay ventas</h1>;
     return fechas.map((fecha) => (
-     <H2FechaTitulo fecha={fecha} opciones={opciones} facturas={facturas}/>
+      <H2FechaTitulo
+        fecha={fecha}
+        opciones={opciones}
+        facturas={facturas}
+        setFacturas={setFacturas}
+      />
     ));
   }
 

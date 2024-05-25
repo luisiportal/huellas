@@ -4,7 +4,6 @@ import { Form, Formik } from "formik";
 import Input from "../Input";
 const EntrarEfectivo = () => {
   const [entrarEfectivo, setEntrarEfectivo] = useState([]);
-  
 
   const schema = Yup.object().shape({
     cantidad: Yup.number()
@@ -14,7 +13,7 @@ const EntrarEfectivo = () => {
   });
 
   const handleChange = (event) => {
-    console.log(event.target.value);
+ 
   };
 
   return (
@@ -22,9 +21,7 @@ const EntrarEfectivo = () => {
       initialValues={entrarEfectivo}
       enableReinitialize={true}
       validationSchema={schema}
-      onSubmit={async (values) => {
-        console.log("pagando");
-      }}
+      onSubmit={async (values) => {}}
     >
       {({ errors, values, isSubmitting }) => (
         <Form>

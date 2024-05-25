@@ -1,5 +1,21 @@
+import { deleteFacturaRequest } from "../../api/venta.api";
+import { useCarritos } from "../../context/CarritosContext";
+import Bton_eliminar_producto from "./Bton_eliminar_producto";
+
 function FacturaCard({ factura }) {
   const { ventas } = factura;
+
+  const handleEliminar = async (id) => {
+    if (confirm("¿Estás a punto de eliminar una Venta ?")) {
+      try {
+        const response = await deleteFacturaRequest(id);
+        ventas.filter((elem) => elem != id);
+        alert("Eliminado");
+      } catch (error) {}
+    } else {
+      // El usuario hizo clic en "Cancelar", puedes poner aquí el código para la acción cancelada
+    }
+  };
 
   return (
     <div
@@ -10,17 +26,30 @@ function FacturaCard({ factura }) {
 
         {ventas.map((producto) => (
           <div className="flex justify-between" key={producto.id_venta}>
-            <div className="flex"><h2> {producto.cantidad}x</h2>
-            <h2>{producto.producto.nombre_producto}</h2></div>
+            <div className="flex">
+              <h2> {producto.cantidad}x</h2>
+              <h2>
+                {producto.producto?.nombre_producto ?? producto.nombre_producto}
+              </h2>
+            </div>
 
-            <h2>$ {producto.precio_total_producto} cup</h2>
+            <h2>
+              ${" "}
+              {producto.precio_total_producto ??
+                producto.precio_venta * producto.cantidad}{" "}
+              cup
+            </h2>
           </div>
         ))}
 
         <div className="text-right mt-5 flex-grow flex flex-col">
           <p>Total {factura.total_venta} cup</p>
-          <p>{new Date(factura.createdAt).toLocaleString("es-ES")}</p>
+
+          <p>{new Date(factura.creado).toLocaleString("es-ES")}</p>
         </div>
+        <button onClick={() => handleEliminar(factura.id)}>
+          <Bton_eliminar_producto />
+        </button>
       </div>
     </div>
   );

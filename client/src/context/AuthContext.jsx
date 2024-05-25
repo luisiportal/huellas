@@ -7,6 +7,7 @@ import {
   registerRequest,
   verifyTokenRequest,
 } from "../api/login.api";
+import { readLocalStorage, writeLocalStorage } from "../hooks/useLocalStorage";
 
 export const AuthContext = createContext();
 
@@ -19,6 +20,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isOnline, setIsOnline] = useState(true);
   const [errors, setErrors] = useState(null);
   const [loading, setLoading] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -39,17 +41,37 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (user) => {
-    setLoader(true);
-    setUser(user);
-    const { data } = await cargarPerfilRequest(user.id_trabajador);
-    setLoader(false);
-    setPerfil(data);
+    try {
+      setLoader(true);
+      setUser(user);
+      if (!isOnline) {
+        setIsAuthenticated(true);
+        setPerfil(readLocalStorage("perfil"));
+      } else {
+        const { data } = await cargarPerfilRequest(user.id_trabajador);
+      
+        writeLocalStorage("perfil", data);
+        setLoader(false);
+        setPerfil(data);
+      }
+    } catch (error) {
+      alert(error);
+    }
+
     setIsAuthenticated(true);
   };
 
   const cargarPerfil = async (id) => {
-    const { data } = await cargarPerfilRequest(id);
-    setPerfil(data);
+    try {
+      if (!isOnline) {
+        setPerfil(readLocalStorage("perfil"));
+      } else {
+        const { data } = await cargarPerfilRequest(id);
+        setPerfil(data);
+      }
+    } catch (error) {
+      return alert(error);
+    }
   };
 
   const logout = async (user) => {
@@ -74,6 +96,7 @@ export const AuthProvider = ({ children }) => {
       }
       try {
         const res = await verifyTokenRequest(cookies.token);
+        if (res.status != 200) return alert("No hay conexión");
         if (!res.data) {
           setIsAuthenticated(false);
           setLoading(false);
@@ -106,6 +129,8 @@ export const AuthProvider = ({ children }) => {
         perfil,
         loader,
         setLoader,
+        isOnline,
+        setIsOnline,
       }}
     >
       {children}

@@ -10,8 +10,14 @@ const PerfilTrabajador = () => {
   const navigate = useNavigate();
   const params = useParams();
   useEffect(() => {
-    cargarPerfil(user.id_trabajador);
-    setLoader(false);
+    try {
+      cargarPerfil(user.id_trabajador);
+      setLoader(false);
+    } catch (error) {
+      alert("Lo siento debes de iniciar sesion con conexión");
+      navigate("/");
+      return alert(error);
+    }
   }, []);
 
   return (
@@ -72,7 +78,7 @@ const PerfilTrabajador = () => {
             Cerrar Sesión
           </button>
 
-          {loader &&( <Loader />)}
+          {loader && <Loader />}
         </div>
       </div>
     </div>

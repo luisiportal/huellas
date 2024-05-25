@@ -3,25 +3,20 @@ import { Link } from "react-router-dom";
 import Navbar from "./navbar/Navbar";
 import { useAuth } from "../context/AuthContext";
 import { cargarPerfilRequest } from "../api/login.api";
+import ActivarDesactModo from "./ModoOffline/ActivarDesactModo";
 
 const NavbarComponent = () => {
   const [abrirHamburguesa, setabrirHamburguesa] = useState(false);
-  const { isAuthenticated, logout, user, perfil } = useAuth();
+  const { isAuthenticated, logout, user, perfil, isOnline, setIsOnline } = useAuth();
 
   const sidebarRef = useRef(null);
   const openButtonRef = useRef(null);
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (sidebarRef != null) {
-        if (sidebarRef.current.contains(event.target)) {
-          setabrirHamburguesa(false);
-        }
-        if (
-          sidebarRef.current &&
-          !sidebarRef.current.contains(event.target) &&
-          !openButtonRef.current.contains(event.target)
-        ) {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        // Si el evento no ocurrió dentro de sidebarRef o dentro de openButtonRef
+        if (!openButtonRef.current || !openButtonRef.current.contains(event.target)) {
           setabrirHamburguesa(false);
         }
       }
@@ -46,6 +41,7 @@ const NavbarComponent = () => {
           <div className="flex -mr-4">
             {/*Logo huellas  */}
             <div>
+          
               <Link
                 className="text-huellas_color hover:rotate-6 duration-200"
                 to={"/"}
@@ -165,6 +161,7 @@ const NavbarComponent = () => {
           </div>
         </div>
       </header>
+      <ActivarDesactModo setIsOnline={setIsOnline} isOnline={isOnline}/>
     </div>
   );
 };

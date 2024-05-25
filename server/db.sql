@@ -24,7 +24,7 @@ BEGIN
 	RETURN NEW;
 END;
 $function$
-; 
+;
 
 create
 or replace trigger tr_actualizar_costo_total_producto before insert
@@ -51,12 +51,43 @@ BEGIN
 	RETURN NEW;
 END;
 $function$
-; 
+;
 
 create
 or replace trigger tr_insertar_movimiento
 after insert on public.ventas for each row
 execute function insertar_movimiento ();
+
+-- DROP FUNCTION public.eliminar_movimiento();
+
+-- DROP FUNCTION public.eliminar_movimiento();
+
+-- DROP FUNCTION public.eliminar_movimiento();
+
+CREATE OR REPLACE FUNCTION public.eliminar_movimiento()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+begin
+	
+ IF (OLD.tipo = 'Venta' OR OLD.tipo = 'Salida') THEN
+        UPDATE productos
+        SET existencia = existencia + OLD.cantidad
+        WHERE id_producto = OLD.id_producto;
+    ELSIF (OLD.tipo = 'Entrada' or OLD.tipo ='Existencia Inicial') THEN
+        UPDATE productos
+        SET existencia = existencia - OLD.cantidad
+        WHERE id_producto = OLD.id_producto;
+    END IF;
+    RETURN NEW;
+END;
+$function$
+;
+
+create
+or REPLACE trigger tr_eliminar_movimiento
+after delete on public.movimientos for each row
+execute function eliminar_movimiento ();
 
 ALTER TABLE public.movimientos
 ALTER COLUMN "createdAt"
@@ -93,11 +124,32 @@ BEGIN
 	RETURN NEW;
 END;
 $function$
-; 
+;
 
 create
 or replace trigger trMoneda_actualizar_costo_total_producto
 after insert
 or
 update on public.monedas for each row
-execute function actualizar_costo_productoMLC ()
+execute function actualizar_costo_productoMLC ();
+
+create trigger tr_insertar_movimi_existen_inicial
+after insert on public.productos for each row
+execute function insertar_movi_existencia_inicial ();
+
+-- DROP FUNCTION public.insertar_movi_existencia_inicial();
+CREATE OR REPLACE FUNCTION public.insertar_movi_existencia_inicial()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+
+BEGIN
+	IF NEW.existencia > 0 THEN
+		INSERT INTO movimientos (id_producto, tipo, cantidad)
+		VALUES (NEW.id_producto, 'Existencia Inicial', NEW.existencia_inicial);
+		
+	END IF;
+		RETURN NEW;
+END;
+$function$
+;

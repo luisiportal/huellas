@@ -18,4 +18,7 @@ export const Movimiento = sequelize.define("movimientos", {
   cantidad: {
     type: DataTypes.INTEGER,
   },
+  creado: {
+    type: DataTypes.DATE,
+  },
 });

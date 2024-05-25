@@ -8,9 +8,22 @@ import { useAuth } from "../../context/AuthContext";
 import { loginRequest } from "../../api/login.api";
 import MostrarErrorMessage from "../ValidacionForm/MostrarErrorMessage";
 import Loader from "../Utilidades/Loader";
+import {
+  readLocalStorage,
+  writeLocalStorage,
+} from "../../hooks/useLocalStorage";
+import ActivarDesactModo from "../ModoOffline/ActivarDesactModo";
 
 const Login = () => {
-  const { isAuthenticated, errors, login, loader, setLoader } = useAuth();
+  const {
+    isAuthenticated,
+    errors,
+    login,
+    loader,
+    setLoader,
+    isOnline,
+    setIsOnline,
+  } = useAuth();
   const [credencial_invalida, setCredencial_invalida] = useState(null);
   const navigate = useNavigate();
 
@@ -33,22 +46,57 @@ const Login = () => {
             .matches(/^[a-zA-Z0-9-. ]*$/, "Solo se permiten letras y números"),
         })}
         onSubmit={async (values, { setSubmitting }) => {
-          try {
-            setLoader(true);
-            await loginRequest(values).then((result) => {
-              setLoader(false);
-              login(result.data);
-            });
-
-            // login(response.data);
-          } catch (error) {
-            setCredencial_invalida(error.response.data.message);
-
-            setTimeout(() => {
-              setCredencial_invalida(null);
-            }, 2000);
+          if (!isOnline) {
+            const responseLocal = readLocalStorage("user");
+            if (!responseLocal) return alert("Debes iniciar sesión con conexión");
+            login(responseLocal);
             setLoader(false);
-            console.error(error);
+          } else {
+            try {
+              setLoader(true);
+              const response = await loginRequest(values);
+
+              if (response.status != 200) {
+                setLoader(false);
+                throw new Error("No hay conexión");
+              }
+
+              writeLocalStorage("user", response.data);
+              setLoader(false);
+              login(response.data);
+            } catch (error) {
+              setLoader(false);
+
+              if (error.message.includes("Network Error")) {
+                alert("No hay conexión");
+                let modoSinConexion = confirm(
+                  "¿Quieres activar el modo sin conexión?"
+                );
+
+                if (modoSinConexion) {
+                  setIsOnline(false);
+                  alert("Modo sin conexión activado");
+                } else {
+                  setIsOnline(true);
+                }
+
+                return;
+              }
+
+              if (error.response.status === 400) {
+                setCredencial_invalida("Credenciales inválidas");
+              } else if (error.message === "No hay conexión") {
+                setCredencial_invalida("No hay conexión con el servidor");
+              } else {
+                setCredencial_invalida("Ocurrió un error inesperado");
+              }
+
+              setTimeout(() => {
+                setCredencial_invalida(null);
+              }, 2000);
+
+              console.error(error);
+            }
           }
         }}
       >
@@ -102,6 +150,7 @@ const Login = () => {
           alt="Logo Huellas Redondo"
         />
       </div>
+      <ActivarDesactModo setIsOnline={setIsOnline} isOnline={isOnline} />
     </div>
   );
 };

@@ -14,7 +14,7 @@ export function saveImage(file,tipoFoto) {
   }
 try {
   const newPath = `../client/public/images/${tipoFoto}/${file.originalname}`;
-  console.log(file.originalname);
+
   fs.renameSync(file.path, newPath);
 
   return newPath;

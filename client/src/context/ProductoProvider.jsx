@@ -7,7 +7,11 @@ import {
   updateProductoRequest,
 } from "../api/productos.api";
 import { ProductoContext } from "./ProductoContext";
-import { cargarPlantillaTrabajadores, deleteTrabajadorRequest } from "../api/login.api";
+import {
+  cargarPlantillaTrabajadores,
+  deleteTrabajadorRequest,
+} from "../api/login.api";
+import { readLocalStorage, writeLocalStorage } from "../hooks/useLocalStorage";
 
 export const useProductos = () => {
   const context = useContext(ProductoContext);
@@ -18,7 +22,7 @@ export const useProductos = () => {
 };
 
 export const ProductoContextProvider = ({ children }) => {
-  const [productos, setProductos] = useState([]);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+  const [productos, setProductos] = useState([]);
   const [trabajadores, setTrabajadores] = useState([]);
 
   async function loadTrabajadores() {
@@ -38,9 +42,15 @@ export const ProductoContextProvider = ({ children }) => {
     }
   };
 
-  async function loadProductos() {
-    const response = await getProductosRequest();
-    setProductos(response.data);
+  async function loadProductos(isOnline) {
+    if (isOnline) {
+      const response = await getProductosRequest();
+
+      setProductos(response.data);
+      writeLocalStorage("productos", response.data);
+    } else {
+      setProductos(readLocalStorage("productos"));
+    }
   }
 
   const deleteProducto = async (id_producto) => {
@@ -95,6 +105,7 @@ export const ProductoContextProvider = ({ children }) => {
         deleteTrabajador,
         loadTrabajadores,
         trabajadores,
+        setProductos,
       }}
     >
       {children}

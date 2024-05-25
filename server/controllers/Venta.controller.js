@@ -7,12 +7,14 @@ import { Producto } from "../models/Producto.model.js";
 export const createVenta = async (req, res) => {
   const productos = req.body.values;
   const { total } = req.body;
+  const { creado } = req.body;
   try {
     await sequelize.transaction(async (t) => {
       // Crear la factura
       const factura = await Factura.create(
         {
           total_venta: total, // Utiliza el valor del total recibido
+          creado: creado,
         },
         { transaction: t }
       );
@@ -63,10 +65,30 @@ export const getTodosFacturas = async (req, res) => {
           ],
         },
       ],
-      order: [["createdAt", "DESC"]],
+      order: [["creado", "DESC"]],
     });
 
     res.json(response);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteFactura = async (req, res) => {
+  try {
+    const responseVentas = await Venta.destroy({
+      where: {
+        id_factura: req.params.id,
+      },
+    });
+
+    const response = await Factura.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    res.sendStatus(204);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

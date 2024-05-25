@@ -21,3 +21,4 @@ Factura.hasMany(Venta, {
 
 Venta.belongsTo(Factura, { foreignKey: "id_factura" });
 Venta.belongsTo(Producto, { foreignKey: "id_producto" });
+

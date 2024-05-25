@@ -9,66 +9,62 @@ import Loader from "../Utilidades/Loader";
 import { useAuth } from "../../context/AuthContext";
 import {
   readLocalStorage,
-  useLocalStorage,
-  writeLocalStorage,
+  writeLocalStorageCrearFactura,
+  writeLocalStorageCrearMovimiento,
+  writeLocalStorageHacerVenta,
 } from "../../hooks/useLocalStorage";
-import { useGetApiRequest } from "../../hooks/useGetApiREquest";
+
 import FormAddProduct from "./FormAddProduct";
 import CarritosGuardados from "./CarritosGuardados";
+import { useCarritos } from "../../context/CarritosContext";
+import { useParams } from "react-router-dom";
+import { useProductos } from "../../context/ProductoProvider";
 
 const NuevaVenta = () => {
-  const [carrito, setCarrito] = useState([]);
+  const {
+    carrito1,
+    carrito2,
+    carrito3,
+    carrito4,
+    recargar,
+    setRecargar,
+    carrito,
+    setCarrito,
+    guardarCarrito,
+    cargarCarrito,
+    nuCart,
+    setnuCart,
+    cartSelect,
+  } = useCarritos();
+  let fechaActual = new Date();
+  let fechaEnFormatoISO = fechaActual.toISOString();
 
-  const [carrito1, setCarrito1] = useState([]);
-  const [carrito2, setCarrito2] = useState([]);
-  const [carrito3, setCarrito3] = useState([]);
-  const [carrito4, setCarrito4] = useState([]);
-  const [cartSelect, setCartSelect] = useState(0);
-
-  const [recargar, setRecargar] = useState(false);
-
-  const [nuCart, setnuCart] = useState(1);
-
-  const { loader, setLoader } = useAuth();
+  const { productos, loadProductos, setProductos } = useProductos();
+  const { loader, setLoader, isOnline } = useAuth();
   const [movimiento, setMovimiento] = useState({
     cantidad: "",
-    producto: "",
+    nombre_producto: "",
   });
 
-  const productos = useGetApiRequest();
+  const params = useParams();
 
   useEffect(() => {
-    cargarCarritosGuardados();
-  }, [recargar]);
+    const cargarProductos = () => {
+      if (!isOnline) {
+        setProductos(readLocalStorage("productos"));
+      } else {
+        loadProductos(null);
+      }
+    };
+    cargarProductos();
+    const cargarCarritoInicio = () => {
+      cargarCarrito(params.id);
+    };
 
-  const guardarCarrito = () => {
-    if (carrito.length == 0) {
-      alert("Carrito Vacio");
-    } else {
-      setnuCart(readLocalStorage("nuCart"));
-      nuCart < 5
-        ? writeLocalStorage("carrito" + nuCart, [...carrito])
-        : alert("Maximo de carritos alcanzado");
-      writeLocalStorage("nuCart", nuCart);
-      setnuCart(nuCart + 1);
-      setCarrito([]);
-      alert("Carrito Guardado");
-      setRecargar(!recargar);
+    if (params.id) {
+      cargarCarritoInicio();
     }
-  };
-  const cargarCarrito = (nuCart) => {
-    setCarrito([0]);
-    setCarrito(readLocalStorage("carrito" + nuCart));
-    setCartSelect(nuCart);
-    alert("Carrito " + nuCart + " Cargado");
-  };
-
-  const cargarCarritosGuardados = () => {
-    setCarrito1(readLocalStorage("carrito1"));
-    setCarrito2(readLocalStorage("carrito2"));
-    setCarrito3(readLocalStorage("carrito3"));
-    setCarrito4(readLocalStorage("carrito4"));
-  };
+  }, [recargar]);
 
   const schema = Yup.object().shape({
     cantidad: Yup.number()
@@ -80,23 +76,49 @@ const NuevaVenta = () => {
       .min(1, "Cantidad vacia"),
   });
 
-  const total = carrito.reduce(
+  const total_venta = carrito.reduce(
     (sum, producto) => sum + producto.precio_venta * producto.cantidad,
     0
   );
 
   const pagar = async () => {
     try {
+      const ventas = carrito;
       setLoader(true);
-      await createVentaRequest(carrito, total);
+      if (!isOnline) {
+        writeLocalStorageHacerVenta("ventas", {
+          ventas,
+          total_venta,
+          creado: fechaEnFormatoISO,
+        });
+
+        writeLocalStorageCrearFactura({
+          ventas,
+          total_venta,
+          creado: fechaEnFormatoISO,
+        });
+        // recorre ventas para agregar  el movimiento de cada producto
+        ventas.map((venta) => {
+          writeLocalStorageCrearMovimiento({
+            cantidad: venta.cantidad,
+            producto: venta.nombre_producto,
+            tipo: "Venta",
+            id_producto: venta.id_producto,
+            creado: fechaEnFormatoISO,
+          });
+        });
+      } else {
+        await createVentaRequest(carrito, total_venta, fechaEnFormatoISO);
+      }
 
       alert("Producto vendido");
       setLoader(false);
 
       setCarrito([]);
 
-      localStorage.removeItem("carrito" + cartSelect);
       setRecargar(!recargar);
+
+      localStorage.removeItem("carrito" + cartSelect);
     } catch (error) {
       setLoader(false);
       alert(error);
@@ -117,7 +139,8 @@ const NuevaVenta = () => {
 
                 if (
                   !carrito.some(
-                    (producto) => producto.producto === values.producto
+                    (producto) =>
+                      producto.nombre_producto === values.nombre_producto
                   )
                 ) {
                   setCarrito([...carrito, values]);
@@ -142,9 +165,8 @@ const NuevaVenta = () => {
                     type={"button"}
                   />
                   <div className="">
-                    {" "}
+                    {" //"}
                     <CarritosGuardados
-                      cargarCarrito={cargarCarrito}
                       carrito1={carrito1}
                       carrito2={carrito2}
                       carrito3={carrito3}
@@ -152,6 +174,8 @@ const NuevaVenta = () => {
                       setCarrito={setCarrito}
                       setRecargar={setRecargar}
                       recargar={recargar}
+                      nuCart={nuCart}
+                      setnuCart={setnuCart}
                     />
                   </div>
 
@@ -171,7 +195,7 @@ const NuevaVenta = () => {
           </div>
         </div>
         {loader && <Loader />}
-        <h2>Total a cobrar : {total}</h2>
+        <h2>Total a cobrar : {total_venta}</h2>
         {carrito.map((producto) => {
           const totalProducto = producto.cantidad * producto.precio_venta;
 
@@ -186,7 +210,7 @@ const NuevaVenta = () => {
           );
         })}
         <Btn_Huellas
-          text={`Cobrar ${total} cup`}
+          text={`Cobrar ${total_venta} cup`}
           disbledText={"Sin productos"}
           disabled={carrito.length ? false : true}
           onclick={() => pagar()}

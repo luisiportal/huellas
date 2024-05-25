@@ -7,7 +7,7 @@ const FormAddProduct = ({ productos, setMovimiento,handleChange,movimiento, valu
   const options = productos.map((producto) => ({
     value: producto.id_producto,
     label: producto.nombre_producto +" Precio: "+ producto.precio_venta + " Existencia: "+producto.existencia,
-    producto : producto.nombre_producto,
+    nombre_producto : producto.nombre_producto,
     existencia: producto.existencia,
     precio_venta: Number(producto.precio_venta),
     ruta_image: producto.ruta_image,
@@ -19,7 +19,7 @@ const FormAddProduct = ({ productos, setMovimiento,handleChange,movimiento, valu
     setMovimiento({
       ...movimiento,
       id_producto: p.value,
-      producto: p.producto,
+      nombre_producto: p.nombre_producto,
       existencia: p.existencia,
       precio_venta: p.precio_venta,
       ruta_image: p.ruta_image,

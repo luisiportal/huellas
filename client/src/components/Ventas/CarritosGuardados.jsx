@@ -1,9 +1,9 @@
 import React from "react";
-import Btn_Huellas from "../Btn_Huellas";
-import BorrarSVG from "../SVG/BorrarSVG";
+
+import CargarCarritoSection from "./CargarCarritoSection";
+import { writeLocalStorage } from "../../hooks/useLocalStorage";
 
 const CarritosGuardados = ({
-  cargarCarrito,
   carrito1,
   carrito2,
   carrito3,
@@ -11,9 +11,13 @@ const CarritosGuardados = ({
   setCarrito,
   setRecargar,
   recargar,
+  setnuCart,
+  nuCart,
 }) => {
   const eliminarCarrito = (numCart) => {
     localStorage.removeItem("carrito" + numCart);
+    setnuCart(nuCart.filter((elem) => elem != numCart));
+    writeLocalStorage("nuCart", nuCart.filter((elem) => elem != numCart));
     setCarrito([]);
     setRecargar(!recargar);
     alert("Carrito eliminado");
@@ -21,39 +25,26 @@ const CarritosGuardados = ({
 
   return (
     <>
-      {carrito1 && (
-        <div className="flex">
-          <Btn_Huellas
-            text={"Carrito1"}
-            onclick={() => cargarCarrito(1)}
-            type={"button"}
-          />
-          <button onClick={() => eliminarCarrito(1)}>
-            <BorrarSVG />
-          </button>
-        </div>
-      )}
-      {carrito2 && (
-        <Btn_Huellas
-          text={"Carrito2"}
-          onclick={() => cargarCarrito(2)}
-          type={"button"}
-        />
-      )}
-      {carrito3 && (
-        <Btn_Huellas
-          text={"Carrito3"}
-          onclick={() => cargarCarrito(3)}
-          type={"button"}
-        />
-      )}
-      {carrito4 && (
-        <Btn_Huellas
-          text={"Carrito4"}
-          onclick={() => cargarCarrito(4)}
-          type={"button"}
-        />
-      )}
+      <CargarCarritoSection
+        carrito={carrito1}
+        nuCarrito={1}
+        eliminarCarrito={eliminarCarrito}
+      />
+      <CargarCarritoSection
+        carrito={carrito2}
+        nuCarrito={2}
+        eliminarCarrito={eliminarCarrito}
+      />
+      <CargarCarritoSection
+        carrito={carrito3}
+        nuCarrito={3}
+        eliminarCarrito={eliminarCarrito}
+      />
+      <CargarCarritoSection
+        carrito={carrito4}
+        nuCarrito={4}
+        eliminarCarrito={eliminarCarrito}
+      />
     </>
   );
 };
