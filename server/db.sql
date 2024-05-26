@@ -133,7 +133,7 @@ or
 update on public.monedas for each row
 execute function actualizar_costo_productoMLC ();
 
-create trigger tr_insertar_movimi_existen_inicial
+create or REPLACE trigger tr_insertar_movimi_existen_inicial
 after insert on public.productos for each row
 execute function insertar_movi_existencia_inicial ();
 
@@ -152,4 +152,3 @@ BEGIN
 		RETURN NEW;
 END;
 $function$
-;

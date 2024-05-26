@@ -10,7 +10,7 @@ import movimientos from "./routes/movimientos.routes.js";
 import moneda from "./routes/moneda.routes.js";
 import { associations } from "./models/associations.js";
 import ventas from "./routes/venta.routes.js";
-import { monedasDefecto } from "./models/Monedas.model.js";
+
 
 const app = express();
 app.use(

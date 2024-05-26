@@ -13,6 +13,7 @@ import {
   writeLocalStorage,
 } from "../../hooks/useLocalStorage";
 import ActivarDesactModo from "../ModoOffline/ActivarDesactModo";
+import { descargarTodos } from "../ModoOffline/Sincronizar/descargarDatos";
 
 const Login = () => {
   const {
@@ -48,7 +49,8 @@ const Login = () => {
         onSubmit={async (values, { setSubmitting }) => {
           if (!isOnline) {
             const responseLocal = readLocalStorage("user");
-            if (!responseLocal) return alert("Debes iniciar sesión con conexión");
+            if (!responseLocal)
+              return alert("Debes iniciar sesión con conexión");
             login(responseLocal);
             setLoader(false);
           } else {
@@ -62,6 +64,8 @@ const Login = () => {
               }
 
               writeLocalStorage("user", response.data);
+
+              descargarTodos(); // alamcena en el local storage los datos para que esten disponibles sin conexion
               setLoader(false);
               login(response.data);
             } catch (error) {
