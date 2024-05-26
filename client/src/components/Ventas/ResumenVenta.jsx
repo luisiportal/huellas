@@ -12,6 +12,7 @@ import {
 const ResumenVenta = () => {
   const [facturas, setFacturas] = useState([]);
   const [fechas, setFechas] = useState([]);
+  const [recargarFactura, setRecargarFactura] = useState(null);
   const opciones = {
     weekday: "long",
     year: "numeric",
@@ -50,7 +51,7 @@ const ResumenVenta = () => {
       ]);
     };
     loadFacturas();
-  }, []);
+  }, [recargarFactura]);
 
   /* function renderMain() {
     if (facturas.length === 0) return <h1>No hay ventas</h1>;
@@ -68,6 +69,7 @@ const ResumenVenta = () => {
         opciones={opciones}
         facturas={facturas}
         setFacturas={setFacturas}
+        setRecargarFactura={setRecargarFactura}
       />
     ));
   }

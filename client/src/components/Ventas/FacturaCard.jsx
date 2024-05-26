@@ -2,7 +2,7 @@ import { deleteFacturaRequest } from "../../api/venta.api";
 import { useCarritos } from "../../context/CarritosContext";
 import Bton_eliminar_producto from "./Bton_eliminar_producto";
 
-function FacturaCard({ factura }) {
+function FacturaCard({ factura, setRecargarFactura }) {
   const { ventas } = factura;
 
   const handleEliminar = async (id) => {
@@ -10,6 +10,7 @@ function FacturaCard({ factura }) {
       try {
         const response = await deleteFacturaRequest(id);
         ventas.filter((elem) => elem != id);
+        setRecargarFactura(id);
         alert("Eliminado");
       } catch (error) {}
     } else {

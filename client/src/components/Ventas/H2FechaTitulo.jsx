@@ -1,7 +1,7 @@
 import React from "react";
 import FacturaCard from "./FacturaCard";
 
-const H2FechaTitulo = ({ fecha, facturas, opciones,setFacturas }) => {
+const H2FechaTitulo = ({ fecha, facturas, opciones,setFacturas,setRecargarFactura }) => {
   const facturasMismafecha = facturas.filter(
     (factura) =>
       new Date(factura.creado).toLocaleDateString("es-ES", opciones) == fecha
@@ -19,7 +19,7 @@ const H2FechaTitulo = ({ fecha, facturas, opciones,setFacturas }) => {
       <h2>{fecha} Venta {totalVentaDia} </h2>
 
       {facturasMismafecha.map((factura) => {
-        return <FacturaCard factura={factura} key={factura.id} />;
+        return <FacturaCard factura={factura} key={factura.id} setRecargarFactura={setRecargarFactura} />;
       })}
     </section>
   );
