@@ -41,13 +41,17 @@ export const CarritosProvaider = ({ children }) => {
 
   const guardarCarrito = () => {
     if (carrito.length == 0) {
-      alert("Carrito Vacio");
+      return alert("Carrito Vacio");
     } else {
+      // carrito tiene productos
+
+      if (!nuCart) {
+        writeLocalStorage("nuCart", [1]);
+      }
       let i = 1;
 
-  if (nuCart){
-        while (i <= 4) {
-        if (!nuCart.includes(i)) {
+      while (i <= 4) {
+        if (nuCart == null || !nuCart.includes(i)) {
           setnuCart([...nuCart, i]);
 
           writeLocalStorage("nuCart", [...nuCart, i]);
@@ -59,9 +63,7 @@ export const CarritosProvaider = ({ children }) => {
         }
         i++;
       }
-  }else{
-    writeLocalStorage("nuCart",[1])
-  }
+      if (i > 4) return alert("Alcanzado limite de 4 carritos");
     }
   };
   const cargarCarrito = (nuCart) => {

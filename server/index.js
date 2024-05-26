@@ -20,7 +20,7 @@ app.use(
   })
 );
 associations();
-await sequelize.sync({ alter: false });
+await sequelize.sync({ alter: true });
 
 app.use(cookieParser());
 app.use(express.json());

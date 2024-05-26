@@ -17,7 +17,7 @@ const CarritoCard = ({ carrito, textoCarrito }) => {
             <div className="flex justify-between" key={index}>
               <div className="flex">
                 <h2>
-                  {producto.cantidad} {producto.producto}
+                  {producto.cantidad} {producto.nombre_producto}
                 </h2>
               </div>
             </div>
