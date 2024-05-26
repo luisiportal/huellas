@@ -148,18 +148,25 @@ export function writeLocalStorageCrearFactura(value) {
   }
 }
 
-export function writeLocalStorageCrearMovimiento(value) {
+export function writeLocalStorageCrearMovimiento(value, venta) {
   ///  aquiiiiiiii crea mvimiento en local
+
+  console.log(venta);
   try {
-    let movimientosCrear = [];
-    const getData = JSON.parse(localStorage.getItem("movimientosCrear"));
+    if (venta != "Venta") {
+      let movimientosCrear = [];
+      const getData = JSON.parse(localStorage.getItem("movimientosCrear"));
 
-    if (getData) {
-      movimientosCrear = getData instanceof Array ? getData : [getData];
+      if (getData) {
+        movimientosCrear = getData instanceof Array ? getData : [getData];
+      }
+
+      movimientosCrear.unshift(value);
+      localStorage.setItem(
+        "movimientosCrear",
+        JSON.stringify(movimientosCrear)
+      );
     }
-
-    movimientosCrear.unshift(value);
-    localStorage.setItem("movimientosCrear", JSON.stringify(movimientosCrear));
 
     let movimientos = [];
     const movimientosGET = JSON.parse(localStorage.getItem("movimientos"));
@@ -172,31 +179,28 @@ export function writeLocalStorageCrearMovimiento(value) {
     movimientos.unshift(value);
     localStorage.setItem("movimientos", JSON.stringify(movimientos));
 
-    let actualizarExistencia = [];
     const getDataProductos = JSON.parse(localStorage.getItem("productos"));
 
-const actProd = getDataProductos.map((producto) => {
-  if (producto.id_producto === value.id_producto) {
-    let existenciaActu = 0;
-    console.log(value.tipo);
-    if (value.tipo == "Salida" || value.tipo == "Venta") {
-      existenciaActu = Number(producto.existencia) - Number(value.cantidad);
-    } else {
-      existenciaActu = Number(producto.existencia) + Number(value.cantidad);
-    }
-    
+    const actProd = getDataProductos.map((producto) => {
+      if (producto.id_producto === value.id_producto) {
+        let existenciaActu = 0;
+       
+        if (value.tipo == "Salida" || value.tipo == "Venta") {
+          existenciaActu = Number(producto.existencia) - Number(value.cantidad);
+        } else {
+          existenciaActu = Number(producto.existencia) + Number(value.cantidad);
+        }
 
-    let obje = { ...producto, existencia: existenciaActu };
+        let obje = { ...producto, existencia: existenciaActu };
 
-    return obje;
-  } else {
-    return producto;
-  }
-});
+        return obje;
+      } else {
+        return producto;
+      }
+    });
 
-localStorage.setItem("productos", JSON.stringify(actProd));
-return value;
-
+    localStorage.setItem("productos", JSON.stringify(actProd));
+    return value;
   } catch (error) {
     console.error(error);
   }

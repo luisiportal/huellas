@@ -105,7 +105,7 @@ const NuevaVenta = () => {
             tipo: "Venta",
             id_producto: venta.id_producto,
             creado: fechaEnFormatoISO,
-          });
+          },"Venta");
         });
       } else {
         await createVentaRequest(carrito, total_venta, fechaEnFormatoISO);
