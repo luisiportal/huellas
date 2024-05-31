@@ -21,6 +21,7 @@ import { CarritosProvaider } from "./context/CarritosContext";
 import VentasRoutes from "./routes/VentasRoutes";
 import LogsMain from "./components/Logs/LogsMain";
 
+
 const App = () => {
   return (
     <div className="bg-white min-h-screen">
@@ -34,7 +35,7 @@ const App = () => {
               <Route element={<ProtectedRoutes />}>
               <Route
                   path="/logs/"
-                  element={<LogsMain />}
+                  element={<LogsMain></LogsMain>}
                 />
                 <Route path="/new" element={<ProductoForm />} />
                 <Route path="/trabajador/new" element={<AgregarTrabajador />} />
