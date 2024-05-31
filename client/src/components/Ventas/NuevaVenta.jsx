@@ -56,13 +56,10 @@ const NuevaVenta = () => {
         loadProductos(null);
       }
     };
-    cargarProductos();
-    const cargarCarritoInicio = () => {
-      cargarCarrito(params.id);
-    };
 
+    cargarProductos();
     if (params.id) {
-      cargarCarritoInicio();
+      cargarCarrito(params.id);
     }
   }, [recargar]);
 
@@ -75,11 +72,13 @@ const NuevaVenta = () => {
       .required("Este campo es requerido")
       .min(1, "Cantidad vacia"),
   });
-
-  const total_venta = carrito.reduce(
-    (sum, producto) => sum + producto.precio_venta * producto.cantidad,
-    0
-  );
+  let total_venta = 0;
+  if (carrito) {
+    total_venta = carrito.reduce(
+      (sum, producto) => sum + producto.precio_venta * producto.cantidad,
+      0
+    );
+  }
 
   const pagar = async () => {
     try {
@@ -99,13 +98,16 @@ const NuevaVenta = () => {
         });
         // recorre ventas para agregar  el movimiento de cada producto
         ventas.map((venta) => {
-          writeLocalStorageCrearMovimiento({
-            cantidad: venta.cantidad,
-            producto: venta.nombre_producto,
-            tipo: "Venta",
-            id_producto: venta.id_producto,
-            creado: fechaEnFormatoISO,
-          },"Venta");
+          writeLocalStorageCrearMovimiento(
+            {
+              cantidad: venta.cantidad,
+              producto: venta.nombre_producto,
+              tipo: "Venta",
+              id_producto: venta.id_producto,
+              creado: fechaEnFormatoISO,
+            },
+            "Venta"
+          );
         });
       } else {
         await createVentaRequest(carrito, total_venta, fechaEnFormatoISO);
@@ -164,7 +166,7 @@ const NuevaVenta = () => {
                     onclick={guardarCarrito}
                     type={"button"}
                   />
-                  <div className="">
+                  <div>
                     {" //"}
                     <CarritosGuardados
                       carrito1={carrito1}
@@ -196,19 +198,20 @@ const NuevaVenta = () => {
         </div>
         {loader && <Loader />}
         <h2>Total a cobrar : {total_venta}</h2>
-        {carrito.map((producto) => {
-          const totalProducto = producto.cantidad * producto.precio_venta;
+        {carrito &&
+          carrito.map((producto) => {
+            const totalProducto = producto.cantidad * producto.precio_venta;
 
-          return (
-            <ProductoCarrito
-              producto={producto}
-              key={producto.id_producto}
-              setCarrito={setCarrito}
-              carrito={carrito}
-              total_producto={totalProducto}
-            />
-          );
-        })}
+            return (
+              <ProductoCarrito
+                producto={producto}
+                key={producto.id_producto}
+                setCarrito={setCarrito}
+                carrito={carrito}
+                total_producto={totalProducto}
+              />
+            );
+          })}
         <Btn_Huellas
           text={`Cobrar ${total_venta} cup`}
           disbledText={"Sin productos"}

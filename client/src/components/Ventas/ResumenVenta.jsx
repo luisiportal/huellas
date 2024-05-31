@@ -44,7 +44,7 @@ const ResumenVenta = () => {
       // aquuiiii
       setFechas([
         ...new Set(
-          facturas.map((factura) =>
+          facturas.map((factura, index) =>
             new Date(factura.creado).toLocaleDateString("es-ES", opciones)
           )
         ),
@@ -63,8 +63,9 @@ const ResumenVenta = () => {
   function renderMain() {
     if (fechas.length === 0) return <h1>No hay ventas</h1>;
     //if (facturas.length === 0) return <h1>No hay ventas</h1>;
-    return fechas.map((fecha) => (
+    return fechas.map((fecha, index) => (
       <H2FechaTitulo
+        key={index}
         fecha={fecha}
         opciones={opciones}
         facturas={facturas}

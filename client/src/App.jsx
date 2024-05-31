@@ -19,6 +19,7 @@ import TipoCambioForm from "./components/TipoCambio/TipoCambioForm";
 import HomePage from "./pages/HomePage";
 import { CarritosProvaider } from "./context/CarritosContext";
 import VentasRoutes from "./routes/VentasRoutes";
+import LogsMain from "./components/Logs/LogsMain";
 
 const App = () => {
   return (
@@ -31,6 +32,10 @@ const App = () => {
               <Route path="/trabajador/login" element={<Trabajador />} />
 
               <Route element={<ProtectedRoutes />}>
+              <Route
+                  path="/logs/"
+                  element={<LogsMain />}
+                />
                 <Route path="/new" element={<ProductoForm />} />
                 <Route path="/trabajador/new" element={<AgregarTrabajador />} />
                 <Route

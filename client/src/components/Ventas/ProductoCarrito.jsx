@@ -13,7 +13,7 @@ const ProductoCarrito = ({ producto, setCarrito, carrito, total_producto }) => {
     >
       <img
         className="object-cover object-center w-28 h-28 border-slate-50 border-spacing-2"
-        src={`../images/productos/${producto.ruta_image}`}
+        src={`/images/productos/${producto.ruta_image}`}
         alt="Imagen de Producto"
       />
       <div className="p-2 text-left">

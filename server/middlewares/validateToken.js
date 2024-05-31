@@ -11,5 +11,6 @@ export const authRequired = (req, res, next) => {
     if (err) return res.status(403).json({ mesagge: "token invalido" });
     req.user = user;
     next();
+   
   });
 };

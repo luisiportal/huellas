@@ -8,7 +8,11 @@ const CarritoCard = ({ carrito, textoCarrito }) => {
     <>
       {carrito && (
         <section
-          onClick={() => navigate(`/transacciones/new/${parseInt(textoCarrito.split(" ")[1])}`)}
+          onClick={() =>
+            navigate(
+              `/transacciones/new/${parseInt(textoCarrito.split(" ")[1])}`
+            )
+          }
           className="bg-slate-300 rounded p-5 m-1 cursor-pointer"
         >
           <h2 className="font-bold">{textoCarrito}</h2>

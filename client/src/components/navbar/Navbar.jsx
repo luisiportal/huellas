@@ -18,6 +18,10 @@ const Navbar = ({ hidden }) => {
         nombre={"Plantilla"}
         href={"/trabajador/plantilla"}
       ></ElementoNavbar>
+       <ElementoNavbar
+        nombre={"Logs"}
+        href={"/logs"}
+      ></ElementoNavbar>
     </div>
   );
 };

@@ -32,10 +32,12 @@ export const CarritosProvaider = ({ children }) => {
   };
 
   const getNucart = () => {
-    if (nuCart == null) {
-      setnuCart([]);
+    const response = readLocalStorage("nuCart");
+    if (response) {
+      setnuCart(response);
     } else {
-      setnuCart(readLocalStorage("nuCart"));
+      writeLocalStorage("nuCart", [0]);
+      setnuCart([0]);
     }
   };
 
@@ -45,14 +47,15 @@ export const CarritosProvaider = ({ children }) => {
     } else {
       // carrito tiene productos
 
-      if (!nuCart) {
-        writeLocalStorage("nuCart", [1]);
-      }
       let i = 1;
 
       while (i <= 4) {
-        if (nuCart == null || !nuCart.includes(i)) {
-          setnuCart([...nuCart, i]);
+        if (!nuCart.includes(i)) {
+          if (nuCart != [0]) {
+            setnuCart([...nuCart, i]);
+          } else {
+            setnuCart([0]);
+          }
 
           writeLocalStorage("nuCart", [...nuCart, i]);
           writeLocalStorage("carrito" + i, [...carrito]);
@@ -67,10 +70,14 @@ export const CarritosProvaider = ({ children }) => {
     }
   };
   const cargarCarrito = (nuCart) => {
-    setCarrito([0]);
-    setCarrito(readLocalStorage("carrito" + nuCart));
-    setCartSelect(nuCart);
-    alert("Carrito " + nuCart + " Cargado");
+    //setCarrito([0]); // vaciar el carrito
+    const getCarrito = readLocalStorage("carrito" + nuCart);
+    if (getCarrito){
+      setCarrito(getCarrito);
+
+      setCartSelect(nuCart);
+    }
+    
   };
 
   return (

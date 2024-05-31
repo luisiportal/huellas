@@ -3,6 +3,7 @@ import sequelize from "../db.js";
 import { Factura } from "../models/Facturas.model.js";
 import { Venta } from "../models/Ventas.model.js";
 import { Producto } from "../models/Producto.model.js";
+import { registrarLog } from "./AuditLog.controllers.js";
 
 export const createVenta = async (req, res) => {
   const productos = req.body.values;
@@ -18,7 +19,7 @@ export const createVenta = async (req, res) => {
         },
         { transaction: t }
       );
-
+      await registrarLog("Facturó", "Venta", ` total : ${total} cup`, req, t);
       // Recorre los productos
       for (const producto of productos) {
         // Crear la venta
@@ -76,19 +77,25 @@ export const getTodosFacturas = async (req, res) => {
 
 export const deleteFactura = async (req, res) => {
   try {
-    const responseVentas = await Venta.destroy({
-      where: {
-        id_factura: req.params.id,
-      },
-    });
+    sequelize.transaction(async (t) => {
+      const responseVentas = await Venta.destroy({
+        where: {
+          id_factura: req.params.id,
+        },
+      });
 
-    const response = await Factura.destroy({
-      where: {
-        id: req.params.id,
-      },
-    });
+      const response = await Factura.destroy(
+        {
+          where: {
+            id: req.params.id,
+          },
+        },
+        { transaction: t }
+      );
+      await registrarLog("Elimino", "Factura", req.params.id, req, t);
 
-    res.sendStatus(204);
+      res.sendStatus(204);
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

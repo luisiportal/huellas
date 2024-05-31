@@ -5,10 +5,12 @@ export const sincronizarMovimientos = async () => {
  const movimientosCrear = JSON.parse(
       localStorage.getItem("movimientosCrear")
     );
+    console.log(movimientosCrear);
 
     if (movimientosCrear != null) {
       await Promise.all(
         movimientosCrear.map((item) => {
+          console.log(item);
           return hacerMoviemientoRequest(item);
         })
       );

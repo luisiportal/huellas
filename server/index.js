@@ -10,7 +10,7 @@ import movimientos from "./routes/movimientos.routes.js";
 import moneda from "./routes/moneda.routes.js";
 import { associations } from "./models/associations.js";
 import ventas from "./routes/venta.routes.js";
-
+import audiTlogs from "./routes/audilogs.routes.js";
 
 const app = express();
 app.use(
@@ -20,7 +20,7 @@ app.use(
   })
 );
 associations();
-await sequelize.sync({ alter: false });
+await sequelize.sync({ alter: true });
 
 app.use(cookieParser());
 app.use(express.json());
@@ -30,6 +30,7 @@ app.use(loginRouter);
 app.use(movimientos);
 app.use(moneda);
 app.use(ventas);
+app.use(audiTlogs);
 app.listen(PUERTO, () => {
   console.log(`El server esta en el puerto : ${PUERTO}....`);
 });

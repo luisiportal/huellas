@@ -3,7 +3,7 @@ import { sincronizarMovimientos } from "./sincronizarMovimientos";
 import { useCrearProductos } from "./useCrearProductos";
 
 export const sincronizarTodo = () => {
-  sincronizarMovimientos();
   useCrearProductos("productos");
-  sincronizarFacturas();
+  sincronizarMovimientos();
+   sincronizarFacturas();
 };

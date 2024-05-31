@@ -7,9 +7,8 @@ import { useAuth } from "../../context/AuthContext";
 import Loader from "../Utilidades/Loader";
 import {
   readLocalStorage,
-  writeLocalStorage,
-   writeLocalStorageActualizarProductos,
-   writeLocalStorageCrearProducto,
+  writeLocalStorageActualizarProductos,
+  writeLocalStorageCrearProducto,
 } from "../../hooks/useLocalStorage";
 
 const schema = Yup.object().shape({
@@ -98,6 +97,7 @@ const ProductoForm = () => {
             precio_venta: formData.get("precio_venta"),
             categoria: formData.get("categoria"),
             stockMinimo: formData.get("stockMinimo"),
+            unidadMedida: formData.get("unidadMedida"),
           });
         }
 
@@ -108,13 +108,18 @@ const ProductoForm = () => {
         if (isOnline) {
           await createProducto(formData);
         } else {
+          return alert("Lo siento no puedo agregar productos fuera de linea");
           writeLocalStorageCrearProducto("productos", {
+            id_producto: Date.now(),
             nombre_producto: formData.get("nombre_producto"),
             description_producto: formData.get("description_producto"),
             costo_unitario: formData.get("costo_unitario"),
             precio_venta: formData.get("precio_venta"),
             categoria: formData.get("categoria"),
             stockMinimo: formData.get("stockMinimo"),
+            unidadMedida: formData.get("unidadMedida"),
+            existencia: 0,
+            existencia_inicial: formData.get("existencia_inicial"),
           });
         }
 

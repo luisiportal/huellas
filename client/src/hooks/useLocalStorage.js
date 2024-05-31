@@ -55,7 +55,7 @@ export function writeLocalStorageCrearProducto(key, value) {
       productos = productosGET instanceof Array ? productosGET : [productosGET];
     }
 
-    productos.push(value);
+    productos.unshift(value);
     localStorage.setItem(key, JSON.stringify(productos));
 
     return value;
@@ -151,9 +151,9 @@ export function writeLocalStorageCrearFactura(value) {
 export function writeLocalStorageCrearMovimiento(value, venta) {
   ///  aquiiiiiiii crea mvimiento en local
 
-  console.log(venta);
   try {
     if (venta != "Venta") {
+      // si el movimiento no es de venta hace esto ////
       let movimientosCrear = [];
       const getData = JSON.parse(localStorage.getItem("movimientosCrear"));
 
@@ -182,9 +182,9 @@ export function writeLocalStorageCrearMovimiento(value, venta) {
     const getDataProductos = JSON.parse(localStorage.getItem("productos"));
 
     const actProd = getDataProductos.map((producto) => {
-      if (producto.id_producto === value.id_producto) {
+      if (producto.nombre_producto == venta) {
         let existenciaActu = 0;
-       
+
         if (value.tipo == "Salida" || value.tipo == "Venta") {
           existenciaActu = Number(producto.existencia) - Number(value.cantidad);
         } else {
@@ -192,6 +192,7 @@ export function writeLocalStorageCrearMovimiento(value, venta) {
         }
 
         let obje = { ...producto, existencia: existenciaActu };
+        console.log(obje);
 
         return obje;
       } else {
