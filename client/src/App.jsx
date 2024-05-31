@@ -20,7 +20,7 @@ import HomePage from "./pages/HomePage";
 import { CarritosProvaider } from "./context/CarritosContext";
 import VentasRoutes from "./routes/VentasRoutes";
 
-import LogsPage from "./components/Logs/LogsPage";
+import LogsPage from "./components/LogsSystem/LogsPage";
 
 const App = () => {
   return (
