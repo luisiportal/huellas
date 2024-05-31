@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { saveImage } from "./upload.multer.js";
 import { Trabajador } from "../models/Trabajador.model.js";
 import { DOMAIN, HTTPONLY, SAMESITE, SECURE } from "../config.js";
+import { registrarLog } from "./AuditLog.controllers.js";
 export const register = async (req, res) => {
   let foto_perfil = "perfil_default.jpg ";
   if (req.file !== undefined) {
@@ -91,7 +92,7 @@ export const login = async (req, res) => {
       httpOnly: HTTPONLY, // La cookie es accesible por el cliente a través de JavaScript
       sameSite: SAMESITE,
     });
-
+    await registrarLog("Inicio", "Sesión", ``, req, "",userFound.id_trabajador);
     res.json({
       id_trabajador: userFound.id_trabajador,
       username: userFound.username,
