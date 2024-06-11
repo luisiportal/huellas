@@ -219,7 +219,7 @@ export const verifyToken = (req, res) => {
     return res.json({
       id_trabajador: userFound.id_trabajador,
       username: userFound.username,
-      privilegio : userFound.privilegio
+     // privilegio : userFound.privilegio
     });
   });
 };

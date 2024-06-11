@@ -1,7 +1,7 @@
 import React from "react";
 import ElementoNavbar from "./ElementoNavbar.jsx";
 
-const Navbar = ({ hidden, privilegio }) => {
+const Navbar = ({ hidden }) => {
   return (
     <div className={`${hidden} m-4 md:m-0 lg:flex md:ml-8 font-semibold`}>
       <ElementoNavbar nombre={"Inicio"} href={"/"}></ElementoNavbar>
@@ -18,12 +18,12 @@ const Navbar = ({ hidden, privilegio }) => {
         href={"/transacciones"}
       ></ElementoNavbar>
 
-      {privilegio == "Administrador" && (
+      
         <ElementoNavbar
           nombre={"Plantilla"}
           href={"/trabajador/plantilla"}
         ></ElementoNavbar>
-      )}
+     
 
       <ElementoNavbar nombre={"Logs"} href={"/logs"}></ElementoNavbar>
     </div>

@@ -7,15 +7,8 @@ import ActivarDesactModo from "./ModoOffline/ActivarDesactModo";
 
 const NavbarComponent = () => {
   const [abrirHamburguesa, setabrirHamburguesa] = useState(false);
-  const {
-    isAuthenticated,
-    logout,
-    user,
-    perfil,
-    isOnline,
-    setIsOnline,
-    privilegio,
-  } = useAuth();
+  const { isAuthenticated, logout, user, perfil, isOnline, setIsOnline } =
+    useAuth();
 
   const sidebarRef = useRef(null);
   const openButtonRef = useRef(null);
@@ -67,7 +60,7 @@ const NavbarComponent = () => {
             <div>
               <Navbar
                 hidden={"hidden space-x-8"}
-                privilegio={privilegio}
+                // privilegio={privilegio}
               ></Navbar>
             </div>
           </div>
