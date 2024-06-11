@@ -39,7 +39,6 @@ export const AuthProvider = ({ children }) => {
     movil: "",
     puesto: "",
   });
-  
 
   const signup = async (formData) => {
     try {
@@ -103,8 +102,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-
-
   useEffect(() => {
     async function checkLogin() {
       const cookies = Cookies.get();
@@ -128,9 +125,9 @@ export const AuthProvider = ({ children }) => {
         }
 
         setIsAuthenticated(true);
-        setPrivilegio(res.data.privilegio);
-        setUser(res.data);
 
+        setUser(res.data);
+        setPrivilegio(res.data.privilegio);
         setLoading(false);
       } catch (error) {
         setIsAuthenticated(false);
@@ -160,7 +157,6 @@ export const AuthProvider = ({ children }) => {
         modalActivo,
         setModalActivo,
         privilegio,
-       
       }}
     >
       {children}
