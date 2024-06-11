@@ -69,7 +69,7 @@ const Login = () => {
               }
               writeLocalStorage("user", response.data);
               login(response.data);
-              setIsAuthenticated(true);
+             // setIsAuthenticated(true);
               descargarTodos(); // alamcena en el local storage los datos para que esten disponibles sin conexion
               setLoader(false);
             } catch (error) {
