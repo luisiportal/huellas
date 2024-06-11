@@ -55,9 +55,9 @@ export const AuthProvider = ({ children }) => {
         setPerfil(readLocalStorage("perfil"));
       } else {
         const { data } = await cargarPerfilRequest(user.id_trabajador);
-
-        writeLocalStorage("perfil", data);
         setIsAuthenticated(true);
+        writeLocalStorage("perfil", data);
+
         setLoader(false);
         setPerfil(data);
       }

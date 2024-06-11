@@ -68,10 +68,10 @@ const Login = () => {
                 throw new Error("No hay conexión");
               }
               writeLocalStorage("user", response.data);
-
+              login(response.data);
               descargarTodos(); // alamcena en el local storage los datos para que esten disponibles sin conexion
               setLoader(false);
-              login(response.data);
+             
             } catch (error) {
               setLoader(false);
 
