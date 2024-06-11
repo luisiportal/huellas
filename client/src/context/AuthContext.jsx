@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     navegarA: "",
     errorColor: false,
   });
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [isOnline, setIsOnline] = useState(true);
   const [errors, setErrors] = useState(null);
   const [loading, setLoading] = useState(false);
