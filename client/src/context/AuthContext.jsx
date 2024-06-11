@@ -50,12 +50,13 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoader(true);
       setUser(user);
-
-      const { data } = await cargarPerfilRequest(user.id_trabajador);
-      setIsAuthenticated(true);
-
-      setLoader(false);
-      setPerfil(data);
+      
+        const { data } = await cargarPerfilRequest(user.id_trabajador);
+        setIsAuthenticated(true);
+        writeLocalStorage("perfil", data);
+        setLoader(false);
+        setPerfil(data);
+      
     } catch (error) {
       console.log(error);
       setModalActivo({
@@ -100,7 +101,7 @@ export const AuthProvider = ({ children }) => {
       const cookies = Cookies.get();
 
       if (!cookies.token) {
-       // setIsAuthenticated(false); probando
+        setIsAuthenticated(false);
         return setUser(null);
       }
       try {
