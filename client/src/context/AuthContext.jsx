@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     navegarA: "",
     errorColor: false,
   });
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
   const [errors, setErrors] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -55,9 +55,8 @@ export const AuthProvider = ({ children }) => {
         setPerfil(readLocalStorage("perfil"));
       } else {
         const { data } = await cargarPerfilRequest(user.id_trabajador);
-        setIsAuthenticated(true);
-        writeLocalStorage("perfil", data);
 
+        writeLocalStorage("perfil", data);
         setLoader(false);
         setPerfil(data);
       }
