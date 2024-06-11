@@ -91,6 +91,8 @@ export const login = async (req, res) => {
       secure: SECURE, // La cookie sólo se envía a través de HTTPS
       httpOnly: HTTPONLY, // La cookie es accesible por el cliente a través de JavaScript
       sameSite: SAMESITE,
+      partitioned: true, // Habilita la partición de la cookie
+      
     });
     await registrarLog("Inicio", "Sesión", ``, req, "",userFound.id_trabajador);
     res.json({
