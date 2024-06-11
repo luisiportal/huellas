@@ -84,7 +84,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Credencial inválida" });
     }
 
-    const token = await createAccessToken({ id: userFound.id_trabajador, privilegio: userFound.privilegio });
+    const token = await createAccessToken({ id: userFound.id_trabajador});
     //res.cookie("token", token);
     res.cookie("token", token, {
       domain: DOMAIN, // Establece el dominio de la cookie
