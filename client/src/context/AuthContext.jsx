@@ -19,7 +19,6 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  //const [privilegio, setPrivilegio] = useState(null);
   const [modalActivo, setModalActivo] = useState({
     mensaje: "",
     activo: false,
@@ -126,7 +125,7 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true);
 
         setUser(res.data);
-       // setPrivilegio(res.data.privilegio);
+
         setLoading(false);
       } catch (error) {
         setIsAuthenticated(false);
@@ -155,7 +154,6 @@ export const AuthProvider = ({ children }) => {
         setIsOnline,
         modalActivo,
         setModalActivo,
-        privilegio,
       }}
     >
       {children}

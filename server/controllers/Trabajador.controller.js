@@ -84,17 +84,22 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Credencial inválida" });
     }
 
-    const token = await createAccessToken({ id: userFound.id_trabajador});
+    const token = await createAccessToken({ id: userFound.id_trabajador });
     //res.cookie("token", token);
     res.cookie("token", token, {
       domain: DOMAIN, // Establece el dominio de la cookie
       secure: SECURE, // La cookie sólo se envía a través de HTTPS
       httpOnly: HTTPONLY, // La cookie es accesible por el cliente a través de JavaScript
       sameSite: SAMESITE,
-      partitioned: true, // Habilita la partición de la cookie
-      
     });
-    await registrarLog("Inicio", "Sesión", ``, req, "",userFound.id_trabajador);
+    await registrarLog(
+      "Inicio",
+      "Sesión",
+      ``,
+      req,
+      "",
+      userFound.id_trabajador
+    );
     res.json({
       id_trabajador: userFound.id_trabajador,
       username: userFound.username,
@@ -219,7 +224,6 @@ export const verifyToken = (req, res) => {
     return res.json({
       id_trabajador: userFound.id_trabajador,
       username: userFound.username,
-     // privilegio : userFound.privilegio
     });
   });
 };

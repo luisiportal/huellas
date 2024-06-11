@@ -58,10 +58,7 @@ const NavbarComponent = () => {
             </div>
 
             <div>
-              <Navbar
-                hidden={"hidden space-x-8"}
-                // privilegio={privilegio}
-              ></Navbar>
+              <Navbar hidden={"hidden space-x-8"}></Navbar>
             </div>
           </div>
 
