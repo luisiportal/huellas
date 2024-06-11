@@ -28,7 +28,6 @@ sequelize.query(
   'ALTER TABLE public.movimientos ALTER COLUMN "updatedAt" SET DEFAULT now();'
 );
 
-
 app.use(cookieParser());
 app.use(express.json());
 app.use(indexRoutes);
@@ -38,6 +37,6 @@ app.use(movimientos);
 app.use(moneda);
 app.use(ventas);
 app.use(audiTlogs);
-app.listen(PUERTO, () => {
+app.listen(PUERTO, "127.0.0.1", () => {
   console.log(`El server esta en el puerto : ${PUERTO}....`);
 });

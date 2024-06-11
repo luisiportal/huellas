@@ -62,7 +62,7 @@ const Login = () => {
             try {
               setLoader(true);
               const response = await loginRequest(values);
-
+console.log(response);
               if (response.status != 200) {
                 setLoader(false);
                 throw new Error("No hay conexión");
