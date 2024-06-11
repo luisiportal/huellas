@@ -5,6 +5,7 @@ import Jwt from "jsonwebtoken";
 import { Trabajador } from "../models/Trabajador.model.js";
 import { Op } from "sequelize";
 import sequelize from "../db.js";
+import { Producto } from "../models/Producto.model.js";
 
 export const registrarLog = async (
   accionRealizada,

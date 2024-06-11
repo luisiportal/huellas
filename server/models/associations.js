@@ -26,3 +26,9 @@ Venta.belongsTo(Producto, { foreignKey: "id_producto" });
 
 Trabajador.hasMany(AuditLog, { foreignKey: "id_usuario" });
 AuditLog.belongsTo(Trabajador, { foreignKey: "id_usuario" });
+
+Venta.hasOne(Movimiento, {
+  foreignKey: "id_venta", // Aquí está la corrección
+  onDelete: "CASCADE",
+  hooks: true,
+});

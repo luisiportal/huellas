@@ -10,6 +10,10 @@ export const Movimiento = sequelize.define("movimientos", {
   id_producto: {
     type: DataTypes.INTEGER,
   },
+  id_venta: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
 
   tipo: {
     type: DataTypes.STRING,

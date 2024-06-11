@@ -2,6 +2,7 @@ import React from "react";
 
 import CargarCarritoSection from "./CargarCarritoSection";
 import { writeLocalStorage } from "../../hooks/useLocalStorage";
+import { useAuth } from "../../context/AuthContext";
 
 const CarritosGuardados = ({
   carrito1,
@@ -14,13 +15,23 @@ const CarritosGuardados = ({
   setnuCart,
   nuCart,
 }) => {
+  const { setModalActivo, modalActivo } = useAuth();
+
   const eliminarCarrito = (numCart) => {
     localStorage.removeItem("carrito" + numCart);
     setnuCart(nuCart.filter((elem) => elem != numCart));
-    writeLocalStorage("nuCart", nuCart.filter((elem) => elem != numCart));
+    writeLocalStorage(
+      "nuCart",
+      nuCart.filter((elem) => elem != numCart)
+    );
     setCarrito([]);
     setRecargar(!recargar);
-    alert("Carrito eliminado");
+
+    setModalActivo({
+      mensaje: "Carrito eliminado",
+      activo: true,
+      errorColor: true,
+    });
   };
 
   return (

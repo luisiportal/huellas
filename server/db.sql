@@ -32,8 +32,8 @@ or
 update on public.productos for each row
 execute function calcular_costo_total_producto ();
 
--- DROP FUNCTION public.insertar_movimiento();
-CREATE OR REPLACE FUNCTION public.insertar_movimiento
+-- DROP FUNCTION public.actualizarExistenciaAlVender();
+CREATE OR REPLACE FUNCTION public.actualizarExistenciaAlVender
 () RETURNS trigger 
 LANGUAGE plpgsql AS 
 $function$
@@ -43,20 +43,16 @@ BEGIN
 	    existencia = existencia - NEW.cantidad
 	WHERE
 	    id_producto = NEW.id_producto;
-	INSERT INTO
-	    movimientos (id_producto, tipo, cantidad)
-	VALUES (
-	        NEW.id_producto, 'Venta', NEW.cantidad
-	    );
+
 	RETURN NEW;
 END;
 $function$
 ;
 
 create
-or replace trigger tr_insertar_movimiento
+or replace trigger tr_actualizarExistenciaAlVender
 after insert on public.ventas for each row
-execute function insertar_movimiento ();
+execute function actualizarExistenciaAlVender ();
 
 -- DROP FUNCTION public.eliminar_movimiento();
 
@@ -133,7 +129,8 @@ or
 update on public.monedas for each row
 execute function actualizar_costo_productoMLC ();
 
-create or REPLACE trigger tr_insertar_movimi_existen_inicial
+create
+or REPLACE trigger tr_insertar_movimi_existen_inicial
 after insert on public.productos for each row
 execute function insertar_movi_existencia_inicial ();
 

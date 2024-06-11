@@ -5,5 +5,5 @@ import { useCrearProductos } from "./useCrearProductos";
 export const sincronizarTodo = () => {
   useCrearProductos("productos");
   sincronizarMovimientos();
-   sincronizarFacturas();
+  sincronizarFacturas();
 };

@@ -6,7 +6,7 @@ const CarritoActivos = () => {
   const { carrito1, carrito2, carrito3, carrito4 } = useCarritos();
 
   return (
-    <div className="flex flex-wrap">
+    <div className="flex flex-wrap justify-center mx-4">
    
       <CarritoCard carrito={carrito1} textoCarrito={"Carrito 1"} />
       <CarritoCard carrito={carrito2} textoCarrito={"Carrito 2"} />

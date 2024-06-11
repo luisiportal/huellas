@@ -8,7 +8,6 @@ import Loader from "../Utilidades/Loader";
 import {
   readLocalStorage,
   writeLocalStorageActualizarProductos,
-  writeLocalStorageCrearProducto,
 } from "../../hooks/useLocalStorage";
 
 const schema = Yup.object().shape({
@@ -27,8 +26,10 @@ const schema = Yup.object().shape({
 
 const ProductoForm = () => {
   const { createProducto, getProducto, updateProducto } = useProductos();
-  const { loader, setLoader, isOnline } = useAuth();
-  const [file, setFile] = useState(null);
+
+  const { loader, setLoader, isOnline, modalActivo, setModalActivo } =
+    useAuth();
+  const [file, setFile] = useState();
   const [producto, setProducto] = useState({
     nombre_producto: "",
     description_producto: "",
@@ -101,15 +102,23 @@ const ProductoForm = () => {
           });
         }
 
-        alert("Se ha actualizado el producto");
-
-        navigate("/productos");
+        setModalActivo({
+          mensaje: "Producto Actualizado",
+          activo: true,
+          navegarA: "/productos",
+        });
       } else {
         if (isOnline) {
           await createProducto(formData);
         } else {
-          return alert("Lo siento no puedo agregar productos fuera de linea");
-          writeLocalStorageCrearProducto("productos", {
+          setLoader(false);
+          return setModalActivo({
+            mensaje: "Lo siento no puedo agregar productos fuera de linea",
+            activo: true,
+            navegarA: "/productos",
+            errorColor: true,
+          });
+          /*   writeLocalStorageCrearProducto("productos", {
             id_producto: Date.now(),
             nombre_producto: formData.get("nombre_producto"),
             description_producto: formData.get("description_producto"),
@@ -120,16 +129,23 @@ const ProductoForm = () => {
             unidadMedida: formData.get("unidadMedida"),
             existencia: 0,
             existencia_inicial: formData.get("existencia_inicial"),
-          });
+          });*/
         }
 
-        alert("Se ha creado el producto correctamente");
-        navigate("/productos");
+        setModalActivo({
+          mensaje: "Se ha creado el producto correctamente",
+          activo: true,
+          navegarA: "/productos",
+        });
       }
     } catch (error) {
       console.log(error);
 
-      alert("Error al actualizar producto  " + error);
+      setModalActivo({
+        mensaje: "Error al actualizar producto  " + error,
+        activo: true,
+        errorColor: true,
+      });
     }
     setLoader(false);
   };

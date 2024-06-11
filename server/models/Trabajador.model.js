@@ -16,6 +16,10 @@ export const Trabajador = sequelize.define("trabajadores", {
     type: DataTypes.STRING(64),
     allowNull: false,
   },
+  privilegio: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   nombre: {
     type: DataTypes.STRING,
     allowNull: false,

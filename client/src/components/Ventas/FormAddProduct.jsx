@@ -1,17 +1,53 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import Select from "react-select";
-const FormAddProduct = ({ productos, setMovimiento,handleChange,movimiento, values,errors,isSubmitting }) => {
-    const [selectedOption, setSelectedOption] = useState(null);
+const FormAddProduct = ({
+  productos,
+  setMovimiento,
+  handleChange,
+  movimiento,
+  values,
+  errors,
+  isSubmitting,
+  recargar,
+  setSelectedOption,
+  selectedOption,
+}) => {
+  const [conExistencia, setConExistencia] = useState(true);
+  const [productosElegir, setProductosElegir] = useState([]);
 
-  const options = productos.map((producto) => ({
-    value: producto.id_producto,
-    label: producto.nombre_producto +" Precio: "+ producto.precio_venta + " Existencia: "+producto.existencia,
-    nombre_producto : producto.nombre_producto,
-    existencia: producto.existencia,
-    precio_venta: Number(producto.precio_venta),
-    ruta_image: producto.ruta_image,
-  }));
+  const productosConExistencia = productos.filter(
+    (producto) => Number(producto.existencia) > 0
+  );
+
+  useEffect(() => {
+    const mostrarProductos = () => {
+      if (conExistencia) {
+        setProductosElegir(productosConExistencia);
+      } else {
+        setProductosElegir(productos);
+      }
+    };
+    mostrarProductos();
+  }, [conExistencia, selectedOption, recargar]);
+
+  const options = (
+    productosElegir.length > 0 ? productosElegir : productosConExistencia
+  ).map((producto) => {
+    return {
+      value: producto.id_producto,
+      label:
+        producto.nombre_producto +
+        " Precio: " +
+        producto.precio_venta +
+        " Existencia: " +
+        producto.existencia,
+      nombre_producto: producto.nombre_producto,
+      existencia: producto.existencia,
+      precio_venta: Number(producto.precio_venta),
+      ruta_image: producto.ruta_image,
+    };
+  });
 
   const handleSelectChange = (p) => {
     setSelectedOption(p);
@@ -26,11 +62,24 @@ const FormAddProduct = ({ productos, setMovimiento,handleChange,movimiento, valu
     });
   };
 
-
+  const handleConExistenciaChange = () => {
+    setConExistencia(!conExistencia);
+  };
 
   return (
     <div className="bg-neutral-200 mt-6">
       <div className="p-4 ">
+        <div className="flex gap-2 items-center">
+          {" "}
+          <label htmlFor="conExistencia">Solo productos con existencia</label>
+          <input
+            type="checkbox"
+            name="conExistencia"
+            defaultChecked={true}
+            id="conExistencia"
+            onChange={handleConExistenciaChange}
+          />
+        </div>
         <Select
           name="nombre_producto"
           options={options}

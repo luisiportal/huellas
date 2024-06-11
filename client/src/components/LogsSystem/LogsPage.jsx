@@ -22,7 +22,7 @@ const LogsPage = () => {
           className="bg-neutral-200 text-slate-700  shadow-lg p-2 m-2 rounded-md"
           key={log.id}
         >
-          <h2 className="   flex ">
+          <h2 className="  flex ">
             <>
               <UserSvg />
               {`${log.trabajadore.nombre}: ${log.accionRealizada} ${log.recurso} ${log.detalles}`}

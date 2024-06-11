@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Select from "react-select";
 
 import { Form, Formik, isInteger } from "formik";
 
@@ -15,11 +14,14 @@ import {
   writeLocalStorage,
   writeLocalStorageCrearMovimiento,
 } from "../../hooks/useLocalStorage";
+import SelectorProductos from "./SelectorProductos";
+
 
 const AgregarMovimiento = (tipo) => {
   const [estadoEnviar, setEstadoEnviar] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
-  const { loader, setLoader, isOnline } = useAuth();
+  const { loader, setLoader, isOnline, modalActivo, setModalActivo } =
+    useAuth();
   const { productos, loadProductos } = useProductos();
   const [movimiento, setMovimiento] = useState({
     cantidad: "",
@@ -33,12 +35,6 @@ const AgregarMovimiento = (tipo) => {
 
   let fechaActual = new Date();
   let createdAt = fechaActual.toISOString();
-
-  const options = productos.map((producto) => ({
-    value: producto.id_producto,
-    label: producto.nombre_producto,
-    existencia: producto.existencia,
-  }));
 
   const schemaSalida = Yup.object().shape({
     cantidad: Yup.number()
@@ -59,7 +55,7 @@ const AgregarMovimiento = (tipo) => {
     setMovimiento({
       ...movimiento,
       id_producto: p.value,
-      producto: p.label,
+      producto: p.label.split("Precio")[0].trim(),
       existencia: p.existencia,
       createdAt: createdAt,
     });
@@ -67,9 +63,6 @@ const AgregarMovimiento = (tipo) => {
 
   return (
     <div>
-      <div className="flex justify-center items-center">
-        <BotoneraEntrada_Salida />
-      </div>
       <div>
         <div className="flex justify-center items-center">
           <div>
@@ -90,7 +83,13 @@ const AgregarMovimiento = (tipo) => {
                   } else {
                     await hacerMoviemientoRequest(values);
                   }
-                  alert(`Movimiento de ${tipo.tipo} realizado`);
+
+                  setModalActivo({
+                    mensaje: `Movimiento de ${tipo.tipo} realizado`,
+                    activo: true,
+                    errorColor: tipo.tipo == "Salida",
+                  });
+
                   resetForm();
                   setSelectedOption(null);
                   setEstadoEnviar(new Date().getTime());
@@ -107,15 +106,11 @@ const AgregarMovimiento = (tipo) => {
                     <h1 className=" text-slate-900 text-xl mb-2 p-4">
                       {"Estas a punto de hacer un movimiento de " + tipo.tipo}
                     </h1>
-                    <div className="p-4 ">
-                      <Select
-                        name="nombre_producto"
-                        options={options}
-                        value={selectedOption}
-                        onChange={handleSelectChange}
-                        isSearchable
-                      />
-                    </div>
+                    <SelectorProductos
+                      productos={productos}
+                      handleSelectChange={handleSelectChange}
+                      selectedOption={selectedOption}
+                    />
                     <div className="text-slate-900 p-4">
                       <label className="p-2" htmlFor="cantidad">
                         Cantidad :
@@ -154,6 +149,8 @@ const AgregarMovimiento = (tipo) => {
           {loader && <Loader />}
         </div>
       </div>
+
+   
     </div>
   );
 };

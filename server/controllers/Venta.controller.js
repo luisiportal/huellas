@@ -4,6 +4,7 @@ import { Factura } from "../models/Facturas.model.js";
 import { Venta } from "../models/Ventas.model.js";
 import { Producto } from "../models/Producto.model.js";
 import { registrarLog } from "./AuditLog.controllers.js";
+import { Movimiento } from "../models/Movimientos.model.js";
 
 export const createVenta = async (req, res) => {
   const productos = req.body.values;
@@ -23,12 +24,21 @@ export const createVenta = async (req, res) => {
       // Recorre los productos
       for (const producto of productos) {
         // Crear la venta
-        await Venta.create(
+        const ventaNueva = await Venta.create(
           {
             id_producto: producto.id_producto,
             cantidad: producto.cantidad,
             precio_total_producto: producto.cantidad * producto.precio_venta,
             id_factura: factura.id,
+          },
+          { transaction: t }
+        );
+        await Movimiento.create(
+          {
+            id_producto: producto.id_producto,
+            tipo: "Venta",
+            cantidad: producto.cantidad,
+            id_venta: ventaNueva.id_venta,
           },
           { transaction: t }
         );

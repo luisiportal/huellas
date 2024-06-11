@@ -131,10 +131,11 @@ export const updateProducto = async (req, res) => {
       response.stockMinimo = stockMinimo;
       response.unidadMedida = unidadMedida;
       await response.save({ transaction: t });
+
       await registrarLog(
         "Actualizó",
         "Producto",
-        response.nombre_producto,
+        `${response.nombre_producto}   `,
         req,
         t
       ); // Asegúrate de que registrarLog acepta la transacción como argumento
@@ -151,6 +152,8 @@ export const updateProducto = async (req, res) => {
 export const deleteProducto = async (req, res) => {
   try {
     sequelize.transaction(async (t) => {
+      const productoTraidoDB = await Producto.findByPk(req.params.id_producto);
+
       const response = await Producto.destroy(
         {
           where: {
@@ -159,7 +162,14 @@ export const deleteProducto = async (req, res) => {
         },
         { transaction: t }
       );
-      await registrarLog("Eliminó","Producto","", req,t,req.params.id_producto);
+      await registrarLog(
+        "Eliminó",
+        "Producto",
+        `${productoTraidoDB.nombre_producto} cantidad : ${productoTraidoDB.existencia}`,
+        req,
+        t,
+        req.params.id_producto
+      );
       res.sendStatus(204);
     });
   } catch (error) {

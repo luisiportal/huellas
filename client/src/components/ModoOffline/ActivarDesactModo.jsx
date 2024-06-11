@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+
+import { useAuth } from "../../context/AuthContext";
+import ComponenteModal from "../Utilidades/ComponenteModal";
 
 const ActivarDesactModo = ({ isOnline, setIsOnline }) => {
+  const { modalActivo, setModalActivo } = useAuth();
+
   const handleIsOnline = (isOnline) => {
     let modoSinConexion = confirm(
       `¿Quieres ${isOnline ? "activar" : "desactivar"} el modo sin conexión?`
@@ -8,7 +13,12 @@ const ActivarDesactModo = ({ isOnline, setIsOnline }) => {
 
     if (modoSinConexion) {
       setIsOnline(!isOnline);
-      alert(`Modo sin conexión ${isOnline ? "activado" : "desactivado"}`);
+      setModalActivo({
+        mensaje: `Modo sin conexión ${isOnline ? "activado" : "desactivado"}`,
+        activo: true,
+
+        errorColor: isOnline,
+      });
     } else {
       setIsOnline(isOnline);
     }
@@ -16,6 +26,10 @@ const ActivarDesactModo = ({ isOnline, setIsOnline }) => {
 
   return (
     <>
+      <ComponenteModal
+        setModalActivo={setModalActivo}
+        modalActivo={modalActivo}
+      />
       <button
         className="cursor-pointer"
         onClick={() => handleIsOnline(isOnline)}

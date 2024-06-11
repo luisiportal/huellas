@@ -1,7 +1,6 @@
 import { sequelize } from "../db.js";
 import { DataTypes } from "sequelize";
 
-
 export const Venta = sequelize.define("ventas", {
   id_venta: {
     type: DataTypes.INTEGER,
@@ -11,6 +10,7 @@ export const Venta = sequelize.define("ventas", {
   id_producto: {
     type: DataTypes.INTEGER,
   },
+
   cantidad: {
     type: DataTypes.INTEGER,
   },
@@ -19,5 +19,3 @@ export const Venta = sequelize.define("ventas", {
     type: DataTypes.DECIMAL,
   },
 });
-
-

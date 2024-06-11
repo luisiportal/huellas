@@ -1,9 +1,11 @@
 import { deleteFacturaRequest } from "../../api/venta.api";
-import { useCarritos } from "../../context/CarritosContext";
+import { useAuth } from "../../context/AuthContext";
+
 import Bton_eliminar_producto from "./Bton_eliminar_producto";
 
 function FacturaCard({ factura, setRecargarFactura }) {
   const { ventas } = factura;
+  const { setModalActivo, modalActivo } = useAuth();
 
   const handleEliminar = async (id) => {
     if (confirm("¿Estás a punto de eliminar una Venta ?")) {
@@ -11,7 +13,12 @@ function FacturaCard({ factura, setRecargarFactura }) {
         const response = await deleteFacturaRequest(id);
         ventas.filter((elem) => elem != id);
         setRecargarFactura(id);
-        alert("Eliminado");
+
+        setModalActivo({
+          mensaje: "Eliminado",
+          activo: true,
+          errorColor: true,
+        });
       } catch (error) {}
     } else {
       // El usuario hizo clic en "Cancelar", puedes poner aquí el código para la acción cancelada
@@ -35,7 +42,6 @@ function FacturaCard({ factura, setRecargarFactura }) {
             </div>
 
             <h2>
-              ${" "}
               {producto.precio_total_producto ??
                 producto.precio_venta * producto.cantidad}{" "}
               cup

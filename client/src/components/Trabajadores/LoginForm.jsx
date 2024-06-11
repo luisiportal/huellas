@@ -26,6 +26,7 @@ const Login = () => {
     setIsOnline,
   } = useAuth();
   const [credencial_invalida, setCredencial_invalida] = useState(null);
+  const { setModalActivo, modalActivo } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {}, [isAuthenticated]);
@@ -50,7 +51,11 @@ const Login = () => {
           if (!isOnline) {
             const responseLocal = readLocalStorage("user");
             if (!responseLocal)
-              return alert("Debes iniciar sesión con conexión");
+              return setModalActivo({
+                mensaje: "Debes iniciar sesión con conexión",
+                activo: true,
+                errorColor: true,
+              });
             login(responseLocal);
             setLoader(false);
           } else {
@@ -72,14 +77,24 @@ const Login = () => {
               setLoader(false);
 
               if (error.message.includes("Network Error")) {
-                alert("No hay conexión");
+                setModalActivo({
+                  mensaje: "No hay conexión",
+                  activo: true,
+                  errorColor: true,
+                });
+
                 let modoSinConexion = confirm(
                   "¿Quieres activar el modo sin conexión?"
                 );
 
                 if (modoSinConexion) {
                   setIsOnline(false);
-                  alert("Modo sin conexión activado");
+
+                  setModalActivo({
+                    mensaje: "Modo sin conexión activado",
+                    activo: true,
+                    errorColor: true,
+                  });
                 } else {
                   setIsOnline(true);
                 }

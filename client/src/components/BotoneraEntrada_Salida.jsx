@@ -1,16 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ArrowUpSVG from "./SVG/ArrowUpSVG";
+import DownArrowSVG from "./SVG/DownArrowSVG";
 const BotoneraEntrada_Salida = () => {
   return (
-    <div className="flex gap-2">
+    <div className="flex justify-center">
       <Link to="/movimientos/entrada">
-        <button className=" bg-green-500 w-full text-2md text-black font-bold block p-2 rounded-md">
-          + Entrada
+        
+        <button className=" bg-white border-huellas_color border-l-8  rounded-md p-3 font-bold text-sm uppercase gap-1 shadow-md w-fit m-4 flex justify-center">
+          {<ArrowUpSVG/>} Entrada
         </button>
       </Link>
       <Link to="/movimientos/salida">
-        <button className=" bg-red-500 w-full text-2md text-black font-bold block p-2 rounded-md ">
-          - Salida
+        <button className="bg-white border-huellas_color border-l-8 rounded-md p-3 font-bold text-sm uppercase gap-1 shadow-md w-fit m-4 flex justify-center">
+          {<DownArrowSVG/>} Salida
         </button>
       </Link>
     </div>

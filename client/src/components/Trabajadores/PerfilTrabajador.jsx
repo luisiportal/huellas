@@ -14,9 +14,7 @@ const PerfilTrabajador = () => {
       cargarPerfil(user.id_trabajador);
       setLoader(false);
     } catch (error) {
-      alert("Lo siento debes de iniciar sesion con conexión");
-      navigate("/");
-      return alert(error);
+      return error;
     }
   }, []);
 

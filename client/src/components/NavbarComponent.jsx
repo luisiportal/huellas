@@ -2,12 +2,20 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "./navbar/Navbar";
 import { useAuth } from "../context/AuthContext";
-import { cargarPerfilRequest } from "../api/login.api";
+
 import ActivarDesactModo from "./ModoOffline/ActivarDesactModo";
 
 const NavbarComponent = () => {
   const [abrirHamburguesa, setabrirHamburguesa] = useState(false);
-  const { isAuthenticated, logout, user, perfil, isOnline, setIsOnline } = useAuth();
+  const {
+    isAuthenticated,
+    logout,
+    user,
+    perfil,
+    isOnline,
+    setIsOnline,
+    privilegio,
+  } = useAuth();
 
   const sidebarRef = useRef(null);
   const openButtonRef = useRef(null);
@@ -16,7 +24,10 @@ const NavbarComponent = () => {
     function handleClickOutside(event) {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
         // Si el evento no ocurrió dentro de sidebarRef o dentro de openButtonRef
-        if (!openButtonRef.current || !openButtonRef.current.contains(event.target)) {
+        if (
+          !openButtonRef.current ||
+          !openButtonRef.current.contains(event.target)
+        ) {
           setabrirHamburguesa(false);
         }
       }
@@ -41,7 +52,6 @@ const NavbarComponent = () => {
           <div className="flex -mr-4">
             {/*Logo huellas  */}
             <div>
-          
               <Link
                 className="text-huellas_color hover:rotate-6 duration-200"
                 to={"/"}
@@ -55,7 +65,10 @@ const NavbarComponent = () => {
             </div>
 
             <div>
-              <Navbar hidden={"hidden space-x-8"}></Navbar>
+              <Navbar
+                hidden={"hidden space-x-8"}
+                privilegio={privilegio}
+              ></Navbar>
             </div>
           </div>
 
@@ -161,7 +174,7 @@ const NavbarComponent = () => {
           </div>
         </div>
       </header>
-      <ActivarDesactModo setIsOnline={setIsOnline} isOnline={isOnline}/>
+      <ActivarDesactModo setIsOnline={setIsOnline} isOnline={isOnline} />
     </div>
   );
 };

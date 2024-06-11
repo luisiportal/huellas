@@ -1,7 +1,7 @@
 import React from "react";
 import FacturaCard from "./FacturaCard";
 
-const H2FechaTitulo = ({ fecha, facturas, opciones,setFacturas,setRecargarFactura }) => {
+const H2FechaTitulo = ({ fecha, facturas, opciones, setRecargarFactura }) => {
   const facturasMismafecha = facturas.filter(
     (factura) =>
       new Date(factura.creado).toLocaleDateString("es-ES", opciones) == fecha
@@ -12,14 +12,20 @@ const H2FechaTitulo = ({ fecha, facturas, opciones,setFacturas,setRecargarFactur
     0
   );
 
- 
-
   return (
     <section className="flex flex-1 flex-col" key={fecha}>
-      <h2>{fecha} Venta {totalVentaDia} </h2>
+      <h2>
+        {fecha} Venta {totalVentaDia}{" "}
+      </h2>
 
       {facturasMismafecha.map((factura) => {
-        return <FacturaCard factura={factura} key={factura.id} setRecargarFactura={setRecargarFactura} />;
+        return (
+          <FacturaCard
+            factura={factura}
+            key={factura.id}
+            setRecargarFactura={setRecargarFactura}
+          />
+        );
       })}
     </section>
   );

@@ -9,10 +9,11 @@ import {
   updateTrabajadorRequest,
 } from "../../api/login.api";
 import MostrarErrorMessage from "../ValidacionForm/MostrarErrorMessage";
+import { useAuth } from "../../context/AuthContext";
 
 const AgregarTrabajador = () => {
   const params = useParams();
-  const navigate = useNavigate();
+  const { modalActivo, setModalActivo } = useAuth();
   const [file, setFile] = useState(null);
   const [cambiarPass, setCambiarPass] = useState(null);
   const [perfil, setPerfil] = useState({
@@ -76,22 +77,31 @@ const AgregarTrabajador = () => {
       if (params.id) {
         await updateTrabajadorRequest(params.id, formData);
 
-        alert("Se han actualizado los datos");
-
-        navigate("/trabajador/plantilla");
+        setModalActivo({
+          mensaje: "Se han actualizado los datos",
+          activo: true,
+          navegarA: "/trabajador/plantilla",
+        });
       } else {
         await registerRequest(formData);
-
-        alert("Se ha agregado un nuevo trabajador correctamente");
-        navigate("/trabajador/plantilla");
+        setModalActivo({
+          mensaje: "Se ha agregado un nuevo trabajador correctamente",
+          activo: true,
+          navegarA: "/trabajador/plantilla",
+        });
       }
     } catch (error) {
-      alert("Error al actualizar perfil  " + error);
+      setModalActivo({
+        mensaje: "Error al actualizar perfil  " + error,
+        activo: true,
+        errorColor: true,
+      });
     }
   };
 
   return (
     <div>
+     
       <h1>Agregar Trabajador</h1>
       <Formik
         initialValues={perfil}
@@ -154,15 +164,16 @@ const AgregarTrabajador = () => {
                 value={values.password}
                 disabled={cambiarPass || !params.id ? false : true}
               />
-              {params.id &&( <div className="flex gap-2 items-center">
-                <label htmlFor="cambiarPass">Cambiar contraseña</label>
-                <input
-                  type="checkbox"
-                  name="cambiarPass"
-                  onChange={handleCambiarPass}
-                />
-              </div>)}
-             
+              {params.id && (
+                <div className="flex gap-2 items-center">
+                  <label htmlFor="cambiarPass">Cambiar contraseña</label>
+                  <input
+                    type="checkbox"
+                    name="cambiarPass"
+                    onChange={handleCambiarPass}
+                  />
+                </div>
+              )}
               <MostrarErrorMessage campo={"password"} errors={errors} />
               <label className="text-black" htmlFor="password">
                 Nombre :

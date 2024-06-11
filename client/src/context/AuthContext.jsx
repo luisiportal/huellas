@@ -8,6 +8,7 @@ import {
   verifyTokenRequest,
 } from "../api/login.api";
 import { readLocalStorage, writeLocalStorage } from "../hooks/useLocalStorage";
+import { getTodosFacturasRequest } from "../api/venta.api";
 
 export const AuthContext = createContext();
 
@@ -19,6 +20,13 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [privilegio, setPrivilegio] = useState(null);
+  const [modalActivo, setModalActivo] = useState({
+    mensaje: "",
+    activo: false,
+    navegarA: "",
+    errorColor: false,
+  });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
   const [errors, setErrors] = useState(null);
@@ -31,6 +39,7 @@ export const AuthProvider = ({ children }) => {
     movil: "",
     puesto: "",
   });
+  
 
   const signup = async (formData) => {
     try {
@@ -49,13 +58,17 @@ export const AuthProvider = ({ children }) => {
         setPerfil(readLocalStorage("perfil"));
       } else {
         const { data } = await cargarPerfilRequest(user.id_trabajador);
-      
+
         writeLocalStorage("perfil", data);
         setLoader(false);
         setPerfil(data);
       }
     } catch (error) {
-      alert(error);
+      setModalActivo({
+        mensaje: error,
+        activo: true,
+        errorColor: true,
+      });
     }
 
     setIsAuthenticated(true);
@@ -70,7 +83,11 @@ export const AuthProvider = ({ children }) => {
         setPerfil(data);
       }
     } catch (error) {
-      return alert(error);
+      return setModalActivo({
+        mensaje: error,
+        activo: true,
+        errorColor: true,
+      });
     }
   };
 
@@ -86,6 +103,8 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+
+
   useEffect(() => {
     async function checkLogin() {
       const cookies = Cookies.get();
@@ -96,7 +115,12 @@ export const AuthProvider = ({ children }) => {
       }
       try {
         const res = await verifyTokenRequest(cookies.token);
-        if (res.status != 200) return alert("No hay conexión");
+        if (res.status != 200)
+          return setModalActivo({
+            mensaje: "No hay conexión",
+            activo: true,
+            errorColor: true,
+          });
         if (!res.data) {
           setIsAuthenticated(false);
           setLoading(false);
@@ -104,7 +128,9 @@ export const AuthProvider = ({ children }) => {
         }
 
         setIsAuthenticated(true);
+        setPrivilegio(res.data.privilegio);
         setUser(res.data);
+
         setLoading(false);
       } catch (error) {
         setIsAuthenticated(false);
@@ -113,7 +139,7 @@ export const AuthProvider = ({ children }) => {
       }
     }
     checkLogin();
-  }, []);
+  }, [isAuthenticated]);
   return (
     <AuthContext.Provider
       value={{
@@ -131,6 +157,10 @@ export const AuthProvider = ({ children }) => {
         setLoader,
         isOnline,
         setIsOnline,
+        modalActivo,
+        setModalActivo,
+        privilegio,
+       
       }}
     >
       {children}

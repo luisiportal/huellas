@@ -16,15 +16,16 @@ import AgregarMovimiento from "./components/Movimientos/AgregarMovimiento";
 import TipoCambioPage from "./pages/TipoCambioPage";
 import TipoCambioForm from "./components/TipoCambio/TipoCambioForm";
 
-import HomePage from "./pages/HomePage";
 import { CarritosProvaider } from "./context/CarritosContext";
 import VentasRoutes from "./routes/VentasRoutes";
 
 import LogsPage from "./components/LogsSystem/LogsPage";
+import HomePage from "./components/HOME/HomePage";
+import CuadrePage from "./components/CuadreCaja/CuadrePage";
 
 const App = () => {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-neutral-100 min-h-screen">
       <ProductoContextProvider>
         <AuthProvider>
           <Navbar />
@@ -46,6 +47,7 @@ const App = () => {
                   element={<ListadoTrabajadores />}
                 />
                 <Route path="/movimientos" element={<Movimientos />} />
+                <Route path="/cuadrar" element={<CuadrePage />} />
 
                 <Route
                   path="/productos/edit/:id_producto"
@@ -73,7 +75,7 @@ const App = () => {
                   path="/"
                   element={
                     <CarritosProvaider>
-                      <HomePage />{" "}
+                      <HomePage />
                     </CarritosProvaider>
                   }
                 />

@@ -36,7 +36,12 @@ export const ProductoContextProvider = ({ children }) => {
       setTrabajadores(
         trabajadores.filter((trabajador) => trabajador.id_trabajador !== id)
       );
-      alert("Se ha eliminado el trabajador correctamente");
+
+      setModalActivo({
+        mensaje: "Se ha eliminado el trabajador correctamente",
+        activo: true,
+        errorColor: true,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -59,7 +64,12 @@ export const ProductoContextProvider = ({ children }) => {
       setProductos(
         productos.filter((producto) => producto.id_producto !== id_producto)
       );
-      alert("Se ha eliminado el producto correctamente");
+
+      setModalActivo({
+        mensaje: "Se ha eliminado el producto correctamente",
+        activo: true,
+        errorColor: true,
+      });
     } catch (error) {
       console.error(error);
     }

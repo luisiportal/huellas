@@ -18,7 +18,8 @@ import FormAddProduct from "./FormAddProduct";
 import CarritosGuardados from "./CarritosGuardados";
 import { useCarritos } from "../../context/CarritosContext";
 import { useParams } from "react-router-dom";
-import { useProductos } from "../../context/ProductoProvider";
+
+import { getProductosRequest } from "../../api/productos.api";
 
 const NuevaVenta = () => {
   const {
@@ -39,8 +40,10 @@ const NuevaVenta = () => {
   let fechaActual = new Date();
   let fechaEnFormatoISO = fechaActual.toISOString();
 
-  const { productos, loadProductos, setProductos } = useProductos();
-  const { loader, setLoader, isOnline } = useAuth();
+  const { loader, setLoader, isOnline, modalActivo, setModalActivo } =
+    useAuth();
+  const [productos, setProductos] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
   const [movimiento, setMovimiento] = useState({
     cantidad: "",
     nombre_producto: "",
@@ -49,15 +52,17 @@ const NuevaVenta = () => {
   const params = useParams();
 
   useEffect(() => {
-    const cargarProductos = () => {
+    const cargarProductos = async () => {
       if (!isOnline) {
         setProductos(readLocalStorage("productos"));
       } else {
-        loadProductos(null);
+        const { data } = await getProductosRequest();
+        setProductos(data);
       }
     };
 
     cargarProductos();
+
     if (params.id) {
       cargarCarrito(params.id);
     }
@@ -113,9 +118,14 @@ const NuevaVenta = () => {
         await createVentaRequest(carrito, total_venta, fechaEnFormatoISO);
       }
 
-      alert("Producto vendido");
-      setLoader(false);
+      setModalActivo({
+        mensaje: `Se ha realizado la venta por un total de ${total_venta} cup`,
+        activo: true,
+      });
 
+      setSelectedOption(null);
+      setLoader(false);
+      setProductos([]); // esto lo que permite que se actualice el estado de los productos en el selector
       setCarrito([]);
 
       setRecargar(!recargar);
@@ -123,20 +133,25 @@ const NuevaVenta = () => {
       localStorage.removeItem("carrito" + cartSelect);
     } catch (error) {
       setLoader(false);
-      alert(error);
+
+      setModalActivo({
+        mensaje: error,
+        activo: true,
+        errorColor: true,
+      });
     }
   };
 
   return (
     <div>
-      <div className="pt-20">
-        <div className="flex justify-center items-center pt-24">
+      <div className="">
+        <div className="flex justify-center items-center pt-14">
           <div>
             <Formik
               initialValues={movimiento}
               enableReinitialize={true}
               validationSchema={schema}
-              onSubmit={async (values) => {
+              onSubmit={async (values, { resetForm }) => {
                 setLoader(true);
 
                 if (
@@ -147,9 +162,14 @@ const NuevaVenta = () => {
                 ) {
                   setCarrito([...carrito, values]);
                 } else {
-                  alert("Ya este producto ha sido agregado");
+                  setModalActivo({
+                    mensaje: `Ya este producto ha sido agregado`,
+                    activo: true,
+                    errorColor: true,
+                  });
                 }
-
+                resetForm();
+                setSelectedOption(null);
                 setLoader(false);
               }}
             >
@@ -167,7 +187,6 @@ const NuevaVenta = () => {
                     type={"button"}
                   />
                   <div>
-                    {" //"}
                     <CarritosGuardados
                       carrito1={carrito1}
                       carrito2={carrito2}
@@ -189,6 +208,9 @@ const NuevaVenta = () => {
                     values={values}
                     errors={errors}
                     isSubmitting={isSubmitting}
+                    recargar={recargar}
+                    setSelectedOption={setSelectedOption}
+                    selectedOption={selectedOption}
                   />
                 </Form>
               )}

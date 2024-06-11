@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { readLocalStorage, writeLocalStorage } from "../hooks/useLocalStorage";
+import { useAuth } from "./AuthContext";
 
 export const CarritosContext = createContext();
 
@@ -18,7 +19,7 @@ export const CarritosProvaider = ({ children }) => {
   const [cartSelect, setCartSelect] = useState(0);
   const [nuCart, setnuCart] = useState([]);
   const [recargar, setRecargar] = useState(false);
-
+  const { setModalActivo, modalActivo } = useAuth();
   useEffect(() => {
     cargarCarritosGuardados();
     getNucart();
@@ -43,7 +44,11 @@ export const CarritosProvaider = ({ children }) => {
 
   const guardarCarrito = () => {
     if (carrito.length == 0) {
-      return alert("Carrito Vacio");
+      return setModalActivo({
+        mensaje: "Carrito Vacio",
+        activo: true,
+        errorColor: true,
+      });
     } else {
       // carrito tiene productos
 
@@ -60,24 +65,32 @@ export const CarritosProvaider = ({ children }) => {
           writeLocalStorage("nuCart", [...nuCart, i]);
           writeLocalStorage("carrito" + i, [...carrito]);
           setCarrito([]);
-          alert("Carrito Guardado");
+
+          setModalActivo({
+            mensaje: "Carrito Guardado",
+            activo: true,
+          });
           setRecargar(!recargar);
           break;
         }
         i++;
       }
-      if (i > 4) return alert("Alcanzado limite de 4 carritos");
+      if (i > 4)
+        return setModalActivo({
+          mensaje: "Alcanzado limite de 4 carritos",
+          activo: true,
+          errorColor: true,
+        });
     }
   };
   const cargarCarrito = (nuCart) => {
     //setCarrito([0]); // vaciar el carrito
     const getCarrito = readLocalStorage("carrito" + nuCart);
-    if (getCarrito){
+    if (getCarrito) {
       setCarrito(getCarrito);
 
       setCartSelect(nuCart);
     }
-    
   };
 
   return (

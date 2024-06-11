@@ -9,6 +9,7 @@ import {
 } from "../../api/moneda.api";
 
 import * as Yup from "yup";
+import { useAuth } from "../../context/AuthContext";
 
 const schema = Yup.object().shape({
   precio: Yup.number()
@@ -22,8 +23,10 @@ const TipoCambioForm = () => {
     precio: 0,
     moneda: "",
   });
+  const { setModalActivo } = useAuth();
   const params = useParams();
   const navigate = useNavigate();
+
   useEffect(() => {
     const loadMonedas = async () => {
       if (params.id) {
@@ -56,8 +59,11 @@ const TipoCambioForm = () => {
                 if (params.id) {
                   await updateMoneda(params.id, values);
 
-                  alert("Se ha actualizado la moneda");
-                  navigate("/cambio");
+                  setModalActivo({
+                    mensaje: `Se ha actualizado la moneda ${values.moneda} con el precio ${values.precio}`,
+                    activo: true,
+                    navegarA: "/cambio",
+                  });
                 } else {
                   await crearMonedaRequest(values);
 

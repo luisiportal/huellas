@@ -13,7 +13,8 @@ import {
 
 const MovimientoCard = () => {
   const [movimientos, setMovimientos] = useState([]);
-  const { loader, setLoader, isOnline } = useAuth();
+  const { loader, setLoader, isOnline, modalActivo, setModalActivo } =
+    useAuth();
 
   useEffect(() => {
     const loadMovimientos = async () => {
@@ -52,9 +53,18 @@ const MovimientoCard = () => {
             movimientos.filter((movimiento) => movimiento.id_movimiento !== id)
           );
         }
-        alert("Movimiento Eliminado");
+
+        setModalActivo({
+          mensaje: "Movimiento Eliminado",
+          activo: true,
+          errorColor: true,
+        });
       } catch (error) {
-        alert(error);
+        setModalActivo({
+          mensaje: error,
+          activo: true,
+          errorColor: true,
+        });
       }
     } else {
       // El usuario hizo clic en "Cancelar", puedes poner aquí el código para la acción cancelada
@@ -96,9 +106,11 @@ const MovimientoCard = () => {
               </span>
             </div>
 
-            <button onClick={() => handleEliminar(movimiento.id_movimiento)}>
-              <Bton_eliminar_producto />
-            </button>
+            {movimiento.tipo !="Venta" && (
+              <button onClick={() => handleEliminar(movimiento.id_movimiento)}>
+                <Bton_eliminar_producto />
+              </button>
+            )}
           </div>
         </header>
       ))}
