@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
         setPerfil(readLocalStorage("perfil"));
       } else {
         const { data } = await cargarPerfilRequest(user.id_trabajador);
-
+        setIsAuthenticated(true);
         writeLocalStorage("perfil", data);
         setLoader(false);
         setPerfil(data);
@@ -67,8 +67,6 @@ export const AuthProvider = ({ children }) => {
         errorColor: true,
       });
     }
-
-    setIsAuthenticated(true);
   };
 
   const cargarPerfil = async (id) => {

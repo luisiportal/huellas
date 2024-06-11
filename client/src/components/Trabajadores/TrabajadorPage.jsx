@@ -7,17 +7,9 @@ import Login from "./LoginForm";
 
 const Trabajador = () => {
   const { isAuthenticated, setIsAuthenticated, errors, login } = useAuth();
-  useEffect(() => {}, [isAuthenticated]);
+  // useEffect(() => {}, [isAuthenticated]);
 
-  return (
-    <div>
-      {isAuthenticated ? (
-      <PerfilTrabajador/>
-      ) : (
-        <Login/>
-      )}
-    </div>
-  );
+  return <div>{isAuthenticated ? <PerfilTrabajador /> : <Login />}</div>;
 };
 
 export default Trabajador;
