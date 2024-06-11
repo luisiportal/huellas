@@ -66,12 +66,13 @@ const Login = () => {
               if (response.status != 200) {
                 setLoader(false);
                 throw new Error("No hay conexión");
+              } else {
+                writeLocalStorage("user", response.data);
+                login(response.data);
+                // setIsAuthenticated(true);
+                descargarTodos(); // alamcena en el local storage los datos para que esten disponibles sin conexion
+                setLoader(false);
               }
-              writeLocalStorage("user", response.data);
-              login(response.data);
-             // setIsAuthenticated(true);
-              descargarTodos(); // alamcena en el local storage los datos para que esten disponibles sin conexion
-              setLoader(false);
             } catch (error) {
               setLoader(false);
 
