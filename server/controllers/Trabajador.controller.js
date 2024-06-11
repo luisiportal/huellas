@@ -86,7 +86,7 @@ export const login = async (req, res) => {
 
     const token = await createAccessToken({ id: userFound.id_trabajador, privilegio: userFound.privilegio });
     //res.cookie("token", token);
-    res.cookie("__Host-token", token, {
+    res.cookie("token", token, {
       domain: DOMAIN, // Establece el dominio de la cookie
       secure: SECURE, // La cookie sólo se envía a través de HTTPS
       httpOnly: HTTPONLY, // La cookie es accesible por el cliente a través de JavaScript
