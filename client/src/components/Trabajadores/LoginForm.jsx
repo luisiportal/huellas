@@ -24,10 +24,10 @@ const Login = () => {
     setLoader,
     isOnline,
     setIsOnline,
+    setIsAuthenticated,
   } = useAuth();
   const [credencial_invalida, setCredencial_invalida] = useState(null);
   const { setModalActivo, modalActivo } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {}, [isAuthenticated]);
   return (
@@ -69,9 +69,9 @@ const Login = () => {
               }
               writeLocalStorage("user", response.data);
               login(response.data);
+              setIsAuthenticated(true);
               descargarTodos(); // alamcena en el local storage los datos para que esten disponibles sin conexion
               setLoader(false);
-             
             } catch (error) {
               setLoader(false);
 
