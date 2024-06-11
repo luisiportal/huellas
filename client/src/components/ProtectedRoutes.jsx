@@ -7,7 +7,7 @@ const ProtectedRoutes = () => {
 
   if (loading) return <h1>Cargando</h1>;
 
-  //if (!isAuthenticated) return <Navigate to="/trabajador/login" replace />;
+  if (!isAuthenticated) return <Navigate to="/trabajador/login" replace />;
 
   return <Outlet></Outlet>;
 };
