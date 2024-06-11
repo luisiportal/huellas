@@ -62,12 +62,11 @@ const Login = () => {
             try {
               setLoader(true);
               const response = await loginRequest(values);
-console.log(response);
+              console.log(response.data);
               if (response.status != 200) {
                 setLoader(false);
                 throw new Error("No hay conexión");
               }
-
               writeLocalStorage("user", response.data);
 
               descargarTodos(); // alamcena en el local storage los datos para que esten disponibles sin conexion
