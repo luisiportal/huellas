@@ -20,7 +20,7 @@ const LogsPage = () => {
       {logs.map((log) => (
         <div
           className="bg-neutral-200 text-slate-700  shadow-lg p-2 m-2 rounded-md"
-          key={log.id}
+          key={log.logId}
         >
           <h2 className="  flex ">
             <>

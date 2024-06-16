@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
-import { loginRequest } from "../../api/login.api";
+import { cargarPerfilRequest, loginRequest } from "../../api/login.api";
 import MostrarErrorMessage from "../ValidacionForm/MostrarErrorMessage";
 import Loader from "../Utilidades/Loader";
 import {
@@ -48,7 +48,7 @@ const Login = () => {
             .matches(/^[a-zA-Z0-9-. ]*$/, "Solo se permiten letras y números"),
         })}
         onSubmit={async (values, { setSubmitting }) => {
-          if (!isOnline) {
+          if (!isOnline) { // no conectado
             const responseLocal = readLocalStorage("user");
             if (!responseLocal)
               return setModalActivo({
@@ -62,14 +62,14 @@ const Login = () => {
             try {
               setLoader(true);
               const response = await loginRequest(values);
-              console.log(response.data);
+
               if (response.status != 200) {
                 setLoader(false);
                 throw new Error("No hay conexión");
               } else {
                 writeLocalStorage("user", response.data);
                 login(response.data);
-                // setIsAuthenticated(true);
+                 setIsAuthenticated(true);
                 descargarTodos(); // alamcena en el local storage los datos para que esten disponibles sin conexion
                 setLoader(false);
               }
@@ -106,10 +106,7 @@ const Login = () => {
                 setCredencial_invalida("Credenciales inválidas");
               } else if (error.message === "No hay conexión") {
                 setCredencial_invalida("No hay conexión con el servidor");
-              } else {
-                setCredencial_invalida("Ocurrió un error inesperado");
               }
-
               setTimeout(() => {
                 setCredencial_invalida(null);
               }, 2000);

@@ -12,7 +12,10 @@ const BuscadorProducto = ({ loader, setLoader, isOnline }) => {
   useEffect(() => {
     try {
       loadProductos(isOnline);
-    } catch (error) {}
+    } catch (error) {
+
+      console.log(error);
+    }
   }, [filtroProductos]);
 
   const handleChange = (e) => {

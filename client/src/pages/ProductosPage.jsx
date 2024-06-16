@@ -17,7 +17,7 @@ const ProductosPage = () => {
         Productos
       </h1>
       <div>
-        <BuscadorProducto loader={loader} setLoader={setLoader}/>
+        <BuscadorProducto loader={loader} setLoader={setLoader} isOnline={isOnline}/>
       </div>
     </div>
   );

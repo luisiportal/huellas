@@ -16,17 +16,19 @@ export const registrarLog = async (
   id_recurso
 ) => {
   const userName = async () => {
-    return new Promise((resolve, reject) => {
-      const { token } = req.cookies;
-      Jwt.verify(token, TOKEN_SECRET, (err, user) => {
-        if (err) {
-          reject(new Error("Invalid token"));
-        } else {
-          req.user = user;
-          resolve(req.user);
-        }
+    const { token } = req.cookies;
+    if (token) {
+      return new Promise((resolve, reject) => {
+        Jwt.verify(token, TOKEN_SECRET, (err, user) => {
+          if (err) {
+            reject(new Error("Invalid token"));
+          } else {
+            req.user = user;
+            resolve(req.user);
+          }
+        });
       });
-    });
+    }
   };
 
   // Ahora puedes usar 'await' para esperar a que se resuelva la promesa
@@ -34,7 +36,7 @@ export const registrarLog = async (
 
   await AuditLog.create(
     {
-      id_usuario: user.id,
+      id_usuario: user ? user.id : id_recurso,
       accionRealizada: accionRealizada,
       recurso: recurso,
       id_recurso: id_recurso,

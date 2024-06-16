@@ -3,6 +3,7 @@ import { useState, useContext } from "react";
 import Cookies from "js-cookie";
 import {
   cargarPerfilRequest,
+  loginRequest,
   logoutRequest,
   registerRequest,
   verifyTokenRequest,
@@ -49,14 +50,11 @@ export const AuthProvider = ({ children }) => {
   const login = async (user) => {
     try {
       setLoader(true);
+
       setUser(user);
-      
-        const { data } = await cargarPerfilRequest(user.id_trabajador);
-        setIsAuthenticated(true);
-        writeLocalStorage("perfil", data);
-        setLoader(false);
-        setPerfil(data);
-      
+      setIsAuthenticated(true);
+      await cargarPerfilRequest(user.id_trabajador);
+      setLoader(false);
     } catch (error) {
       console.log(error);
       setModalActivo({
