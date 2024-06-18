@@ -62,6 +62,8 @@ export const getTodosVentas = async (req, res) => {
   }
 };
 export const getTodosFacturas = async (req, res) => {
+  const { limit, offset } = req.query;
+
   try {
     const response = await Factura.findAll({
       include: [
@@ -77,6 +79,8 @@ export const getTodosFacturas = async (req, res) => {
         },
       ],
       order: [["creado", "DESC"]],
+      limit: limit,
+      offset: offset,
     });
 
     res.json(response);

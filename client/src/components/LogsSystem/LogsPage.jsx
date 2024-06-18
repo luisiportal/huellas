@@ -2,17 +2,21 @@ import React, { useEffect, useState } from "react";
 import { getTodosLogsRequest } from "../../api/logs.api";
 import CalendarSvg from "../SVG/CalendarSvg";
 import UserSvg from "../SVG/UserSvg";
+import BTNCargarMas from "../Utilidades/BTNCargarMas";
+import Loader from "../Utilidades/Loader";
+import { useAuth } from "../../context/AuthContext";
 
 const LogsPage = () => {
   const [logs, setLogs] = useState([]);
+  const { loader, setLoader } = useAuth();
 
   useEffect(() => {
-    const loadLogs = async () => {
-      const { data } = await getTodosLogsRequest();
+    const loadLogs = async (limit) => {
+      const { data } = await getTodosLogsRequest(limit);
       setLogs(data);
     };
 
-    loadLogs();
+    loadLogs(30);
   }, []);
 
   return (
@@ -37,6 +41,13 @@ const LogsPage = () => {
           </h3>
         </div>
       ))}
+      <BTNCargarMas
+        estado={logs}
+        setEstado={setLogs}
+        getRecurso={getTodosLogsRequest}
+        setLoader={setLoader}
+      />
+      {loader && <Loader />}
     </div>
   );
 };

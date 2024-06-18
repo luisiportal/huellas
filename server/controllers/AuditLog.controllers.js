@@ -47,6 +47,7 @@ export const registrarLog = async (
 };
 
 export const getTodosLogs = async (req, res) => {
+  const { limit, offset } = req.query;
   try {
     const response = await AuditLog.findAll({
       where: {
@@ -62,6 +63,7 @@ export const getTodosLogs = async (req, res) => {
         },
       ],
       order: [["createdAt", "DESC"]],
+      limit: limit,
     });
     res.json(response);
   } catch (error) {

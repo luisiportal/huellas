@@ -7,10 +7,10 @@ import { registrarLog } from "./AuditLog.controllers.js";
 export const hacerMovimientoAPi = async (req, res) => {
   try {
     const { existencia, cantidad, id_producto, creado } = req.body;
-       if (req.body.tipo === "Entrada") {
+    if (req.body.tipo === "Entrada") {
       const response = await Producto.findByPk(id_producto);
 
-      response.existencia = Number(cantidad) + Number(existencia) ;
+      response.existencia = Number(cantidad) + Number(existencia);
 
       await response.save();
 
@@ -45,22 +45,30 @@ export const regsitrarMovimiento = async (
   tipo,
   producto,
   cantidad,
-  creado,req
+  creado,
+  req
 ) => {
   try {
-    sequelize.transaction(async (t) => { const response = await Movimiento.create({
-      id_producto,
-      tipo,
-      producto,
-      cantidad,
-      creado,
-    },
-    { transaction: t }
-    
-  );
-  await registrarLog(tipo, "Movimiento", `  producto: ${producto} cantidad: ${cantidad} `, req, t,id_producto);  
-})
-   
+    sequelize.transaction(async (t) => {
+      const response = await Movimiento.create(
+        {
+          id_producto,
+          tipo,
+          producto,
+          cantidad,
+          creado,
+        },
+        { transaction: t }
+      );
+      await registrarLog(
+        tipo,
+        "Movimiento",
+        `  producto: ${producto} cantidad: ${cantidad} `,
+        req,
+        t,
+        id_producto
+      );
+    });
   } catch (error) {
     console.log("Error al registrar movimiento");
   }
@@ -69,6 +77,8 @@ export const regsitrarMovimiento = async (
 // listar movimiemtons
 
 export const getTodosMovimientos = async (req, res) => {
+  const { limit, offset } = req.query;
+
   try {
     const response = await Movimiento.findAll({
       where: {
@@ -84,6 +94,7 @@ export const getTodosMovimientos = async (req, res) => {
         },
       ],
       order: [["createdAt", "DESC"]],
+      limit: limit,
     });
     res.json(response);
   } catch (error) {
@@ -94,18 +105,17 @@ export const getTodosMovimientos = async (req, res) => {
 export const deleteMovimiento = async (req, res) => {
   try {
     sequelize.transaction(async (t) => {
-      const response = await Movimiento.destroy({
-        where: {
-          id_movimiento: req.params.id,
+      const response = await Movimiento.destroy(
+        {
+          where: {
+            id_movimiento: req.params.id,
+          },
         },
-      },
-      { transaction: t }
-    );
-    await registrarLog("Elimino", "Movimiento", `: ${req.params.id}`, req, t,);
+        { transaction: t }
+      );
+      await registrarLog("Elimino", "Movimiento", `: ${req.params.id}`, req, t);
       res.sendStatus(204);
-
-    })
- 
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

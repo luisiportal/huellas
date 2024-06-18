@@ -10,6 +10,7 @@ import {
   readLocalStorage,
   writeLocalStorage,
 } from "../../hooks/useLocalStorage";
+import BTNCargarMas from "../Utilidades/BTNCargarMas";
 
 const MovimientoCard = () => {
   const [movimientos, setMovimientos] = useState([]);
@@ -17,13 +18,13 @@ const MovimientoCard = () => {
     useAuth();
 
   useEffect(() => {
-    const loadMovimientos = async () => {
+    const loadMovimientos = async (limit) => {
       try {
         setLoader(true);
         if (!isOnline) {
           setMovimientos(readLocalStorage("movimientos"));
         } else {
-          const response = await getTodosMovimientosRequest();
+          const response = await getTodosMovimientosRequest(limit);
           setMovimientos(response.data);
           writeLocalStorage("movimientos", response.data);
         }
@@ -32,7 +33,7 @@ const MovimientoCard = () => {
       } catch (error) {}
     };
 
-    loadMovimientos();
+    loadMovimientos(30);
   }, []);
 
   const handleEliminar = async (id) => {
@@ -106,7 +107,7 @@ const MovimientoCard = () => {
               </span>
             </div>
 
-            {movimiento.tipo !="Venta" && (
+            {movimiento.tipo != "Venta" && (
               <button onClick={() => handleEliminar(movimiento.id_movimiento)}>
                 <Bton_eliminar_producto />
               </button>
@@ -114,6 +115,12 @@ const MovimientoCard = () => {
           </div>
         </header>
       ))}
+      <BTNCargarMas
+        estado={movimientos}
+        setEstado={setMovimientos}
+        getRecurso={getTodosMovimientosRequest}
+        setLoader={setLoader}
+      />
       {loader && <Loader />}
     </div>
   );

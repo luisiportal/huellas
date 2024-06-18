@@ -12,6 +12,8 @@ import {
 } from "../../hooks/useLocalStorage";
 import BTNHOME from "../HOME/elementos/BTNHOME";
 import CuadreSVG from "../SVG/CuadreSVG";
+import BTNCargarMas from "../Utilidades/BTNCargarMas";
+import Loader from "../Utilidades/Loader";
 
 const ResumenVenta = () => {
   const [recargarFactura, setRecargarFactura] = useState(null);
@@ -24,10 +26,10 @@ const ResumenVenta = () => {
     month: "long",
     day: "numeric",
   };
-  const { isOnline } = useAuth();
+  const { isOnline, loader, setLoader } = useAuth();
 
   useEffect(() => {
-    const loadFacturas = async () => {
+    const loadFacturas = async (limit) => {
       try {
         if (!isOnline) {
           const data = readLocalStorage("facturas");
@@ -35,7 +37,7 @@ const ResumenVenta = () => {
           setFacturas(data);
           loadFechas(data);
         } else {
-          const { data } = await getTodosFacturasRequest();
+          const { data } = await getTodosFacturasRequest(limit);
           writeLocalStorage("facturas", data);
 
           setFacturas(data);
@@ -54,7 +56,7 @@ const ResumenVenta = () => {
         ),
       ]);
     };
-    loadFacturas();
+    loadFacturas(30);
   }, [recargarFactura]);
 
   ///////////////trbajar aqui las fechas
@@ -99,10 +101,22 @@ const ResumenVenta = () => {
         handleClick={() => setMostrarCuadrarDialog(!mostrarCuadrarDialog)}
       />
       {!mostrarCuadrarDialog ? (
-        <div className="gap-2 mt-8 ">{renderMain()};</div>
+        <div className="gap-2 mt-8 ">
+          <>
+            {renderMain()}
+            <BTNCargarMas
+              estado={facturas}
+              setEstado={setFacturas}
+              getRecurso={getTodosFacturasRequest}
+              setLoader={setLoader}
+            />
+          </>
+          ;
+        </div>
       ) : (
         <EntrarEfectivo totalVentaHoy={totalVentaDia} />
       )}
+       {loader && <Loader />}
     </div>
   );
 };
