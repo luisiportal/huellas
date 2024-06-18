@@ -16,12 +16,12 @@ const descargarProductos = async () => {
 };
 
 const descargarMovimientos = async () => {
-  const response = await getTodosMovimientosRequest();
+  const response = await getTodosMovimientosRequest(100);
 
   writeLocalStorage("movimientos", response.data);
 };
 
 const descargarTransacciones = async () => {
-  const { data } = await getTodosFacturasRequest();
+  const { data } = await getTodosFacturasRequest(100);
   writeLocalStorage("facturas", data);
 };
