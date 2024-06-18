@@ -56,7 +56,7 @@ const ResumenVenta = () => {
         ),
       ]);
     };
-    loadFacturas(30);
+    loadFacturas(100);
   }, [recargarFactura]);
 
   ///////////////trbajar aqui las fechas
