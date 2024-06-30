@@ -22,6 +22,7 @@ import VentasRoutes from "./routes/VentasRoutes";
 import LogsPage from "./components/LogsSystem/LogsPage";
 import HomePage from "./components/HOME/HomePage";
 import CuadrePage from "./components/CuadreCaja/CuadrePage";
+import Edit from "./components/Movimientos/Edit";
 
 const App = () => {
   return (
@@ -47,6 +48,10 @@ const App = () => {
                   element={<ListadoTrabajadores />}
                 />
                 <Route path="/movimientos" element={<Movimientos />} />
+                <Route
+                  path="/movimientos/edit/:id_movimiento"
+                  element={<Edit />}
+                />
                 <Route path="/cuadrar" element={<CuadrePage />} />
 
                 <Route
@@ -66,6 +71,10 @@ const App = () => {
                 <Route
                   path="/movimientos/salida"
                   element={<AgregarMovimiento tipo={"Salida"} key={"salida"} />}
+                />
+                  <Route
+                  path="/movimientos/edit/:id_movimiento"
+                  element={<Edit />}
                 />
                 <Route path="cambio" element={<TipoCambioPage />} />
                 <Route path="cambio/new" element={<TipoCambioPage />} />

@@ -120,3 +120,29 @@ export const deleteMovimiento = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const updateMovimiento = async (req, res) => {
+  const { fecha, id_movimiento } = req.body;
+
+  let fechaConHora = new Date(`${fecha}T08:00:00`);
+
+  sequelize.transaction(async (t) => {
+    try {
+      const response = await Movimiento.findByPk(id_movimiento);
+      console.log(fechaConHora);
+      response.creado =fechaConHora;
+      await response.save({ transaction: t }); // Pasamos la transacción como opción al método save
+      res.json(response);
+      await registrarLog(
+        "Actualizó",
+        "Movimiento",
+        `${response.id_movimiento} fecha: ${fecha}`,
+        req,
+        t
+      );
+    } catch (error) {
+      console.error(error);
+      // Aquí puedes manejar el error, por ejemplo, enviando una respuesta con un código de estado 500
+    }
+  });
+};

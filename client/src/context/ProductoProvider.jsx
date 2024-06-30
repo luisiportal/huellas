@@ -65,11 +65,7 @@ export const ProductoContextProvider = ({ children }) => {
         productos.filter((producto) => producto.id_producto !== id_producto)
       );
 
-      setModalActivo({
-        mensaje: "Se ha eliminado el producto correctamente",
-        activo: true,
-        errorColor: true,
-      });
+   
     } catch (error) {
       console.error(error);
     }

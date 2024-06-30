@@ -4,6 +4,7 @@ import { getTodosFacturasRequest } from "../../../api/venta.api";
 import { writeLocalStorage } from "../../../hooks/useLocalStorage";
 
  export const descargarTodos = async () => {
+  
   descargarProductos();
   descargarMovimientos();
   descargarTransacciones();

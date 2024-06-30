@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from "react";
 
-import { Form, Formik, isInteger } from "formik";
+import { Form, Formik } from "formik";
 
 import * as Yup from "yup";
 import { hacerMoviemientoRequest } from "../../api/movimientos.api";
-import MovimientoCard from "./MovimientoCard";
 import BotoneraEntrada_Salida from "../BotoneraEntrada_Salida";
 import { useAuth } from "../../context/AuthContext";
 import Loader from "../Utilidades/Loader";
 
 import { useProductos } from "../../context/ProductoProvider";
-import {
-  writeLocalStorage,
-  writeLocalStorageCrearMovimiento,
-} from "../../hooks/useLocalStorage";
+import { writeLocalStorageCrearMovimiento } from "../../hooks/useLocalStorage";
 import SelectorProductos from "./SelectorProductos";
-
+import { useNavigate } from "react-router-dom";
 
 const AgregarMovimiento = (tipo) => {
   const [estadoEnviar, setEstadoEnviar] = useState(0);
@@ -28,9 +24,10 @@ const AgregarMovimiento = (tipo) => {
     producto: "",
     tipo: tipo.tipo,
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
-    loadProductos(null);
+    loadProductos(isOnline);
   }, [estadoEnviar]);
 
   let fechaActual = new Date();
@@ -92,7 +89,8 @@ const AgregarMovimiento = (tipo) => {
 
                   resetForm();
                   setSelectedOption(null);
-                  setEstadoEnviar(new Date().getTime());
+                  setEstadoEnviar(!estadoEnviar);
+                  navigate("/movimientos");
                 } catch (error) {
                   console.error(error);
                 }
@@ -140,17 +138,11 @@ const AgregarMovimiento = (tipo) => {
                 </Form>
               )}
             </Formik>
-            <div className="flex justify-center items-center mt-4">
-              <div>
-                <MovimientoCard key={estadoEnviar}></MovimientoCard>
-              </div>
-            </div>
+            <div className="flex justify-center items-center mt-4"></div>
           </div>
           {loader && <Loader />}
         </div>
       </div>
-
-   
     </div>
   );
 };

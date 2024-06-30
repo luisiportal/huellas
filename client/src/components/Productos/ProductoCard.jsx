@@ -36,7 +36,6 @@ function ProductoCard({ producto }) {
       onMouseLeave={handleMouseLeave}
       onClick={handleSetmasDetalles}
     >
-      
       <header className="flex">
         <div /* imagen del prodcuto */>
           <img

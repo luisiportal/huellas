@@ -10,6 +10,7 @@ import PendientesAsincronizar from "./PendientesAsincronizar";
 import CarritoSVG from "../SVG/CarritoSVG";
 import CuadreSVG from "../SVG/CuadreSVG";
 import BTNHOME from "./elementos/BTNHOME";
+import { useFetch } from "../../hooks/useFetch";
 
 const HomePage = () => {
   const [pendientesSincronizar, setPendientesSincronizar] = useState(false);
@@ -38,7 +39,6 @@ const HomePage = () => {
       <BotoneraEntrada_Salida />
       <CarritoActivos />
 
-
       <BTNHOME
         texto={
           <>
@@ -46,15 +46,6 @@ const HomePage = () => {
           </>
         }
         enlace={"/transacciones/new"}
-      />
-
-      <BTNHOME
-        texto={
-          <>
-            <CuadreSVG /> Cuadre de Caja
-          </>
-        }
-        enlace={"/cuadrar"}
       />
 
       {pendientesSincronizar && (

@@ -23,6 +23,11 @@ Factura.hasMany(Venta, {
 
 Venta.belongsTo(Factura, { foreignKey: "id_factura" });
 Venta.belongsTo(Producto, { foreignKey: "id_producto" });
+Producto.hasMany(Venta, {
+  foreignKey: "id_producto",
+  onDelete: "CASCADE",
+  hooks: true,
+});
 
 Trabajador.hasMany(AuditLog, { foreignKey: "id_usuario" });
 AuditLog.belongsTo(Trabajador, { foreignKey: "id_usuario" });

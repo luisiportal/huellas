@@ -63,31 +63,53 @@ const BarraFiltrado = ({ setFiltroProductos, productos, order, setOrder }) => {
       setFiltroProductos(ASC);
     }
   };
-  const ordenarNombre = () => {
+  const ordenarExistencia = () => {
     if (order === "DSC") {
       setOrder("ASC");
 
-      const DSC = productos.sort((a, b) => a.nombre_producto.localeCompare(b.nombre_producto));
-
+      const DSC = productos.sort(
+        (a, b) => Number(b.existencia) - Number(a.existencia)
+      );
 
       setFiltroProductos(DSC);
     }
     if (order === "ASC") {
       setOrder("DSC");
-      const ASC = productos.sort((a, b) => b.nombre_producto.localeCompare(a.nombre_producto));
+      const ASC = productos.sort(
+        (a, b) => Number(a.existencia) - Number(b.existencia)
+      );
+
+      setFiltroProductos(ASC);
+    }
+  };
+  const ordenarNombre = () => {
+    if (order === "DSC") {
+      setOrder("ASC");
+
+      const DSC = productos.sort((a, b) =>
+        a.nombre_producto.localeCompare(b.nombre_producto)
+      );
+
+      setFiltroProductos(DSC);
+    }
+    if (order === "ASC") {
+      setOrder("DSC");
+      const ASC = productos.sort((a, b) =>
+        b.nombre_producto.localeCompare(a.nombre_producto)
+      );
 
       setFiltroProductos(ASC);
     }
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex  flex-wrap justify-center">
       <BTNFiltrado
         handleOrdenar={ordenarFecha}
         campo={"Fecha"}
         tipo={"DSC"}
         estado={order}
-        activeBTN={activeBTN ==="Fecha"}
+        activeBTN={activeBTN === "Fecha"}
         setActiveBTN={setActiveBTN}
       />
       <BTNFiltrado
@@ -95,23 +117,31 @@ const BarraFiltrado = ({ setFiltroProductos, productos, order, setOrder }) => {
         campo={"Precio"}
         tipo={"DSC"}
         estado={order}
-        activeBTN={activeBTN ==="Precio"}
+        activeBTN={activeBTN === "Precio"}
         setActiveBTN={setActiveBTN}
       />
-        <BTNFiltrado
+      <BTNFiltrado
         handleOrdenar={ordenarCosto}
         campo={"Costo"}
         tipo={"DSC"}
         estado={order}
-        activeBTN={activeBTN ==="Costo"}
+        activeBTN={activeBTN === "Costo"}
         setActiveBTN={setActiveBTN}
       />
-        <BTNFiltrado
+      <BTNFiltrado
         handleOrdenar={ordenarNombre}
         campo={"A-Z"}
         tipo={"DSC"}
         estado={order}
-        activeBTN={activeBTN ==="A-Z"}
+        activeBTN={activeBTN === "A-Z"}
+        setActiveBTN={setActiveBTN}
+      />
+      <BTNFiltrado
+        handleOrdenar={ordenarExistencia}
+        campo={"Existencia"}
+        tipo={"DSC"}
+        estado={order}
+        activeBTN={activeBTN === "Existencia"}
         setActiveBTN={setActiveBTN}
       />
     </div>

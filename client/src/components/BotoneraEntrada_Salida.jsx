@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import ArrowUpSVG from "./SVG/ArrowUpSVG";
 import DownArrowSVG from "./SVG/DownArrowSVG";
-const BotoneraEntrada_Salida = () => {
+const BotoneraEntrada_Salida = ({movimientos}) => {
   return (
     <div className="flex justify-center">
       <Link to="/movimientos/entrada">

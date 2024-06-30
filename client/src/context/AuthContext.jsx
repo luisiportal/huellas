@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }) => {
     errorColor: false,
   });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [recargar, setRecargar] = useState(null);
   const [isOnline, setIsOnline] = useState(true);
   const [errors, setErrors] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -100,7 +101,7 @@ export const AuthProvider = ({ children }) => {
       const cookies = Cookies.get();
 
       if (!cookies.token) {
-       // setIsAuthenticated(false); probando
+        // setIsAuthenticated(false); probando
         return setUser(null);
       }
       try {
@@ -149,6 +150,8 @@ export const AuthProvider = ({ children }) => {
         setIsOnline,
         modalActivo,
         setModalActivo,
+        recargar,
+        setRecargar,
       }}
     >
       {children}

@@ -13,7 +13,6 @@ const BuscadorProducto = ({ loader, setLoader, isOnline }) => {
     try {
       loadProductos(isOnline);
     } catch (error) {
-
       console.log(error);
     }
   }, [filtroProductos]);
