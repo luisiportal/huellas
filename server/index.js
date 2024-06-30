@@ -20,7 +20,7 @@ app.use(
   })
 );
 associations();
-await sequelize.sync({ alter: false });
+await sequelize.sync({ alter: true });
 sequelize.query(
   'ALTER TABLE public.movimientos ALTER COLUMN "createdAt" SET DEFAULT now();'
 );

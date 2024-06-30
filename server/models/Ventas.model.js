@@ -12,7 +12,7 @@ export const Venta = sequelize.define("ventas", {
   },
 
   cantidad: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.DECIMAL,
   },
 
   precio_total_producto: {

@@ -104,6 +104,8 @@ export const getTodosMovimientos = async (req, res) => {
 
 export const deleteMovimiento = async (req, res) => {
   try {
+    const { dataValues } = await Movimiento.findByPk(req.params.id);
+    console.log(dataValues);
     sequelize.transaction(async (t) => {
       const response = await Movimiento.destroy(
         {
@@ -113,7 +115,13 @@ export const deleteMovimiento = async (req, res) => {
         },
         { transaction: t }
       );
-      await registrarLog("Elimino", "Movimiento", `: ${req.params.id}`, req, t);
+      await registrarLog(
+        "Elimino",
+        "un Movimiento",
+        `del ID_Producto: ${dataValues.id_producto}  Tipo :${dataValues.tipo}  Cantidad: ${dataValues.cantidad}`,
+        req,
+        t
+      );
       res.sendStatus(204);
     });
   } catch (error) {
@@ -129,8 +137,8 @@ export const updateMovimiento = async (req, res) => {
   sequelize.transaction(async (t) => {
     try {
       const response = await Movimiento.findByPk(id_movimiento);
-      console.log(fechaConHora);
-      response.creado =fechaConHora;
+
+      response.creado = fechaConHora;
       await response.save({ transaction: t }); // Pasamos la transacción como opción al método save
       res.json(response);
       await registrarLog(
