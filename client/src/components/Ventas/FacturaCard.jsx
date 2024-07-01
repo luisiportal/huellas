@@ -8,7 +8,8 @@ import EditFechaFactura from "./EditFechaFactura";
 
 function FacturaCard({ factura, setRecargarFactura, setRecargar, recargar }) {
   const { ventas } = factura;
-  const { setModalActivo, modalActivo, editando, setEditando } = useAuth();
+  const { setModalActivo, modalActivo, editando, setEditando, perfil } =
+    useAuth();
 
   const handleEliminar = async (id) => {
     if (confirm("¿Estás a punto de eliminar una Venta ?")) {
@@ -63,9 +64,9 @@ function FacturaCard({ factura, setRecargarFactura, setRecargar, recargar }) {
           </p>
         </div>
 
-        <div>
-          <button onClick={() => handleEliminar(factura.id)}>
-            <Bton_eliminar_producto />
+   {(perfil.privilegio =="Administrador") ? <>     <div>
+          <button className="flex" onClick={() => handleEliminar(factura.id)}>
+            <Bton_eliminar_producto /> Eliminar Factura
           </button>
         </div>
         {editando == factura.id && (
@@ -75,7 +76,7 @@ function FacturaCard({ factura, setRecargarFactura, setRecargar, recargar }) {
             setRecargar={setRecargar}
             recargar={recargar}
           />
-        )}
+        )}</> :""}
       </div>
     </div>
   );

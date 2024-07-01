@@ -9,7 +9,6 @@ import BTNCargarMas from "../components/Utilidades/BTNCargarMas";
 
 import Edit from "../components/Movimientos/Edit";
 
-
 const MovimientosPage = () => {
   const {
     loader,
@@ -21,6 +20,7 @@ const MovimientosPage = () => {
     setRecargar,
     editando,
     setEditando,
+    perfil,
   } = useAuth();
   const [movimientos, setMovimientos] = useState([]);
   useEffect(() => {
@@ -63,6 +63,7 @@ const MovimientosPage = () => {
               setModalActivo={setModalActivo}
               isOnline={isOnline}
               setEditando={setEditando}
+              perfil={perfil}
             ></MovimientoCard>
           </div>
           {editando == movimiento.id_movimiento && (

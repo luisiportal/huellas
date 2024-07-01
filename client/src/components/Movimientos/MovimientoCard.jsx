@@ -13,6 +13,7 @@ const MovimientoCard = ({
   setModalActivo,
   isOnline,
   setEditando,
+  perfil,
 }) => {
   const navigate = useNavigate();
 
@@ -79,20 +80,28 @@ const MovimientoCard = ({
               {new Date(
                 movimiento?.creado ?? movimiento.createdAt
               ).toLocaleString("es-ES")}{" "}
-              <button
-                onClick={() => {
-                  setEditando(movimiento.id_movimiento);
-                }}
-              >
-                <EditSVG />
-              </button>
+              {perfil.privilegio == "Administrador" && (
+                <button
+                  onClick={() => {
+                    setEditando(movimiento.id_movimiento);
+                  }}
+                >
+                  <EditSVG />
+                </button>
+              )}
             </span>
           </div>
 
-          {movimiento.tipo != "Venta" && (
-            <button onClick={() => handleEliminar(movimiento.id_movimiento)}>
-              <Bton_eliminar_producto />
-            </button>
+          {perfil.privilegio == "Administrador" && (
+            <>
+              {movimiento.tipo != "Venta" && (
+                <button
+                  onClick={() => handleEliminar(movimiento.id_movimiento)}
+                >
+                  <Bton_eliminar_producto />
+                </button>
+              )}
+            </>
           )}
         </div>
       </header>
