@@ -11,8 +11,6 @@ export const getTodosMovimientosRequest = async (limit) =>
 export const deleteMovimientoRequest = async (id) =>
   await axios.delete(`/movimientos/${id}`);
 
-export const updateFechaMovimientoRequest = async (values) =>{
-
+export const updateFechaMovimientoRequest = async (values) => {
   await axios.put(`/movimientos/`, values);
-}
- 
+};

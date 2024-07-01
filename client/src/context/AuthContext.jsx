@@ -18,6 +18,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
+  const [editando, setEditando] = useState();
   const [user, setUser] = useState(null);
   const [modalActivo, setModalActivo] = useState({
     mensaje: "",
@@ -152,6 +153,8 @@ export const AuthProvider = ({ children }) => {
         setModalActivo,
         recargar,
         setRecargar,
+        setEditando,
+        editando,
       }}
     >
       {children}

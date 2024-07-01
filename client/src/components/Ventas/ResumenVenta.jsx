@@ -26,7 +26,7 @@ const ResumenVenta = () => {
     month: "long",
     day: "numeric",
   };
-  const { isOnline, loader, setLoader } = useAuth();
+  const { isOnline, loader, setLoader,recargar,setRecargar } = useAuth();
 
   useEffect(() => {
     const loadFacturas = async (limit) => {
@@ -57,7 +57,7 @@ const ResumenVenta = () => {
       ]);
     };
     loadFacturas(100);
-  }, [recargarFactura]);
+  }, [recargarFactura,recargar]);
 
   ///////////////trbajar aqui las fechas
 
@@ -85,6 +85,9 @@ const ResumenVenta = () => {
         facturas={facturas}
         setFacturas={setFacturas}
         setRecargarFactura={setRecargarFactura}
+        recargar={recargar}
+        setRecargar={setRecargar}
+
       />
     ));
   }

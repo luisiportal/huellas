@@ -8,10 +8,9 @@ import Loader from "../components/Utilidades/Loader";
 import BTNCargarMas from "../components/Utilidades/BTNCargarMas";
 
 import Edit from "../components/Movimientos/Edit";
-import { useFetch } from "../hooks/useFetch";
+
 
 const MovimientosPage = () => {
-  const [editando, setEditando] = useState();
   const {
     loader,
     setLoader,
@@ -20,6 +19,8 @@ const MovimientosPage = () => {
     setModalActivo,
     recargar,
     setRecargar,
+    editando,
+    setEditando,
   } = useAuth();
   const [movimientos, setMovimientos] = useState([]);
   useEffect(() => {

@@ -8,7 +8,7 @@ const Bton_eliminar_producto = () => {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="w-6 h-6"
+      className="w-6 h-6 hover:text-white hover:bg-huellas_color rounded-full transition-all duration-200 "
     >
       <path
         strokeLinecap="round"

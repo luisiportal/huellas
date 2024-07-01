@@ -1,11 +1,14 @@
 import { deleteFacturaRequest } from "../../api/venta.api";
 import { useAuth } from "../../context/AuthContext";
+import Edit from "../Movimientos/Edit";
+import EditSVG from "../SVG/EditSVG";
 
 import Bton_eliminar_producto from "./Bton_eliminar_producto";
+import EditFechaFactura from "./EditFechaFactura";
 
-function FacturaCard({ factura, setRecargarFactura }) {
+function FacturaCard({ factura, setRecargarFactura, setRecargar, recargar }) {
   const { ventas } = factura;
-  const { setModalActivo, modalActivo } = useAuth();
+  const { setModalActivo, modalActivo, editando, setEditando } = useAuth();
 
   const handleEliminar = async (id) => {
     if (confirm("¿Estás a punto de eliminar una Venta ?")) {
@@ -52,11 +55,27 @@ function FacturaCard({ factura, setRecargarFactura }) {
         <div className="text-right mt-5 flex-grow flex flex-col">
           <p>Total {factura.total_venta} cup</p>
 
-          <p>{new Date(factura.creado).toLocaleString("es-ES")}</p>
+          <p>
+            {new Date(factura.creado).toLocaleString("es-ES")}{" "}
+            <button onClick={() => setEditando(factura.id)}>
+              <EditSVG />
+            </button>
+          </p>
         </div>
-        <button onClick={() => handleEliminar(factura.id)}>
-          <Bton_eliminar_producto />
-        </button>
+
+        <div>
+          <button onClick={() => handleEliminar(factura.id)}>
+            <Bton_eliminar_producto />
+          </button>
+        </div>
+        {editando == factura.id && (
+          <EditFechaFactura
+            factura={factura}
+            setEditando={setEditando}
+            setRecargar={setRecargar}
+            recargar={recargar}
+          />
+        )}
       </div>
     </div>
   );
