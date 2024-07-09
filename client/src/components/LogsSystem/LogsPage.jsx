@@ -28,7 +28,7 @@ const LogsPage = () => {
         >
           <h2 className="  flex ">
             <>
-              <UserSvg />
+              <UserSvg estilo={"w-6 h-6 text-huellas_color font-extrabold"}/>
               {`${log.trabajadore.nombre}: ${log.accionRealizada} ${log.recurso} ${log.detalles}`}
             </>
           </h2>

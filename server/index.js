@@ -11,6 +11,7 @@ import moneda from "./routes/moneda.routes.js";
 import { associations } from "./models/associations.js";
 import ventas from "./routes/venta.routes.js";
 import audiTlogs from "./routes/audilogs.routes.js";
+import cuadre_caja from "./routes/cuadre_caja.routes.js";
 
 const app = express();
 app.use(
@@ -20,7 +21,7 @@ app.use(
   })
 );
 associations();
-await sequelize.sync({ alter: false });
+await sequelize.sync({ alter: true });
 sequelize.query(
   'ALTER TABLE public.movimientos ALTER COLUMN "createdAt" SET DEFAULT now();'
 );
@@ -38,6 +39,7 @@ app.use(movimientos);
 app.use(moneda);
 app.use(ventas);
 app.use(audiTlogs);
+app.use(cuadre_caja);
 app.listen(PUERTO, () => {
   console.log(`El server esta en el puerto : ${PUERTO}....`);
 });

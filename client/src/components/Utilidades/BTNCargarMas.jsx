@@ -1,7 +1,15 @@
 import React from "react";
 import BTNHOME from "../HOME/elementos/BTNHOME";
 
-const BTNCargarMas = ({ estado, setEstado, getRecurso, setLoader }) => {
+const BTNCargarMas = ({
+  estado,
+  setEstado,
+  getRecurso,
+  setLoader,
+  recargarFactura,
+  setRecargarFactura,
+  loadFechas,
+}) => {
   return (
     <BTNHOME
       texto={"Cargar +"}
@@ -9,6 +17,7 @@ const BTNCargarMas = ({ estado, setEstado, getRecurso, setLoader }) => {
         setLoader(true);
         const { data } = await getRecurso(estado.length + 10);
         setEstado(data);
+        loadFechas(estado);
         setLoader(false);
       }}
     />

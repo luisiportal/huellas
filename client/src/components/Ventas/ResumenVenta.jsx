@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import FacturaCard from "./FacturaCard";
 import { getTodosFacturasRequest } from "../../api/venta.api";
 import H2FechaTitulo from "./H2FechaTitulo";
 import { useAuth } from "../../context/AuthContext";
@@ -26,7 +25,8 @@ const ResumenVenta = () => {
     month: "long",
     day: "numeric",
   };
-  const { isOnline, loader, setLoader,recargar,setRecargar } = useAuth();
+  const { isOnline, loader, setLoader, recargar, setRecargar, perfil } =
+    useAuth();
 
   useEffect(() => {
     const loadFacturas = async (limit) => {
@@ -46,21 +46,21 @@ const ResumenVenta = () => {
       } catch (error) {}
     };
 
-    const loadFechas = async (facturas) => {
-      // aquuiiii
-      setFechas([
-        ...new Set(
-          facturas.map((factura, index) =>
-            new Date(factura.creado).toLocaleDateString("es-ES", opciones)
-          )
-        ),
-      ]);
-    };
-    loadFacturas(100);
-  }, [recargarFactura,recargar]);
+    loadFacturas(30);
+  }, [recargarFactura, recargar]);
 
   ///////////////trbajar aqui las fechas
-
+  const loadFechas = async (facturas) => {
+    
+    // aquuiiii
+    setFechas([
+      ...new Set(
+        facturas.map((factura, index) =>
+          new Date(factura.creado).toLocaleDateString("es-ES", opciones)
+        )
+      ),
+    ]);
+  };
   const facturasMismafecha = facturas.filter(
     (factura) =>
       new Date(factura.creado).toLocaleDateString("es-ES", opciones) ==
@@ -87,7 +87,8 @@ const ResumenVenta = () => {
         setRecargarFactura={setRecargarFactura}
         recargar={recargar}
         setRecargar={setRecargar}
-
+        mostrarCuadrarDialog={mostrarCuadrarDialog}
+        setMostrarCuadrarDialog={setMostrarCuadrarDialog}
       />
     ));
   }
@@ -95,14 +96,17 @@ const ResumenVenta = () => {
   return (
     <div>
       <h1 className=" px-2 pb-2 text-3xl text-slate-700 font-bold">Ventas</h1>
-      <BTNHOME
-        texto={
-          <>
-            <CuadreSVG /> {mostrarCuadrarDialog ? "Ventas" : "Cuadre de Caja"}
-          </>
-        }
-        handleClick={() => setMostrarCuadrarDialog(!mostrarCuadrarDialog)}
-      />
+      {mostrarCuadrarDialog && (
+        <BTNHOME
+          texto={
+            <>
+              <CuadreSVG /> {"Ventas"}
+            </>
+          }
+          handleClick={() => setMostrarCuadrarDialog(!mostrarCuadrarDialog)}
+        />
+      )}
+
       {!mostrarCuadrarDialog ? (
         <div className="gap-2 mt-8 ">
           <>
@@ -112,14 +116,21 @@ const ResumenVenta = () => {
               setEstado={setFacturas}
               getRecurso={getTodosFacturasRequest}
               setLoader={setLoader}
+              recargarFactura={recargarFactura}
+              setRecargarFactura={setRecargarFactura}
+              loadFechas={loadFechas}
             />
           </>
           ;
         </div>
       ) : (
-        <EntrarEfectivo totalVentaHoy={totalVentaDia} />
+        <EntrarEfectivo
+          totalVentaHoy={totalVentaDia}
+          perfil={perfil}
+          venta={mostrarCuadrarDialog}
+        />
       )}
-       {loader && <Loader />}
+      {loader && <Loader />}
     </div>
   );
 };

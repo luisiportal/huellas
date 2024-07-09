@@ -23,6 +23,7 @@ import LogsPage from "./components/LogsSystem/LogsPage";
 import HomePage from "./components/HOME/HomePage";
 import CuadrePage from "./components/CuadreCaja/CuadrePage";
 import Edit from "./components/Movimientos/Edit";
+import ResumenVenta from "./components/Ventas/ResumenVenta";
 
 const App = () => {
   return (
@@ -52,7 +53,9 @@ const App = () => {
                   path="/movimientos/edit/:id_movimiento"
                   element={<Edit />}
                 />
-                <Route path="/cuadrar" element={<CuadrePage />} />
+
+                <Route path="/cuadre/" element={<CuadrePage />} />
+                <Route path="/cuadre/:fecha" element={<ResumenVenta />} />
 
                 <Route
                   path="/productos/edit/:id_producto"
@@ -72,7 +75,7 @@ const App = () => {
                   path="/movimientos/salida"
                   element={<AgregarMovimiento tipo={"Salida"} key={"salida"} />}
                 />
-                  <Route
+                <Route
                   path="/movimientos/edit/:id_movimiento"
                   element={<Edit />}
                 />

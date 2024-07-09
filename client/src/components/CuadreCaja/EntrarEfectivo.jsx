@@ -9,7 +9,6 @@ const schema = Yup.object().shape({
   x100: Yup.number().typeError("Debes escribir solo números"),
   x50: Yup.number().typeError("Debes escribir solo números"),
   x20: Yup.number().typeError("Debes escribir solo números"),
-
   x10: Yup.number().typeError("Debes escribir solo números"),
 
   x5: Yup.number().typeError("Debes escribir solo números"),
@@ -19,20 +18,22 @@ const schema = Yup.object().shape({
 import Denominacion from "./Denominacion";
 
 import Input from "../Input";
-const EntrarEfectivo = ({ totalVentaHoy }) => {
+import { insertarCuadreRequest } from "../../api/cuadre_caja.api";
+import { loginRequest } from "../../api/login.api";
+const EntrarEfectivo = ({ perfil, venta }) => {
   const [totalEfectivo, setTotalEfectivo] = useState(0);
   const [transferencia, setTransferencia] = useState([]);
   const [cantTransfer, setCantTransfer] = useState([1]);
   const [entrarEfectivo, setEntrarEfectivo] = useState({
-    x1000: "",
-    x500: "",
-    x200: "",
-    x100: "",
-    x50: "",
-    x20: "",
-    x10: "",
-    x5: "",
-    x1: "",
+    x1000: 0,
+    x500: 0,
+    x200: 0,
+    x100: 0,
+    x50: 0,
+    x20: 0,
+    x10: 0,
+    x5: 0,
+    x1: 0,
   });
   const [totalDenominacion, setTotalDenominacion] = useState({
     x1000: 0,
@@ -45,6 +46,7 @@ const EntrarEfectivo = ({ totalVentaHoy }) => {
     x5: 0,
     x1: 0,
   });
+  console.log(venta);
 
   useEffect(() => {
     const suma = Object.values(totalDenominacion).reduce((a, b) => a + b, 0);
@@ -93,7 +95,21 @@ const EntrarEfectivo = ({ totalVentaHoy }) => {
       initialValues={entrarEfectivo}
       enableReinitialize={true}
       validationSchema={schema}
-      onSubmit={async (values) => {}}
+      onSubmit={async (values) => {
+        const grand_total = grandTotalResult();
+        const total_transferencia = dineroEnTransferenciaTotal();
+        const vendedor = perfil.username;
+        const fechaVentaDate = new Date(venta.fechaVenta);
+        await insertarCuadreRequest({
+          values,
+          totalVentaHoy: venta.totalVentaDia,
+          grand_total,
+          vendedor,
+          total_transferencia,
+          totalEfectivo,
+          fechaVentaDate,
+        });
+      }}
     >
       {({ errors, values, isSubmitting }) => (
         <Form>
@@ -174,13 +190,13 @@ const EntrarEfectivo = ({ totalVentaHoy }) => {
                 label={"Transferencia" + (index + 1)}
               />
             ))}
-            <h2>Total Venta Hoy: {totalVentaHoy}</h2>
+            <h2>Total Venta Hoy: {venta.totalVentaDia}</h2>
             <h2>Entrada Efectivo Total :{totalEfectivo}</h2>
             <h2>Dinero en Transferencias {dineroEnTransferenciaTotal()}</h2>
             <h2>
-              {totalVentaHoy === grandTotalResult()
+              {venta.totalVentaDia === grandTotalResult()
                 ? "Cuadrado"
-                : `Falta : ${totalVentaHoy - grandTotalResult()}`}
+                : `Falta : ${venta.totalVentaDia - grandTotalResult()}`}
             </h2>
 
             <h2>Grand Total {grandTotalResult()}</h2>

@@ -1,0 +1,82 @@
+
+
+
+
+mostrar los cuadres
+
+
+cuadre page
+
+card del cuadre
+
+me quede haciendo el mostar
+
+//////////////////general
+
+
+
+
+
+
+
+
+///////////movimientos
+
+separar por fecha los moviminetos
+
+
+parte visual
+arreglar ventana de movimientos
+al elinar un movimiento no sincronizado no se actualiza hay que entrar y salir a movimientos
+
+
+
+
+
+// cuadre de caja
+manejar la entrada de efectivo
+las tranferencias 
+mlc zelle
+otras monedas
+
+/////
+roles de usuario /// 1 h
+
+permitir agregar trabajador  // realizado
+admin
+trabajadores
+-acceso a movimientos
+no pueden ver la plantilla
+tipo cambio
+log del sistema  // realiz
+
+
+/// pago del trabajadores
+pro dias de trabajo
+
+// tpo cambio 
+integrar api el toque
+
+
+
+// ventas
+hacer una herramienta que te mantenga el porcentaje de ganancia
+ 
+//// al eliminar venta hay que eliminar sus movimientos
+
+
+
+
+al vender seleccionar el tipo de pago
+-efectivo
+-tranferencia cup
+mlc
+zelle
+usd/euro
+
+al hacer click en cobrar sale una vnetana para escojer el metodo de pago
+
+
+//// salvas del sistema
+
+
