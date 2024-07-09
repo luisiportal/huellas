@@ -17,7 +17,7 @@ const BTNCargarMas = ({
         setLoader(true);
         const { data } = await getRecurso(estado.length + 10);
         setEstado(data);
-        loadFechas(estado);
+        loadFechas ? loadFechas(estado) : "";
         setLoader(false);
       }}
     />
