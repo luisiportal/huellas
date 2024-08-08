@@ -75,7 +75,7 @@ const NuevaVenta = () => {
         "La cantidad no puede ser mayor que la existencia"
       )
       .required("Este campo es requerido")
-      .min(1, "Cantidad vacia"),
+      .min(0.1, "Cantidad vacia"),
   });
   let total_venta = 0;
   if (carrito) {
