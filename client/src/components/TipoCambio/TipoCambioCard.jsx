@@ -1,23 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getTodasMonedaRequest } from "../../api/moneda.api";
+import { useMonedas } from "../../hooks/useMonedas";
 
 const TipoCambioCard = () => {
-  const [monedas, setMonedas] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const loadMonedas = async () => {
-      try {
-        const {data} = await getTodasMonedaRequest();
-        setMonedas(data);
-      } catch (error) {}
-    };
+  const monedas = useMonedas();
 
-    loadMonedas();
-  }, []);
-
-    return (
+  return (
     <div className="mx-2 bg-neutral-200 rounded-md p-4 mt-8">
       {monedas.map((moneda) => (
         <header key={moneda.id_moneda} className="flex p-4">

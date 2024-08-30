@@ -5,6 +5,11 @@ export const insertarCuadre = async (req, res) => {
   console.log(req.body);
   try {
     const {
+      precioUSD,
+      cantUSD,
+      precioMLC,
+      cantMLC,
+      gastos,
       totalVentaHoy,
       totalEfectivo,
       total_transferencia,
@@ -30,6 +35,11 @@ export const insertarCuadre = async (req, res) => {
       grand_total,
       vendedor,
       fecha: fechaVentaDate,
+      precioUSD,
+      precioMLC,
+      cantMLC,
+      cantUSD,
+      gastos,
     });
 
     res.json({

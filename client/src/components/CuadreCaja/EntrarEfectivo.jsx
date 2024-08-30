@@ -19,11 +19,13 @@ import Denominacion from "./Denominacion";
 
 import Input from "../Input";
 import { insertarCuadreRequest } from "../../api/cuadre_caja.api";
-import { loginRequest } from "../../api/login.api";
-const EntrarEfectivo = ({ perfil, venta }) => {
+import { useMonedas } from "../../hooks/useMonedas";
+
+const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
   const [totalEfectivo, setTotalEfectivo] = useState(0);
   const [transferencia, setTransferencia] = useState([]);
   const [cantTransfer, setCantTransfer] = useState([1]);
+  const [MLCinput, setMLCinput] = useState([{ usd: 0, mlc: 0, money: 0 }]);
   const [entrarEfectivo, setEntrarEfectivo] = useState({
     x1000: 0,
     x500: 0,
@@ -46,16 +48,23 @@ const EntrarEfectivo = ({ perfil, venta }) => {
     x5: 0,
     x1: 0,
   });
-  console.log(venta);
+  const monedas = useMonedas();
+  const USD = monedas.filter((moneda) => moneda.moneda === "USD");
+  const precioUSD = USD.length > 0 ? USD[0].precio : 0;
+
+  const MLC = monedas.filter((moneda) => moneda.moneda === "MLC");
+  const precioMLC = MLC.length > 0 ? MLC[0].precio : 0;
 
   useEffect(() => {
     const suma = Object.values(totalDenominacion).reduce((a, b) => a + b, 0);
+    console.log(suma);
+
     setTotalEfectivo(suma);
 
     // Ahora puedes usar 'suma' sabiendo que 'totalDenominacion' está actualizado
   }, [totalDenominacion]); // Este efecto se ejecuta cada vez que 'totalDenominacion' cambia
 
-  const handleChange = (e) => {
+  const handleChangeEfectivo = (e) => {
     const { name, value } = e.target;
     setEntrarEfectivo((prevState) => ({ ...prevState, [name]: value })); // actualizar la caja del input
 
@@ -81,9 +90,24 @@ const EntrarEfectivo = ({ perfil, venta }) => {
   const dineroEnTransferenciaTotal = () => {
     return transferencia.reduce((a, b) => a + b, 0);
   };
+  const totalMLCenCUP = (values) => {
+    return values.MLC ? Number(precioMLC) * Number(values.MLC) : 0;
+  };
+  const totalUSDenCUP = (values) => {
+    return values.USD ? Number(precioUSD) * Number(values.USD) : 0;
+  };
+  const totalGastosCUP = (values) => {
+    return values.money ? Number(values.money) : 0;
+  };
 
-  const grandTotalResult = () => {
-    return Number(dineroEnTransferenciaTotal()) + Number(totalEfectivo);
+  const grandTotalResult = (values) => {
+    return (
+      Number(dineroEnTransferenciaTotal()) +
+      Number(totalEfectivo) +
+      Number(values ? totalUSDenCUP(values) : 0) +
+      Number(values ? totalMLCenCUP(values) : 0) +
+      Number(values ? totalGastosCUP(values) : 0)
+    );
   };
 
   const AddTransferInput = () => {
@@ -96,55 +120,88 @@ const EntrarEfectivo = ({ perfil, venta }) => {
       enableReinitialize={true}
       validationSchema={schema}
       onSubmit={async (values) => {
-        const grand_total = grandTotalResult();
+       
+
+        const grand_total = grandTotalResult(values);
         const total_transferencia = dineroEnTransferenciaTotal();
         const vendedor = perfil.username;
         const fechaVentaDate = new Date(venta.fechaVenta);
-        await insertarCuadreRequest({
-          values,
-          totalVentaHoy: venta.totalVentaDia,
-          grand_total,
-          vendedor,
-          total_transferencia,
-          totalEfectivo,
-          fechaVentaDate,
-        });
+        const cantMLC = values.MLC;
+        const cantUSD = values.USD;
+        const gastos =  totalGastosCUP(values);
+
+
+        if (grand_total ==0){
+          return   setModalActivo({
+            mensaje: "Cuidado esta vacio",
+            activo: true,
+            errorColor: true,
+           
+          });
+        }
+
+        try {
+          await insertarCuadreRequest({
+            values,
+            precioUSD,
+            precioMLC,
+            cantMLC,
+            cantUSD,
+            totalVentaHoy: venta.totalVentaDia,
+            grand_total,
+            vendedor,
+            total_transferencia,
+            totalEfectivo,
+            fechaVentaDate,
+            gastos,
+          }).then(() => {
+            setModalActivo({
+              mensaje: "El cuadre ha sido guardado",
+              activo: true,
+              navegarA: "/cuadre",
+             
+            });
+          })
+        } catch (error) {
+          console.log(error);
+        }
+        
       }}
     >
-      {({ errors, values, isSubmitting }) => (
+      {({ errors, values, isSubmitting, handleChange }) => (
         <Form>
           <div className="bg-neutral-200 mt-6">
             <Denominacion
               values={values}
-              handleChange={handleChange}
+              handleChange={handleChangeEfectivo}
               errors={errors}
               totalDenominacion={totalDenominacion}
               name={"x1000"}
             />
             <Denominacion
               values={values}
-              handleChange={handleChange}
+              handleChange={handleChangeEfectivo}
               errors={errors}
               totalDenominacion={totalDenominacion}
               name={"x500"}
             />
             <Denominacion
               values={values}
-              handleChange={handleChange}
+              handleChange={handleChangeEfectivo}
               errors={errors}
               totalDenominacion={totalDenominacion}
               name={"x200"}
             />
             <Denominacion
               values={values}
-              handleChange={handleChange}
+              handleChange={handleChangeEfectivo}
               errors={errors}
               totalDenominacion={totalDenominacion}
               name={"x100"}
             />
             <Denominacion
               values={values}
-              handleChange={handleChange}
+              handleChange={handleChangeEfectivo}
               errors={errors}
               totalDenominacion={totalDenominacion}
               name={"x50"}
@@ -152,28 +209,28 @@ const EntrarEfectivo = ({ perfil, venta }) => {
 
             <Denominacion
               values={values}
-              handleChange={handleChange}
+              handleChange={handleChangeEfectivo}
               errors={errors}
               totalDenominacion={totalDenominacion}
               name={"x20"}
             />
             <Denominacion
               values={values}
-              handleChange={handleChange}
+              handleChange={handleChangeEfectivo}
               errors={errors}
               totalDenominacion={totalDenominacion}
               name={"x10"}
             />
             <Denominacion
               values={values}
-              handleChange={handleChange}
+              handleChange={handleChangeEfectivo}
               errors={errors}
               totalDenominacion={totalDenominacion}
               name={"x5"}
             />
             <Denominacion
               values={values}
-              handleChange={handleChange}
+              handleChange={handleChangeEfectivo}
               errors={errors}
               totalDenominacion={totalDenominacion}
               name={"x1"}
@@ -181,6 +238,7 @@ const EntrarEfectivo = ({ perfil, venta }) => {
 
             {cantTransfer.map((item, index) => (
               <Input
+                placeholder={"En CUP"}
                 key={index}
                 type={"number"}
                 name={`transferencia${index}`}
@@ -190,16 +248,48 @@ const EntrarEfectivo = ({ perfil, venta }) => {
                 label={"Transferencia" + (index + 1)}
               />
             ))}
+            <Input
+              placeholder={"Efectivo USD"}
+              type={"number"}
+              name={`USD`}
+              value={MLCinput.usd}
+              handleChange={handleChange}
+              errors={errors}
+              label={"USD"}
+            />
+            <Input
+              placeholder={"MLC Transferencia"}
+              type={"number"}
+              name={`MLC`}
+              value={MLCinput.mlc}
+              handleChange={handleChange}
+              errors={errors}
+              label={"MLC"}
+            />
+            <Input
+              placeholder={"Gastos del día"}
+              type={"number"}
+              name={"money"}
+              value={MLCinput.money}
+              handleChange={handleChange}
+              errors={errors}
+              label={"Gastos"}
+            />
+
             <h2>Total Venta Hoy: {venta.totalVentaDia}</h2>
             <h2>Entrada Efectivo Total :{totalEfectivo}</h2>
             <h2>Dinero en Transferencias {dineroEnTransferenciaTotal()}</h2>
+            <h2>Efectivo USD {totalUSDenCUP(values) || 0} cup</h2>
+            <h2>Transfer MLC {totalMLCenCUP(values) || 0} cup</h2>
+            <h2>Gastos {totalGastosCUP(values) || 0} cup</h2>
+
             <h2>
-              {venta.totalVentaDia === grandTotalResult()
+              {venta.totalVentaDia === grandTotalResult(values)
                 ? "Cuadrado"
-                : `Falta : ${venta.totalVentaDia - grandTotalResult()}`}
+                : `Falta : ${venta.totalVentaDia - grandTotalResult(values)}`}
             </h2>
 
-            <h2>Grand Total {grandTotalResult()}</h2>
+            <h2>Grand Total {grandTotalResult(values)}</h2>
             <h2> </h2>
             <button onClick={AddTransferInput}>+ Transfer</button>
             <button

@@ -58,6 +58,28 @@ export const Cuadre_Caja = sequelize.define(
         type: DataTypes.INTEGER,
         allowNull: true,
       },
+
+      cantUSD: {
+        type: DataTypes.DECIMAL(10,2),
+        allowNull: true,
+      },
+      cantMLC: {
+        type: DataTypes.DECIMAL(10,2),
+        allowNull: true,
+      },
+      precioUSD: {
+        type: DataTypes.DECIMAL(10,2),
+        allowNull: true,
+      },
+      precioMLC: {
+        type: DataTypes.DECIMAL(10,2),
+        allowNull: true,
+      },
+      gastos: {
+        type: DataTypes.DECIMAL(10,2),
+        allowNull: true,
+      },
+
       grand_total: {
         type: DataTypes.INTEGER,
         allowNull: false,

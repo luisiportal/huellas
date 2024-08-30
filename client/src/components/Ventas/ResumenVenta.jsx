@@ -25,7 +25,7 @@ const ResumenVenta = () => {
     month: "long",
     day: "numeric",
   };
-  const { isOnline, loader, setLoader, recargar, setRecargar, perfil } =
+  const { isOnline, loader, setLoader, recargar, setRecargar, perfil,  setModalActivo } =
     useAuth();
 
   useEffect(() => {
@@ -128,6 +128,7 @@ const ResumenVenta = () => {
           totalVentaHoy={totalVentaDia}
           perfil={perfil}
           venta={mostrarCuadrarDialog}
+          setModalActivo={setModalActivo}
         />
       )}
       {loader && <Loader />}
