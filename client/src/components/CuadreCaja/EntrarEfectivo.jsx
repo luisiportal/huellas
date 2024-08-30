@@ -13,6 +13,7 @@ const schema = Yup.object().shape({
 
   x5: Yup.number().typeError("Debes escribir solo números"),
   x1: Yup.number().typeError("Debes escribir solo números"),
+  
 });
 
 import Denominacion from "./Denominacion";
@@ -120,24 +121,30 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
       enableReinitialize={true}
       validationSchema={schema}
       onSubmit={async (values) => {
-       
-
         const grand_total = grandTotalResult(values);
         const total_transferencia = dineroEnTransferenciaTotal();
         const vendedor = perfil.username;
         const fechaVentaDate = new Date(venta.fechaVenta);
         const cantMLC = values.MLC;
         const cantUSD = values.USD;
-        const gastos =  totalGastosCUP(values);
+        const gastos = totalGastosCUP(values);
+        const tarjeta = total_transferencia > 0 ? values.tarjeta : null ;
 
-
-        if (grand_total ==0){
-          return   setModalActivo({
+        if (grand_total == 0) {
+          return setModalActivo({
             mensaje: "Cuidado esta vacio",
             activo: true,
             errorColor: true,
-           
           });
+        }
+
+        if (total_transferencia > 0 && values.tarjeta == null){
+          return setModalActivo({
+            mensaje: "Cuidado no ha seleccionado la tarjeta CUP",
+            activo: true,
+            errorColor: true,
+          });
+
         }
 
         try {
@@ -154,23 +161,22 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
             totalEfectivo,
             fechaVentaDate,
             gastos,
+            tarjeta,
           }).then(() => {
             setModalActivo({
               mensaje: "El cuadre ha sido guardado",
               activo: true,
               navegarA: "/cuadre",
-             
             });
-          })
+          });
         } catch (error) {
           console.log(error);
         }
-        
       }}
     >
       {({ errors, values, isSubmitting, handleChange }) => (
         <Form>
-          <div className="bg-neutral-200 mt-6">
+          <div className="bg-neutral-200 mt-6  ">
             <Denominacion
               values={values}
               handleChange={handleChangeEfectivo}
@@ -237,16 +243,29 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
             />
 
             {cantTransfer.map((item, index) => (
-              <Input
-                placeholder={"En CUP"}
-                key={index}
-                type={"number"}
-                name={`transferencia${index}`}
-                value={transferencia[index] || ""}
-                handleChange={(event) => handleChangeTransfer(index, event)}
-                errors={errors}
-                label={"Transferencia" + (index + 1)}
-              />
+              <div className="flex">
+                {" "}
+                <Input
+                  placeholder={"En CUP"}
+                  key={index}
+                  type={"number"}
+                  name={`transferencia${index}`}
+                  value={transferencia[index] || ""}
+                  handleChange={(event) => handleChangeTransfer(index, event)}
+                  errors={errors}
+                  label={"Transferencia" + (index + 1)}
+                />
+                <select
+                  name="tarjeta"
+                  id="tarjeta"
+                  value={values.tarjeta}
+                  onChange={handleChange}
+                >
+                  <option value="">Tarjeta CUP</option>
+                  <option value="1038">1038</option>
+                  <option value="3158">3158</option>
+                </select>
+              </div>
             ))}
             <Input
               placeholder={"Efectivo USD"}
@@ -278,7 +297,10 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
 
             <h2>Total Venta Hoy: {venta.totalVentaDia}</h2>
             <h2>Entrada Efectivo Total :{totalEfectivo}</h2>
-            <h2>Dinero en Transferencias {dineroEnTransferenciaTotal()}</h2>
+            <h2>
+              Dinero en Transferencias {dineroEnTransferenciaTotal()}Tarjeta :{" "}
+              {values.tarjeta}
+            </h2>
             <h2>Efectivo USD {totalUSDenCUP(values) || 0} cup</h2>
             <h2>Transfer MLC {totalMLCenCUP(values) || 0} cup</h2>
             <h2>Gastos {totalGastosCUP(values) || 0} cup</h2>

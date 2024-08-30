@@ -1,4 +1,5 @@
 import { useAuth } from "../../context/AuthContext";
+import CardSVG from "../SVG/CardSVG";
 
 import EditSVG from "../SVG/EditSVG";
 import UserSvg from "../SVG/UserSvg";
@@ -28,10 +29,16 @@ function CuadreCard({ cuadre }) {
           </h2>
 
           <h2 className=" border-b-2 border-slate-200 font-semibold text-slate-900">
-            En transferencia
+            En transferencia CUP
           </h2>
-          <h2 className="flex justify-center text-slate-600">
-            {cuadre.total_transferencia}
+          {cuadre.tarjeta && (
+            <div className="flex text-xs justify-end items-center text-slate-900">
+              <CardSVG />
+              {` ${cuadre.tarjeta}`}
+            </div>
+          )}
+          <h2 className="flex justify-center text-slate-600 items-center gap-2">
+            {`${cuadre.total_transferencia} `}
           </h2>
           <h2 className="border-b-2 border-slate-200 font-semibold text-slate-900">
             En efectivo
@@ -43,22 +50,29 @@ function CuadreCard({ cuadre }) {
             En USD
           </h2>
           <h2 className="flex justify-center text-slate-600">
-           {cuadre.cantUSD ? `${cuadre.cantUSD} x ${cuadre.precioUSD} = ${Number(cuadre.cantUSD * cuadre.precioUSD )} cup`: 0}  
+            {cuadre.cantUSD
+              ? `${cuadre.cantUSD} x ${cuadre.precioUSD} = ${Number(
+                  cuadre.cantUSD * cuadre.precioUSD
+                )} cup`
+              : 0}
           </h2>
           <h2 className="border-b-2 border-slate-200 font-semibold text-slate-900">
             En MLC
           </h2>
           <h2 className="flex justify-center text-slate-600">
-           {cuadre.cantMLC ? `${cuadre.cantMLC} x ${cuadre.precioMLC} = ${Number(cuadre.cantMLC * cuadre.precioMLC )} cup`: 0}  
+            {cuadre.cantMLC
+              ? `${cuadre.cantMLC} x ${cuadre.precioMLC} = ${Number(
+                  cuadre.cantMLC * cuadre.precioMLC
+                )} cup`
+              : 0}
           </h2>
-         
         </div>
       </div>
 
       <div className=" flex flex-col text-xs border-l-2 border-slate-200 font-semibold">
         {/* right*/}
         <div className="p-2  pl-4 text-slate-600">
-          <p> 
+          <p>
             {cuadre.x1000} x 1000 = {cuadre.x1000 * 1000}{" "}
           </p>
           <p>
@@ -97,11 +111,11 @@ function CuadreCard({ cuadre }) {
           {cuadre.total_efectivo}
         </h2>
         <h2 className="border-b-2 border-slate-200 font-semibold text-slate-900">
-            Gastos
-          </h2>
-          <h2 className="flex justify-center text-slate-600">
-           {cuadre.gastos ? `${cuadre.gastos} cup`: 0}  
-          </h2>
+          Gastos
+        </h2>
+        <h2 className="flex justify-center text-slate-600">
+          {cuadre.gastos ? `${cuadre.gastos} cup` : 0}
+        </h2>
         <div className="flex flex-1 bg-huellas_color rounded-br-xl rounded-tl-lg p-2  text-white justify-center font-bold text-base bottom-0">
           <h2> Total : {cuadre.grand_total}</h2>
         </div>

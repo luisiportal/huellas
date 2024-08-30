@@ -14,6 +14,7 @@ export const insertarCuadre = async (req, res) => {
       totalEfectivo,
       total_transferencia,
       grand_total,
+      tarjeta,
       vendedor,
       fechaVentaDate,
     } = req.body;
@@ -40,6 +41,7 @@ export const insertarCuadre = async (req, res) => {
       cantMLC,
       cantUSD,
       gastos,
+      tarjeta
     });
 
     res.json({

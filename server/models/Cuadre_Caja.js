@@ -67,6 +67,7 @@ export const Cuadre_Caja = sequelize.define(
         type: DataTypes.DECIMAL(10,2),
         allowNull: true,
       },
+
       precioUSD: {
         type: DataTypes.DECIMAL(10,2),
         allowNull: true,
@@ -92,6 +93,10 @@ export const Cuadre_Caja = sequelize.define(
       vendedor: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      tarjeta: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     {
