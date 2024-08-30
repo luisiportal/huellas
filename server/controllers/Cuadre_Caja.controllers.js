@@ -17,6 +17,7 @@ export const insertarCuadre = async (req, res) => {
       tarjeta,
       vendedor,
       fechaVentaDate,
+      faltante,
     } = req.body;
     const { x1000, x500, x200, x100, x50, x20, x10, x5, x1 } = req.body.values;
 
@@ -41,7 +42,8 @@ export const insertarCuadre = async (req, res) => {
       cantMLC,
       cantUSD,
       gastos,
-      tarjeta
+      tarjeta,
+      faltante,
     });
 
     res.json({
@@ -59,6 +61,7 @@ export const insertarCuadre = async (req, res) => {
       total_transferencia,
       grand_total,
       vendedor,
+      faltante,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });

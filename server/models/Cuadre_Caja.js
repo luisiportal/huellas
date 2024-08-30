@@ -80,6 +80,10 @@ export const Cuadre_Caja = sequelize.define(
         type: DataTypes.DECIMAL(10,2),
         allowNull: true,
       },
+      faltante: {
+        type: DataTypes.DECIMAL(10,2),
+        allowNull: true,
+      },
 
       grand_total: {
         type: DataTypes.INTEGER,

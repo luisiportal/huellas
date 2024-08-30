@@ -13,7 +13,6 @@ const schema = Yup.object().shape({
 
   x5: Yup.number().typeError("Debes escribir solo números"),
   x1: Yup.number().typeError("Debes escribir solo números"),
-  
 });
 
 import Denominacion from "./Denominacion";
@@ -128,7 +127,10 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
         const cantMLC = values.MLC;
         const cantUSD = values.USD;
         const gastos = totalGastosCUP(values);
-        const tarjeta = total_transferencia > 0 ? values.tarjeta : null ;
+        const tarjeta = total_transferencia > 0 ? values.tarjeta : null;
+        const faltante = venta.totalVentaDia - grand_total;
+        console.log(faltante);
+        
 
         if (grand_total == 0) {
           return setModalActivo({
@@ -138,13 +140,12 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
           });
         }
 
-        if (total_transferencia > 0 && values.tarjeta == null){
+        if (total_transferencia > 0 && values.tarjeta == null) {
           return setModalActivo({
             mensaje: "Cuidado no ha seleccionado la tarjeta CUP",
             activo: true,
             errorColor: true,
           });
-
         }
 
         try {
@@ -162,6 +163,7 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
             fechaVentaDate,
             gastos,
             tarjeta,
+            faltante,
           }).then(() => {
             setModalActivo({
               mensaje: "El cuadre ha sido guardado",

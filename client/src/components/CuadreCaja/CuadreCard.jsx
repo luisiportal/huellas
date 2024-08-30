@@ -40,12 +40,7 @@ function CuadreCard({ cuadre }) {
           <h2 className="flex justify-center text-slate-600 items-center gap-2">
             {`${cuadre.total_transferencia} `}
           </h2>
-          <h2 className="border-b-2 border-slate-200 font-semibold text-slate-900">
-            En efectivo
-          </h2>
-          <h2 className="flex justify-center text-slate-600">
-            {cuadre.total_efectivo}
-          </h2>
+         
           <h2 className="border-b-2 border-slate-200 font-semibold text-slate-900">
             En USD
           </h2>
@@ -69,9 +64,15 @@ function CuadreCard({ cuadre }) {
         </div>
       </div>
 
-      <div className=" flex flex-col text-xs border-l-2 border-slate-200 font-semibold">
+      <div className=" flex flex-col justify-end border-l-2 border-slate-200 font-semibold">
         {/* right*/}
-        <div className="p-2  pl-4 text-slate-600">
+        <h2 className="border-b-2 border-slate-200 font-semibold text-slate-900">
+            En efectivo
+          </h2>
+          <h2 className="flex justify-center text-slate-600">
+            {cuadre.total_efectivo}
+          </h2>
+        <div className="p-2  pl-4 text-slate-600  text-xs">
           <p>
             {cuadre.x1000} x 1000 = {cuadre.x1000 * 1000}{" "}
           </p>
@@ -116,8 +117,9 @@ function CuadreCard({ cuadre }) {
         <h2 className="flex justify-center text-slate-600">
           {cuadre.gastos ? `${cuadre.gastos} cup` : 0}
         </h2>
-        <div className="flex flex-1 bg-huellas_color rounded-br-xl rounded-tl-lg p-2  text-white justify-center font-bold text-base bottom-0">
+        <div className={`flex flex-col justify-end ${cuadre.faltante ? "bg-red-600" :"bg-huellas_color"}  rounded-br-xl rounded-tl-lg p-2  text-white  font-bold text-base bottom-0`}>
           <h2> Total : {cuadre.grand_total}</h2>
+          {cuadre.faltante && <h2>Faltante : {cuadre.faltante}</h2>}
         </div>
       </div>
     </section>
