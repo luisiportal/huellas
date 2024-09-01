@@ -119,7 +119,7 @@ function CuadreCard({ cuadre }) {
         </h2>
         <div className={`flex flex-col justify-end ${cuadre.faltante > 0 ? "bg-red-600" :"bg-huellas_color"}  rounded-br-xl rounded-tl-lg p-2  text-white  font-bold text-base bottom-0`}>
           <h2> Total : {cuadre.grand_total}</h2>
-          {cuadre.faltante && <h2>Faltante : {cuadre.faltante}</h2>}
+          {cuadre.faltante > 0 && <h2>Faltante : {cuadre.faltante}</h2>}
         </div>
       </div>
     </section>
