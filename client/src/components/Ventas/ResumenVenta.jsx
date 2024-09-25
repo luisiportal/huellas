@@ -129,6 +129,7 @@ const ResumenVenta = () => {
           perfil={perfil}
           venta={mostrarCuadrarDialog}
           setModalActivo={setModalActivo}
+          setLoader={setLoader}
         />
       )}
       {loader && <Loader />}

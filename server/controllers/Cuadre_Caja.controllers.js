@@ -2,13 +2,14 @@ import sequelize from "../db.js";
 import { Cuadre_Caja } from "../models/Cuadre_Caja.js";
 
 export const insertarCuadre = async (req, res) => {
-  console.log(req.body);
   try {
     const {
       precioUSD,
       cantUSD,
       precioMLC,
       cantMLC,
+      precioZelle,
+      cantZelle,
       gastos,
       totalVentaHoy,
       totalEfectivo,
@@ -39,6 +40,8 @@ export const insertarCuadre = async (req, res) => {
       fecha: fechaVentaDate,
       precioUSD,
       precioMLC,
+      precioZelle,
+      cantZelle,
       cantMLC,
       cantUSD,
       gastos,

@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { ProductoContextProvider } from "./context/ProductoProvider";
-import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 import Trabajador from "./components/Trabajadores/TrabajadorPage";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import ProductoForm from "./components/Productos/ProductosForm";
@@ -37,13 +37,14 @@ const App = () => {
 
               <Route element={<ProtectedRoutes />}>
                 <Route path="/logs/" element={<LogsPage />} />
+
                 <Route path="/new" element={<ProductoForm />} />
                 <Route path="/trabajador/new" element={<AgregarTrabajador />} />
                 <Route
                   path="/trabajador/profile/edit/:id"
                   element={<AgregarTrabajador />}
                 />
-
+          
                 <Route
                   path="/trabajador/plantilla"
                   element={<ListadoTrabajadores />}

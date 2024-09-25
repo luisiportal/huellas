@@ -67,12 +67,20 @@ export const Cuadre_Caja = sequelize.define(
         type: DataTypes.DECIMAL(10,2),
         allowNull: true,
       },
+      cantZelle: {
+        type: DataTypes.DECIMAL(10,2),
+        allowNull: true,
+      },
 
       precioUSD: {
         type: DataTypes.DECIMAL(10,2),
         allowNull: true,
       },
       precioMLC: {
+        type: DataTypes.DECIMAL(10,2),
+        allowNull: true,
+      },
+      precioZelle: {
         type: DataTypes.DECIMAL(10,2),
         allowNull: true,
       },

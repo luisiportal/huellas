@@ -1,7 +1,5 @@
 import { useAuth } from "../../context/AuthContext";
 import CardSVG from "../SVG/CardSVG";
-
-import EditSVG from "../SVG/EditSVG";
 import UserSvg from "../SVG/UserSvg";
 
 function CuadreCard({ cuadre }) {
@@ -58,6 +56,16 @@ function CuadreCard({ cuadre }) {
             {cuadre.cantMLC
               ? `${cuadre.cantMLC} x ${cuadre.precioMLC} = ${Number(
                   cuadre.cantMLC * cuadre.precioMLC
+                )} cup`
+              : 0}
+          </h2>
+          <h2 className="border-b-2 border-slate-200 font-semibold text-slate-900">
+            Zelle
+          </h2>
+          <h2 className="flex justify-center text-slate-600">
+            {cuadre.cantZelle
+              ? `${cuadre.cantZelle	} x ${cuadre.precioZelle} = ${Number(
+                  cuadre.cantZelle	 * cuadre.precioZelle
                 )} cup`
               : 0}
           </h2>

@@ -21,11 +21,13 @@ import Input from "../Input";
 import { insertarCuadreRequest } from "../../api/cuadre_caja.api";
 import { useMonedas } from "../../hooks/useMonedas";
 
-const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
+const EntrarEfectivo = ({ perfil, venta, setModalActivo, setLoader }) => {
   const [totalEfectivo, setTotalEfectivo] = useState(0);
   const [transferencia, setTransferencia] = useState([]);
   const [cantTransfer, setCantTransfer] = useState([1]);
-  const [MLCinput, setMLCinput] = useState([{ usd: 0, mlc: 0, money: 0 }]);
+  const [MLCinput, setMLCinput] = useState([
+    { usd: 0, mlc: 0, money: 0, zelle: 0 },
+  ]);
   const [entrarEfectivo, setEntrarEfectivo] = useState({
     x1000: 0,
     x500: 0,
@@ -54,6 +56,9 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
 
   const MLC = monedas.filter((moneda) => moneda.moneda === "MLC");
   const precioMLC = MLC.length > 0 ? MLC[0].precio : 0;
+
+  const Zelle = monedas.filter((moneda) => moneda.moneda === "ZELLE");
+  const precioZelle = Zelle.length > 0 ? Zelle[0].precio : 0;
 
   useEffect(() => {
     const suma = Object.values(totalDenominacion).reduce((a, b) => a + b, 0);
@@ -99,9 +104,13 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
   const totalGastosCUP = (values) => {
     return values.money ? Number(values.money) : 0;
   };
+  const totalZelle = (values) => {
+    return values.ZELLE ? Number(precioZelle) * Number(values.ZELLE) : 0;
+  };
 
   const grandTotalResult = (values) => {
     return (
+      Number(values ? totalZelle(values) : 0) +
       Number(dineroEnTransferenciaTotal()) +
       Number(totalEfectivo) +
       Number(values ? totalUSDenCUP(values) : 0) +
@@ -120,24 +129,26 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
       enableReinitialize={true}
       validationSchema={schema}
       onSubmit={async (values) => {
+        setLoader(true);
         const grand_total = grandTotalResult(values);
         const total_transferencia = dineroEnTransferenciaTotal();
         const vendedor = perfil.username;
         const fechaVentaDate = new Date(venta.fechaVenta);
         const cantMLC = values.MLC;
+        const cantZelle = values.ZELLE;
         const cantUSD = values.USD;
         const gastos = totalGastosCUP(values);
         const tarjeta = total_transferencia > 0 ? values.tarjeta : null;
         const faltante = venta.totalVentaDia - grand_total;
-        console.log(faltante);
-        
 
         if (grand_total == 0) {
+          setLoader(false);
           return setModalActivo({
             mensaje: "Cuidado esta vacio",
             activo: true,
             errorColor: true,
           });
+          
         }
 
         if (total_transferencia > 0 && values.tarjeta == null) {
@@ -153,8 +164,10 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
             values,
             precioUSD,
             precioMLC,
+            precioZelle,
             cantMLC,
             cantUSD,
+            cantZelle,
             totalVentaHoy: venta.totalVentaDia,
             grand_total,
             vendedor,
@@ -170,6 +183,7 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
               activo: true,
               navegarA: "/cuadre",
             });
+            setLoader(false);
           });
         } catch (error) {
           console.log(error);
@@ -279,6 +293,15 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
               label={"USD"}
             />
             <Input
+              placeholder={"Zelle"}
+              type={"number"}
+              name={`ZELLE`}
+              value={MLCinput.zelle}
+              handleChange={handleChange}
+              errors={errors}
+              label={"ZELLE"}
+            />
+            <Input
               placeholder={"MLC Transferencia"}
               type={"number"}
               name={`MLC`}
@@ -304,6 +327,7 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo }) => {
               {values.tarjeta}
             </h2>
             <h2>Efectivo USD {totalUSDenCUP(values) || 0} cup</h2>
+            <h2>Zelle {totalZelle(values) || 0} cup</h2>
             <h2>Transfer MLC {totalMLCenCUP(values) || 0} cup</h2>
             <h2>Gastos {totalGastosCUP(values) || 0} cup</h2>
 
