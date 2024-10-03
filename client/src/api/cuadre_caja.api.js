@@ -8,3 +8,6 @@ export const getTodosCuadreRequest = async () =>
 
 export const getCuadreporDiaRequest = async (id) =>
     await axios.get(`/cuadre/${id}`);
+
+export const deleteCuadreRequest = async (id) =>
+    await axios.delete(`/cuadre/${id}`);

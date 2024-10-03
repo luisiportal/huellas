@@ -1,10 +1,32 @@
-import { useAuth } from "../../context/AuthContext";
+/* eslint-disable react/prop-types */
+
+import { deleteCuadreRequest } from "../../api/cuadre_caja.api";
 import CardSVG from "../SVG/CardSVG";
+import DeleteSVG from "../SVG/DeleteSVG";
 import UserSvg from "../SVG/UserSvg";
 
-function CuadreCard({ cuadre }) {
-  const { setModalActivo, modalActivo, editando, setEditando, perfil } =
-    useAuth();
+function CuadreCard({
+  cuadre,
+  setModalActivo,
+  setRecargar,
+  setLoader,
+  perfil,
+}) {
+  const handleDelete = async (id) => {
+    try {
+      setLoader(true);
+      const response = await deleteCuadreRequest(id);
+      setModalActivo({
+        mensaje: "Cuadre Eliminado",
+        activo: true,
+        errorColor: true,
+      });
+      setRecargar(id);
+    } catch (error) {
+      console.error(error);
+    }
+    setLoader(false);
+  };
 
   return (
     <section className="shadow-md  mt-8 mx-2 grid grid-cols-2 gap-4 bg-white border-l-4 border-huellas_color rounded-xl mb-5 max-w-md">
@@ -38,7 +60,7 @@ function CuadreCard({ cuadre }) {
           <h2 className="flex justify-center text-slate-600 items-center gap-2">
             {`${cuadre.total_transferencia} `}
           </h2>
-         
+
           <h2 className="border-b-2 border-slate-200 font-semibold text-slate-900">
             En USD
           </h2>
@@ -64,8 +86,8 @@ function CuadreCard({ cuadre }) {
           </h2>
           <h2 className="flex justify-center text-slate-600">
             {cuadre.cantZelle
-              ? `${cuadre.cantZelle	} x ${cuadre.precioZelle} = ${Number(
-                  cuadre.cantZelle	 * cuadre.precioZelle
+              ? `${cuadre.cantZelle} x ${cuadre.precioZelle} = ${Number(
+                  cuadre.cantZelle * cuadre.precioZelle
                 )} cup`
               : 0}
           </h2>
@@ -74,12 +96,23 @@ function CuadreCard({ cuadre }) {
 
       <div className=" flex flex-col justify-end border-l-2 border-slate-200 font-semibold">
         {/* right*/}
-        <h2 className="border-b-2 border-slate-200 font-semibold text-slate-900">
+        <div className="flex justify-between p-1">
+          {" "}
+          <h2 className="border-b-2 border-slate-200 font-semibold text-slate-900">
             En efectivo
           </h2>
-          <h2 className="flex justify-center text-slate-600">
-            {cuadre.total_efectivo}
-          </h2>
+          {perfil.privilegio == "Administrador" && (
+            <button
+              onClick={() => handleDelete(cuadre.id)}
+              className="hover:text-huellas_color transition-all duration-500 hover:scale-125"
+            >
+              <DeleteSVG />
+            </button>
+          )}
+        </div>
+        <h2 className="flex justify-center text-slate-600">
+          {cuadre.total_efectivo}
+        </h2>
         <div className="p-2  pl-4 text-slate-600  text-xs">
           <p>
             {cuadre.x1000} x 1000 = {cuadre.x1000 * 1000}{" "}
@@ -125,7 +158,11 @@ function CuadreCard({ cuadre }) {
         <h2 className="flex justify-center text-slate-600">
           {cuadre.gastos ? `${cuadre.gastos} cup` : 0}
         </h2>
-        <div className={`flex flex-col justify-end ${cuadre.faltante > 0 ? "bg-red-600" :"bg-huellas_color"}  rounded-br-xl rounded-tl-lg p-2  text-white  font-bold text-base bottom-0`}>
+        <div
+          className={`flex flex-col justify-end ${
+            cuadre.faltante > 0 ? "bg-red-600" : "bg-huellas_color"
+          }  rounded-br-xl rounded-tl-lg p-2  text-white  font-bold text-base bottom-0`}
+        >
           <h2> Total : {cuadre.grand_total}</h2>
           {cuadre.faltante > 0 && <h2>Faltante : {cuadre.faltante}</h2>}
         </div>

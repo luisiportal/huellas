@@ -1,5 +1,6 @@
 import sequelize from "../db.js";
 import { Cuadre_Caja } from "../models/Cuadre_Caja.js";
+import { registrarLog } from "./AuditLog.controllers.js";
 
 export const insertarCuadre = async (req, res) => {
   try {
@@ -89,6 +90,27 @@ export const getTodosCuadres = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
     res.json(response);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteCuadre = async (req, res) => {
+  try {
+    
+    
+      const response = await Cuadre_Caja.destroy(
+        {
+          where: {
+            id: req.params.id,
+          },
+        },
+  
+      );
+      await registrarLog("Elimino", "Cuadre", req.params.id, req, "");
+
+      res.sendStatus(204);
+   
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

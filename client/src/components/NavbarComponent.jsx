@@ -4,10 +4,11 @@ import Navbar from "./navbar/Navbar";
 import { useAuth } from "../context/AuthContext";
 
 import ActivarDesactModo from "./ModoOffline/ActivarDesactModo";
+import Loader from "./Utilidades/Loader";
 
 const NavbarComponent = () => {
   const [abrirHamburguesa, setabrirHamburguesa] = useState(false);
-  const { isAuthenticated, logout, user, perfil, isOnline, setIsOnline } =
+  const { isAuthenticated, logout, user, perfil, isOnline, setIsOnline,loader } =
     useAuth();
 
   const sidebarRef = useRef(null);
@@ -165,6 +166,7 @@ const NavbarComponent = () => {
         </div>
       </header>
       <ActivarDesactModo setIsOnline={setIsOnline} isOnline={isOnline} />
+      {loader && <Loader />}
     </div>
   );
 };
