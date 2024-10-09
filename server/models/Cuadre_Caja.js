@@ -47,7 +47,7 @@ export const Cuadre_Caja = sequelize.define(
       },
   
       total_venta: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL,
         allowNull: false,
       },
       total_efectivo: {
@@ -55,7 +55,7 @@ export const Cuadre_Caja = sequelize.define(
         allowNull: true,
       },
       total_transferencia: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL,
         allowNull: true,
       },
 
@@ -94,7 +94,7 @@ export const Cuadre_Caja = sequelize.define(
       },
 
       grand_total: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL,
         allowNull: false,
       },
   
