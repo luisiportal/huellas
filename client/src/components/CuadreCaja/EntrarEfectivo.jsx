@@ -152,6 +152,7 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo, setLoader }) => {
         }
 
         if (total_transferencia > 0 && values.tarjeta == null) {
+          setLoader(false);
           return setModalActivo({
             mensaje: "Cuidado no ha seleccionado la tarjeta CUP",
             activo: true,
