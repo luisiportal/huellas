@@ -2,7 +2,7 @@ import React from "react";
 import MostrarErrorMessage from "./ValidacionForm/MostrarErrorMessage";
 
 
-const Input = ({ type, name, value, handleChange, errors, label,placeholder }) => {
+const Input = ({ type, name, value, handleChange, errors, label,placeholder,step }) => {
   return (
     <div className="flex justify-center">
       <label htmlFor={name} className="flex items-center m-2 w-12">
@@ -11,6 +11,7 @@ const Input = ({ type, name, value, handleChange, errors, label,placeholder }) =
       <input
       placeholder={placeholder}
         type={type}
+        step={step}
         name={name}
         className="my-2 px-2 py-1 rounded-sm w-32"
         onChange={handleChange}

@@ -62,7 +62,7 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo, setLoader }) => {
 
   useEffect(() => {
     const suma = Object.values(totalDenominacion).reduce((a, b) => a + b, 0);
-    console.log(suma);
+
 
     setTotalEfectivo(suma);
 
@@ -259,12 +259,13 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo, setLoader }) => {
             />
 
             {cantTransfer.map((item, index) => (
-              <div className="flex">
+              <div className="flex" key={index}>
                 {" "}
                 <Input
                   placeholder={"En CUP"}
                   key={index}
                   type={"number"}
+                  step={"0.01"}
                   name={`transferencia${index}`}
                   value={transferencia[index] || ""}
                   handleChange={(event) => handleChangeTransfer(index, event)}
@@ -286,6 +287,7 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo, setLoader }) => {
             <Input
               placeholder={"Efectivo USD"}
               type={"number"}
+              step={"0.01"}
               name={`USD`}
               value={MLCinput.usd}
               handleChange={handleChange}
@@ -295,6 +297,7 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo, setLoader }) => {
             <Input
               placeholder={"Zelle"}
               type={"number"}
+              step={"0.01"}
               name={`ZELLE`}
               value={MLCinput.zelle}
               handleChange={handleChange}
@@ -305,6 +308,7 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo, setLoader }) => {
               placeholder={"MLC Transferencia"}
               type={"number"}
               name={`MLC`}
+              step={"0.01"}
               value={MLCinput.mlc}
               handleChange={handleChange}
               errors={errors}
@@ -313,6 +317,7 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo, setLoader }) => {
             <Input
               placeholder={"Gastos del día"}
               type={"number"}
+              step={"0.01"}
               name={"money"}
               value={MLCinput.money}
               handleChange={handleChange}
