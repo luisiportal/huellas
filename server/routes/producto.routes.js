@@ -10,7 +10,7 @@ import { uploadProducto } from "../controllers/upload.multer.js";
 import { authRequired } from "../middlewares/validateToken.js";
 const router = Router();
 
-router.get("/Productos",authRequired, getTodosProductos);
+router.get("/Productos", getTodosProductos);
 
 router.get("/Productos/:id_producto",authRequired, getProducto);
 

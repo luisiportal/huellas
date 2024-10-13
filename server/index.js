@@ -12,11 +12,15 @@ import { associations } from "./models/associations.js";
 import ventas from "./routes/venta.routes.js";
 import audiTlogs from "./routes/audilogs.routes.js";
 import cuadre_caja from "./routes/cuadre_caja.routes.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express();
 app.use(
   cors({
-    origin: FRONTEND_URL,
+    origin: [FRONTEND_URL],
     credentials: true,
   })
 );
@@ -29,7 +33,7 @@ sequelize.query(
   'ALTER TABLE public.movimientos ALTER COLUMN "updatedAt" SET DEFAULT now();'
 );
 
-
+app.use("/images", express.static(path.join(__dirname, "/public/images")));
 app.use(cookieParser());
 app.use(express.json());
 app.use(indexRoutes);
