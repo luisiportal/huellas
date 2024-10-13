@@ -1,5 +1,5 @@
 import express from "express";
-import { FRONTEND_URL, PUERTO } from "./config.js";
+import { FRONTEND_URL, FRONTEND_URL2, PUERTO } from "./config.js";
 import indexRoutes from "./routes/index.routes.js";
 import productoRoutes from "./routes/producto.routes.js";
 import cookieParser from "cookie-parser";
