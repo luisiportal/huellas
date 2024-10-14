@@ -296,7 +296,9 @@ const ProductoForm = () => {
                 value={values.categoria || ""}
                 className="block my-2 rounded-sm"
               >
-               {categorias.map((categoria)=> <option>{categoria.nombre}</option>)}
+                {categorias.map((categoria) => (
+                  <option value={categoria.nombre}>{categoria.nombre}</option>
+                ))}
               </select>
               <label htmlFor="ruta_image" className="block"></label>
               <input
