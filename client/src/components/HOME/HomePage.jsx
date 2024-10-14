@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import BotoneraEntrada_Salida from "../BotoneraEntrada_Salida";
 
-import { Link } from "react-router-dom";
 import CarritoActivos from "./CarritoActivos";
 
 import { sincronizarTodo } from "../ModoOffline/Sincronizar/sincronizar";
 import { readLocalStorage } from "../../hooks/useLocalStorage";
 import PendientesAsincronizar from "./PendientesAsincronizar";
 import CarritoSVG from "../SVG/CarritoSVG";
-import CuadreSVG from "../SVG/CuadreSVG";
 import BTNHOME from "./elementos/BTNHOME";
-import { useFetch } from "../../hooks/useFetch";
 
 const HomePage = () => {
   const [pendientesSincronizar, setPendientesSincronizar] = useState(false);

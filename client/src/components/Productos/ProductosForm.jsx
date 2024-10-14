@@ -9,6 +9,8 @@ import {
   readLocalStorage,
   writeLocalStorageActualizarProductos,
 } from "../../hooks/useLocalStorage";
+import { getAllCaregoriasRequest } from "../../api/categoria.api";
+import { useRequest } from "../../hooks/useRequest";
 
 const schema = Yup.object().shape({
   nombre_producto: Yup.string().required("Nombre producto requerido"),
@@ -30,6 +32,9 @@ const ProductoForm = () => {
   const { loader, setLoader, isOnline, modalActivo, setModalActivo } =
     useAuth();
   const [file, setFile] = useState();
+  const { recurso: categorias, setRecurso: setCategorias } = useRequest(
+    getAllCaregoriasRequest
+  );
   const [producto, setProducto] = useState({
     nombre_producto: "",
     description_producto: "",
@@ -291,10 +296,7 @@ const ProductoForm = () => {
                 value={values.categoria || ""}
                 className="block my-2 rounded-sm"
               >
-                <option value="Sin categoria">Sin categoria</option>
-                <option value="Higiene">Higiene</option>
-                <option value="Comida">Comida</option>
-                <option value="Medicina">Medicina</option>
+               {categorias.map((categoria)=> <option>{categoria.nombre}</option>)}
               </select>
               <label htmlFor="ruta_image" className="block"></label>
               <input

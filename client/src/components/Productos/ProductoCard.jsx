@@ -40,7 +40,7 @@ function ProductoCard({ producto }) {
         <div /* imagen del prodcuto */>
           <img
             className="w-12 h-12 object-cover object-center shadow-xl border-slate-50 border-spacing-2 rounded-md"
-            src={"images/productos/" + producto.ruta_image}
+            src={`${import.meta.env.VITE_BACKEND_URL}images/productos/${producto.ruta_image}`}
             alt="Imagen de Producto"
           />
         </div>

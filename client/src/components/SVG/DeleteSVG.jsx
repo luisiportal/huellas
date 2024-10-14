@@ -8,7 +8,7 @@ const DeleteSVG = () => {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="w-6 h-6"
+      className="w-6 h-6 hover:bg-huellas_color hover:text-neutral-50 rounded-full transition-all duration-200"
     >
       <path
         strokeLinecap="round"

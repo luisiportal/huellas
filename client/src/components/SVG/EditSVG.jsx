@@ -1,6 +1,6 @@
 import React from "react";
 
-const EditSVG = () => {
+const EditSVG = ({ size }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -8,7 +8,9 @@ const EditSVG = () => {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      className="w-4 h-4 hover:text-white hover:bg-huellas_color rounded-full transition-all duration-200 "
+      className={`${
+        size ? size : "w-4 h-4"
+      } hover:text-white hover:bg-huellas_color rounded-full transition-all duration-200`}
     >
       <path
         strokeLinecap="round"

@@ -24,6 +24,8 @@ import HomePage from "./components/HOME/HomePage";
 import CuadrePage from "./components/CuadreCaja/CuadrePage";
 import Edit from "./components/Movimientos/Edit";
 import ResumenVenta from "./components/Ventas/ResumenVenta";
+import CategoriasForm from "./components/Categorias/CategoriasForm";
+import ListarCategorias from "./components/Categorias/ListarCategorias";
 
 const App = () => {
   return (
@@ -44,7 +46,7 @@ const App = () => {
                   path="/trabajador/profile/edit/:id"
                   element={<AgregarTrabajador />}
                 />
-          
+
                 <Route
                   path="/trabajador/plantilla"
                   element={<ListadoTrabajadores />}
@@ -57,7 +59,12 @@ const App = () => {
 
                 <Route path="/cuadre/" element={<CuadrePage />} />
                 <Route path="/cuadre/:fecha" element={<ResumenVenta />} />
-
+                <Route path="/categorias/new" element={<CategoriasForm />} />
+                <Route path="/categorias/" element={<ListarCategorias />} />
+                <Route
+                  path="/categorias/edit/:id"
+                  element={<CategoriasForm />}
+                />
                 <Route
                   path="/productos/edit/:id_producto"
                   element={<ProductoForm />}
