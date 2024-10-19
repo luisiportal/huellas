@@ -15,11 +15,7 @@ import cuadre_caja from "./routes/cuadre_caja.routes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import categoriaRouter from "./routes/categoria.routes.js";
-import { handler as ssrHandler } from './dist/server/entry.mjs';
 
-const base = '/'
-app.use(base, express.static('dist/client/'));
-app.use(ssrHandler);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
@@ -49,7 +45,7 @@ app.use(moneda);
 app.use(ventas);
 app.use(audiTlogs);
 app.use(cuadre_caja);
-app.use(categoriaRouter)
+app.use(categoriaRouter);
 app.listen(PUERTO, () => {
   console.log(`El server esta en el puerto : ${PUERTO}....`);
 });
