@@ -1,5 +1,5 @@
 -- Active: 1713315852698@@127.0.0.1@5432@huellasapp
-
+--pro-
 -- DROP FUNCTION public.calcular_costo_total_producto();
 
 CREATE OR REPLACE FUNCTION public.calcular_costo_total_producto
