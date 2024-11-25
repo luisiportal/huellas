@@ -282,6 +282,8 @@ const EntrarEfectivo = ({ perfil, venta, setModalActivo, setLoader }) => {
                   <option value="">Tarjeta CUP</option>
                   <option value="1038">1038</option>
                   <option value="3158">3158</option>
+                  <option value="3429">3429</option>
+                  <option value="4149">4149</option>
                 </select>
               </div>
             ))}
