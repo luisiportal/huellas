@@ -85,6 +85,7 @@ function ProductoCard({ producto }) {
               <p>Costo: {producto.costo_unitario} cup</p>
 
               <p>Costo Total: {producto.costo_total} cup</p>
+              <p>Mostrar: {producto.mostrar}</p>
 
               <span>
                 Creado: {new Date(producto.createdAt).toLocaleString("es-ES")}

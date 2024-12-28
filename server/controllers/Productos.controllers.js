@@ -49,6 +49,7 @@ export const createProducto = async (req, res) => {
       stockMinimo,
       unidadMedida,
       existencia_inicial,
+      mostrar,
     } = req.body;
 
     // Iniciar una transacción
@@ -67,6 +68,7 @@ export const createProducto = async (req, res) => {
             stockMinimo,
             unidadMedida,
             existencia_inicial,
+            mostrar,
           },
           { transaction: t }
         );
@@ -87,6 +89,7 @@ export const createProducto = async (req, res) => {
           unidadMedida,
           ruta_image,
           existencia_inicial,
+          mostrar,
         });
       });
     } catch (error) {
@@ -119,6 +122,7 @@ export const updateProducto = async (req, res) => {
         categoria,
         stockMinimo,
         unidadMedida,
+        mostrar,
       } = req.body;
 
       const response = await Producto.findByPk(id_producto);
@@ -130,6 +134,7 @@ export const updateProducto = async (req, res) => {
       ruta_image && (response.ruta_image = ruta_image);
       response.stockMinimo = stockMinimo;
       response.unidadMedida = unidadMedida;
+      response.mostrar = mostrar;
       await response.save({ transaction: t });
 
       await registrarLog(

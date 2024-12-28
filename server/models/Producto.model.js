@@ -56,6 +56,8 @@ export const Producto = sequelize.define("productos", {
   costo_zelle: {
     type: DataTypes.DECIMAL(10, 2),
   },
+  mostrar: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
-
-

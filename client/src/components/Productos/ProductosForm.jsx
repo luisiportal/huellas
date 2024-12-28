@@ -42,6 +42,7 @@ const ProductoForm = () => {
     precio_venta: 0,
     categoria: "Sin categoria",
     stockMinimo: 0,
+    mostrar: "",
   });
 
   useEffect(() => {
@@ -84,6 +85,7 @@ const ProductoForm = () => {
     formData.append("stockMinimo", values.stockMinimo);
     formData.append("existencia_inicial", values.existencia_inicial || 0);
     formData.append("unidadMedida", values.unidadMedida || "pcs");
+    formData.append("mostrar", values.mostrar || "");
 
     if (file !== null) {
       formData.append("ruta_image", file);
@@ -299,6 +301,19 @@ const ProductoForm = () => {
                 {categorias.map((categoria) => (
                   <option value={categoria.nombre}>{categoria.nombre}</option>
                 ))}
+              </select>
+              <label htmlFor="mostrar" className="block">
+                Elegir donde Mostrar:
+              </label>
+              <select
+                name="mostrar"
+                onChange={handleChange}
+                value={values.mostrar || ""}
+                className="block my-2 rounded-sm"
+              >
+                <option value="ninguno">Ninguno</option>
+
+                <option value="Destacado">Destacado</option>
               </select>
               <label htmlFor="ruta_image" className="block"></label>
               <input
