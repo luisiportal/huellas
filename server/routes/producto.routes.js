@@ -12,7 +12,7 @@ const router = Router();
 
 router.get("/Productos", getTodosProductos);
 
-router.get("/Productos/:id_producto",authRequired, getProducto);
+router.get("/Productos/:id_producto", getProducto);
 
 router.post(
   "/Productos",authRequired,
