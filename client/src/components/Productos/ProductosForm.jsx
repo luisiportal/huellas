@@ -314,6 +314,7 @@ const ProductoForm = () => {
                 <option value="ninguno">Ninguno</option>
 
                 <option value="Destacado">Destacado</option>
+                <option value="Más Vendido">Más Vendido</option>
               </select>
               <label htmlFor="ruta_image" className="block"></label>
               <input
