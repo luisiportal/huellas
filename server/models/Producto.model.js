@@ -60,4 +60,8 @@ export const Producto = sequelize.define("productos", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  animal: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });

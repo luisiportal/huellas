@@ -43,6 +43,7 @@ const ProductoForm = () => {
     categoria: "Sin categoria",
     stockMinimo: 0,
     mostrar: "",
+    animal: "",
   });
 
   useEffect(() => {
@@ -86,6 +87,7 @@ const ProductoForm = () => {
     formData.append("existencia_inicial", values.existencia_inicial || 0);
     formData.append("unidadMedida", values.unidadMedida || "pcs");
     formData.append("mostrar", values.mostrar || "");
+    formData.append("animal", values.animal || "");
 
     if (file !== null) {
       formData.append("ruta_image", file);
@@ -315,6 +317,22 @@ const ProductoForm = () => {
 
                 <option value="Destacado">Destacado</option>
                 <option value="Más Vendido">Más Vendido</option>
+              </select>
+
+              <label htmlFor="animal" className="block">
+                Animal:
+              </label>
+              <select
+                name="animal"
+                onChange={handleChange}
+                value={values.animal || ""}
+                className="block my-2 rounded-sm"
+              >
+                <option value="ninguno">Ninguno</option>
+                <option value="Todos">Todos</option>
+
+                <option value="Gatos">Gatos</option>
+                <option value="Perro">Perros</option>
               </select>
               <label htmlFor="ruta_image" className="block"></label>
               <input
