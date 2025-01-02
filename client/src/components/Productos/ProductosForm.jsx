@@ -331,7 +331,7 @@ const ProductoForm = () => {
                 <option value="ninguno">Ninguno</option>
                 <option value="Todos">Todos</option>
 
-                <option value="Gatos">Gatos</option>
+                <option value="Gato">Gatos</option>
                 <option value="Perro">Perros</option>
               </select>
               <label htmlFor="ruta_image" className="block"></label>
